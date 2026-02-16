@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "FilingType" ADD VALUE 'INITIAL_PETITION';

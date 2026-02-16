@@ -1,0 +1,175 @@
+// generator e datasource configurados corretamente
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User{
+  id  String @id @default(uuid())
+  name String?
+  email  String @unique
+  password String
+  role String @default("user")
+  active Boolean @default(true) // Added active field
+  // Campos de perfil profissional
+  oab String? // Número OAB
+  oab_uf String? // UF da OAB
+  cpf String? // CPF do usuário
+  phone String? // Telefone
+  specialty String? // Especialidades
+  office String? // Escritório vinculado
+  createdAt DateTime @default(now()) // Added createdAt field
+  updatedAt DateTime @updatedAt // Added updatedAt field
+}
+model Client {
+  id            String    @id @default(uuid())
+  name          String
+  email         String?
+  phone         String?
+  cpf           String?   @unique
+  cnpj          String?   @unique
+  cpf_cnpj      String?
+  address       String?
+  city          String?
+  state         String?
+  zip_code      String?
+  notes         String?
+  dateOfBirth   DateTime?
+  maritalStatus String?
+  profession    String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  appointments Appointment[]
+  processes    Process[]
+  petitions    Petition[]      // 👈 linha alterada
+
+  @@map("clients")
+}
+model Process {
+  id            String @id @default(uuid())
+  processNumber String @unique
+  court         String
+  type          String
+  status        String @default("open")
+
+  // Relacionamento com Lawyer
+  lawyerId String?
+  lawyer   Lawyer? @relation(fields: [lawyerId], references: [id])
+
+  // Relacionamento com Client
+  clientId String?
+  client   Client? @relation(fields: [clientId], references: [id])
+
+  // Novos campos
+  hearingDate   DateTime
+  caseValue     Decimal  @db.Decimal(15, 2)
+  internalNotes String   @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  appointment Appointment[]
+  petitions    Petition[]
+
+  @@map("processes")
+}
+model Lawyer {
+  id        String  @id @default(uuid())
+  name      String
+  email     String  @unique
+  oabNumber String  @unique
+  specialty String
+  phone     String?
+
+  // Um advogado tem vários processos
+  processes Process[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  appointment Appointment[]
+  petitions    Petition[]
+
+  @@map("lawyers")
+}
+
+model Appointment {
+  id String @id @default(uuid())
+
+  title       String // Ex: "Reunião inicial", "Audiência", "Retorno"
+  description String? // Observações
+
+  date DateTime // Data e hora do agendamento
+
+  status  AppointmentStatus @default(SCHEDULED)
+
+  eventType String? // Tipo: audiencia, reuniao, prazo, outros
+  location  String? // Local ou link da reunião
+
+  // 🔗 Relação com Cliente
+  clientId String?
+  client   Client? @relation(fields: [clientId], references: [id])
+
+  // 🔗 Relação com Advogado
+  lawyerId String?
+  lawyer   Lawyer? @relation(fields: [lawyerId], references: [id])
+
+  // 🔗 (Opcional) Pode estar ligado a um processo
+  processId String?
+  process   Process? @relation(fields: [processId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("appointments")
+}
+
+enum AppointmentStatus {
+  SCHEDULED // agendado
+  COMPLETED // realizado
+  CANCELED // cancelado
+  NO_SHOW // cliente não compareceu
+}
+
+model Petition {
+  id             String       @id @default(uuid())
+  title          String
+  description    String?
+  type           PetitionType   // Agora o Prisma encontrará a definição abaixo
+  status         PetitionStatus @default(DRAFT)
+  factsSummary   String?
+  fileUrl        String?
+  protocolNumber String?
+
+  // Relação opcional com Process
+  processId      String?
+  process        Process?     @relation(fields: [processId], references: [id])
+
+  clientId       String?
+  client         Client?     @relation(fields: [clientId], references: [id])
+
+  lawyerId       String?
+  lawyer         Lawyer  ?     @relation(fields: [lawyerId], references: [id])
+}
+
+// ⬇️ ADICIONE ESTES BLOCOS ABAIXO ⬇️
+
+enum PetitionStatus {
+  DRAFT
+  PENDING
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+enum PetitionType {
+  INITIAL_PETITION  // Adicionei aqui para bater com o que o front está enviando
+  PETITION
+  RECOURSE
+  EVIDENCE
+  OTHER
+}
