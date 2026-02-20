@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Search, Pencil, Trash2, FileText } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -70,6 +71,8 @@ const translatePetitionStatus = (status: string) => {
 export default function Petitions() {
   const { petitions, isLoading, createPetition, updatePetition, deletePetition } = usePetitions();
   const { clients } = useClients();
+  const navigate = useNavigate();
+  const location = useLocation();
   
   const [search, setSearch] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -90,6 +93,18 @@ export default function Petitions() {
       p.process_number?.includes(search) ||
       p.client_name?.toLowerCase().includes(search.toLowerCase())
   ) || [];
+
+  useEffect(() => {
+    const openPetitionId = (location.state as { openPetitionId?: string } | null)?.openPetitionId;
+    if (!openPetitionId || !petitions?.length) return;
+
+    const petitionItem = petitions.find((p) => p.id === openPetitionId);
+    if (petitionItem) {
+      handleOpenDialog(petitionItem);
+      // Limpa o state para não reabrir o modal ao navegar
+      navigate("/petitions", { replace: true, state: {} });
+    }
+  }, [location.state, petitions, navigate]);
 
   const handleOpenDialog = (petition?: any) => {
     if (petition) {

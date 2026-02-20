@@ -18,9 +18,9 @@ import { useAuth } from "@/hooks/useAuth";
 const menuItems = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
   { title: "Clientes", url: "/clientes", icon: Users },
-  { title: "Advogados", url: "/advogados", icon: Gavel }, 
+  // { title: "Advogados", url: "/advogados", icon: Gavel }, 
   { title: "Processos", url: "/processos", icon: Briefcase },
-  { title: "Petitions", url: "/petitions", icon: FileText }, // Updated item
+  { title: "Petições", url: "/petitions", icon: FileText }, // Updated item
   { title: "Agenda", url: "/agenda", icon: Calendar },
 ];
 

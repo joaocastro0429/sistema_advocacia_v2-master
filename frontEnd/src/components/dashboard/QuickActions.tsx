@@ -19,7 +19,7 @@ const actions = [
   {
     label: "Nova Petição",
     icon: FileText,
-    path: "/peticoes",
+    path: "/petitions",
     variant: "outline" as const,
   },
   {

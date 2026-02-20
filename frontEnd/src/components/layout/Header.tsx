@@ -1,4 +1,5 @@
-import { Bell, Search, User, Clock } from "lucide-react";
+import { useState } from "react";
+import { Bell, Search, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -12,19 +13,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserProfile } from "@/hooks/useUserProfile";
-import { cn } from "@/lib/utils";
-
-// Dados simplificados para o menu rápido do sino
-const quickNotifications = [
-  { id: 1, title: "Prazo Urgente", time: "10 min atrás", type: "urgent" },
-  { id: 2, title: "Nova Audiência", time: "1 hora atrás", type: "info" },
-  { id: 3, title: "Documento Assinado", time: "5 horas atrás", type: "success" },
-];
+import { useNotifications } from "@/hooks/useNotifications";
+import { NotificationsModal } from "@/components/NotificationsModal";
 
 export function Header() {
   const { user, signOut } = useAuth();
   const { profileData } = useUserProfile();
+  const { notifications } = useNotifications();
   const navigate = useNavigate();
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+
+  const unreadCount = notifications.filter((n) => !n.is_read).length;
 
   const displayName =
     profileData?.full_name ||
@@ -52,54 +51,22 @@ export function Header() {
 
       <div className="flex items-center gap-4">
         
-        {/* 2. Menu do Sino (Dropdown Rápido) */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative group">
-              <Bell className="w-5 h-5 transition-transform group-hover:scale-110 text-slate-600" />
-              <span className="absolute top-2 right-2.5 w-2 h-2 bg-red-600 rounded-full border-2 border-card" />
-            </Button>
-          </DropdownMenuTrigger>
-          
-          <DropdownMenuContent align="end" className="w-80 p-0 overflow-hidden shadow-2xl border-border">
-            <div className="p-4 border-b border-border bg-muted/30 flex items-center justify-between">
-              <h3 className="font-bold text-sm">Notificações Recentes</h3>
-              <span className="text-[10px] bg-red-600 text-white px-2 py-0.5 rounded-full font-bold">3 NOVAS</span>
-            </div>
-
-            <div className="max-h-[300px] overflow-y-auto">
-              {quickNotifications.map((notif) => (
-                <DropdownMenuItem 
-                  key={notif.id} 
-                  className="p-4 flex flex-col items-start gap-1 cursor-pointer border-b border-border last:border-0 focus:bg-primary/5"
-                  onClick={() => navigate("/notificacoes")}
-                >
-                  <div className="flex items-center justify-between w-full">
-                    <span className={cn(
-                      "text-[10px] font-black uppercase tracking-widest", 
-                      notif.type === 'urgent' ? "text-red-600" : "text-primary"
-                    )}>
-                      {notif.title}
-                    </span>
-                    <span className="text-[10px] text-slate-400 flex items-center gap-1 font-medium">
-                      <Clock className="w-3 h-3" /> {notif.time}
-                    </span>
-                  </div>
-                </DropdownMenuItem>
-              ))}
-            </div>
-
-            <div className="p-2 bg-slate-50">
-              <Button 
-                variant="ghost" 
-                onClick={() => navigate("/notificacoes")}
-                className="w-full text-xs h-9 font-bold text-primary hover:bg-primary/10 transition-colors"
-              >
-                Ver todas na página central
-              </Button>
-            </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* 2. Sino de Notificações (abre modal) */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="relative group"
+          onClick={() => setNotificationsOpen(true)}
+          aria-label="Notificações"
+        >
+          <Bell className="w-5 h-5 transition-transform group-hover:scale-110 text-slate-600" />
+          {unreadCount > 0 && (
+            <span className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[9px] font-bold text-white border-2 border-card">
+              {unreadCount > 9 ? "9+" : unreadCount}
+            </span>
+          )}
+        </Button>
+        <NotificationsModal open={notificationsOpen} onOpenChange={setNotificationsOpen} />
 
         {/* 3. Menu do Usuário */}
         <DropdownMenu>

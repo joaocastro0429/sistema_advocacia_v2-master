@@ -2,22 +2,22 @@ import { useMemo } from "react";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { RecentCases } from "@/components/dashboard/RecentCases";
 import { UpcomingEvents } from "@/components/dashboard/UpcomingEvents";
+import { RecentPetitions } from "@/pages/RecentPetitions";
 import { QuickActions } from "@/components/dashboard/QuickActions";
-import { Briefcase, Users, Calendar, Clock } from "lucide-react";
+import { Briefcase, Users, FileText, FileStack } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { useCases } from "@/hooks/useCases";
 import { useClients } from "@/hooks/useClients";
-import { useEvents } from "@/hooks/useEvents";
+import { usePetitions } from "@/hooks/usePetitions";
 import { Footer } from "@/components/layout/Footer";
 
-// REPARO: Removi o DashboardLayout daqui, pois o App.tsx já o provê.
 const Index = () => {
   const { user } = useAuth();
   const { profileData } = useUserProfile();
   const { cases } = useCases();
   const { clients } = useClients();
-  const { events } = useEvents();
+  const { petitions } = usePetitions();
 
   // Garante a leitura do nome em diferentes estruturas de usuário e evita erro de tipagem
   const userName =
@@ -29,44 +29,77 @@ const Index = () => {
     "Usuário";
 
   const stats = useMemo(() => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const inOneWeek = new Date(today);
-    inOneWeek.setDate(inOneWeek.getDate() + 7);
-    const todayStr = today.toISOString().slice(0, 10);
-    const weekEndStr = inOneWeek.toISOString().slice(0, 10);
+    const processosAtivos = (cases || []).length;
+    const totalClientes = (clients || []).length;
+    const totalPeticoes = (petitions || []).length;
 
-    const processosAtivos = cases.length;
-    const processosEmAndamento = cases.filter(
-      (c) => (c.status || "").toLowerCase() === "open" || (c.status || "").toLowerCase() === "em_andamento"
-    ).length;
+    // Contagem de processos por status
+    const processosPorStatus = (cases || []).reduce((acc, caseItem) => {
+      const status = caseItem.status || "indefinido";
+      acc[status] = (acc[status] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
 
-    const totalClientes = clients.length;
+    // Contagem de petições por status
+    const peticoesPorStatus = (petitions || []).reduce((acc, petition) => {
+      const status = petition.status || "indefinido";
+      acc[status] = (acc[status] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
 
-    const isAudiencia = (e: { event_type?: string | null; title?: string | null }) => {
-      const t = (e.event_type || "").toLowerCase();
-      const title = (e.title || "").toLowerCase();
-      return t === "audiencia" || t === "audiência" || /audi[eê]ncia/.test(title);
-    };
-    const audiencias = events.filter(isAudiencia);
-
-    const isPrazo = (e: { event_type?: string | null; title?: string | null }) => {
-      const t = (e.event_type || "").toLowerCase();
-      const title = (e.title || "").toLowerCase();
-      return t === "prazo" || /prazo/.test(title);
-    };
-    const prazosUrgentes = events.filter(
-      (e) => isPrazo(e) && e.event_date >= todayStr && e.event_date <= weekEndStr
-    ).length;
+    // Contagem de petições por tipo
+    const peticoesPorTipo = (petitions || []).reduce((acc, petition) => {
+      const type = petition.type || "indefinido";
+      acc[type] = (acc[type] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
 
     return {
       processosAtivos,
-      processosEmAndamento,
       totalClientes,
-      audiencias: audiencias.length,
-      prazosUrgentes,
+      totalPeticoes,
+      processosPorStatus,
+      peticoesPorStatus,
+      peticoesPorTipo,
     };
-  }, [cases, clients, events]);
+  }, [cases, clients, petitions]);
+
+  // Mapeamento de legendas para os status e tipos
+  const caseStatusLabels: Record<string, string> = {
+    em_andamento: "Andamento",
+    aguardando: "Aguardando",
+    concluido: "Concluído",
+    urgente: "Urgente",
+  };
+
+  const petitionStatusLabels: Record<string, string> = {
+    DRAFT: "Rascunhos",
+    PENDING: "Pendentes",
+    SUBMITTED: "Submetidas",
+    APPROVED: "Aprovadas",
+    REJECTED: "Rejeitadas",
+  };
+
+  const petitionTypeLabels: Record<string, string> = {
+    INITIAL_PETITION: "Iniciais",
+    PETITION: "Intermediárias",
+    RECOURSE: "Recursos",
+    EVIDENCE: "Provas",
+    OTHER: "Outras",
+  };
+
+  // Geração das strings para os subtítulos dos cards
+  const processosStatusSubtitle = Object.entries(stats.processosPorStatus)
+    .map(([status, count]) => `${caseStatusLabels[status] || status}: ${count}`)
+    .join(' | ') || "Nenhum processo";
+
+  const peticoesStatusSubtitle = Object.entries(stats.peticoesPorStatus)
+    .map(([status, count]) => `${petitionStatusLabels[status] || status}: ${count}`)
+    .join(' | ') || "Nenhuma petição";
+
+  const peticoesTipoSubtitle = Object.entries(stats.peticoesPorTipo)
+    .map(([type, count]) => `${petitionTypeLabels[type] || type}: ${count}`)
+    .join(' | ') || "Nenhum tipo cadastrado";
 
   return (
     <div className="space-y-6">
@@ -88,11 +121,7 @@ const Index = () => {
         <StatCard
           title="Processos Ativos"
           value={stats.processosAtivos}
-          subtitle={
-            stats.processosEmAndamento > 0
-              ? `${stats.processosEmAndamento} em andamento`
-              : "Cadastrados no sistema"
-          }
+          subtitle={processosStatusSubtitle}
           icon={Briefcase}
           variant="accent"
         />
@@ -103,16 +132,16 @@ const Index = () => {
           icon={Users}
         />
         <StatCard
-          title="Audiências"
-          value={stats.audiencias}
-          subtitle="Da agenda"
-          icon={Calendar}
+          title="Petições por Status"
+          value={stats.totalPeticoes}
+          subtitle={peticoesStatusSubtitle}
+          icon={FileText}
         />
         <StatCard
-          title="Prazos Urgentes"
-          value={stats.prazosUrgentes}
-          subtitle="Próximos 7 dias"
-          icon={Clock}
+          title="Petições por Tipo"
+          value={stats.totalPeticoes}
+          subtitle={peticoesTipoSubtitle}
+          icon={FileText}
         />
       </div>
 
@@ -124,6 +153,11 @@ const Index = () => {
         <div>
           <UpcomingEvents />
         </div>
+      </div>
+
+      {/* New Row for Petitions */}
+      <div className="grid grid-cols-1 gap-6">
+        <RecentPetitions />
       </div>
       <Footer />
     </div>
