@@ -50,7 +50,7 @@ export const createController = async (req: Request, res: Response) => {
                 }
             }
         }
-        return res.status(500).json({ 
+        return res.status(500).json({
             error: 'Internal server error',
             message: error.message || 'Erro desconhecido ao criar cliente'
         });

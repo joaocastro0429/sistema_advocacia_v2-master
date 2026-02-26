@@ -38,6 +38,17 @@ export const updateProcess = async (
     updateData.status = data.status
   }
 
+
+  // Atualizar valor da causa (caseValue)
+  if (data.value !== undefined && data.value !== null) {
+    updateData.caseValue = data.value;
+  }
+
+  // Atualizar data de julgamento/audiência (hearingDate)
+  if ((data as any).trial_date !== undefined && (data as any).trial_date !== null) {
+    updateData.hearingDate = new Date((data as any).trial_date);
+  }
+
   // Relacionamentos
   const clientId = data.clientId || data.client_id
   if (clientId !== undefined) {
@@ -71,8 +82,9 @@ export const updateProcess = async (
     judge: null,
     subject: null,
     status: process.status,
-    value: null,
-    notes: null,
+    value: process.caseValue ?? null,
+    notes: process.internalNotes ?? null,
+    trial_date: process.hearingDate ? process.hearingDate.toISOString() : null,
     created_at: process.createdAt.toISOString(),
     updated_at: process.updatedAt.toISOString(),
     clients: process.client ? { // Corrected from process.clients

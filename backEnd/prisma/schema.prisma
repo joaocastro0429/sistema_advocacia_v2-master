@@ -15,7 +15,7 @@ model User{
   password String
   role String @default("user")
   active Boolean @default(true) // Added active field
-  // Campos de perfil profissional
+  // Campos de profissional profissional
   oab String? // Número OAB
   oab_uf String? // UF da OAB
   cpf String? // CPF do usuário
@@ -46,7 +46,7 @@ model Client {
 
   appointments Appointment[]
   processes    Process[]
-  petitions    Petition[]      // 👈 linha alterada
+  petitions    Petition[]
 
   @@map("clients")
 }
@@ -67,7 +67,7 @@ model Process {
 
   // Novos campos
   hearingDate   DateTime
-  caseValue     Decimal  @db.Decimal(15, 2)
+  caseValue     Decimal  @db.Decimal(30, 15)
   internalNotes String   @db.Text
 
   createdAt DateTime @default(now())

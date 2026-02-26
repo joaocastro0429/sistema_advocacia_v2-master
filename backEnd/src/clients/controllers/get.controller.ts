@@ -35,7 +35,7 @@ export const getClient:RequestHandler = async (req, res) => {
   try {
     const clients = await getClients()
 
-    return res.status(200).json(clients) // 🔴 OBRIGATÓRIO
+    return res.status(200).json(clients)
   } catch (error: any) {
     console.error('Erro no controller getClient:', error)
     return res.status(500).json({
@@ -44,3 +44,4 @@ export const getClient:RequestHandler = async (req, res) => {
     })
   }
 }
+

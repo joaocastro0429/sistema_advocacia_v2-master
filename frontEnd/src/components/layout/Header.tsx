@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bell, Search, User } from "lucide-react";
+import { Bell, Search, User, Menu } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,12 @@ import { useUserProfile } from "@/hooks/useUserProfile";
 import { useNotifications } from "@/hooks/useNotifications";
 import { NotificationsModal } from "@/components/NotificationsModal";
 
-export function Header() {
+// Add props for mobile menu
+interface HeaderProps {
+  onMenuClick: () => void;
+}
+
+export function Header({ onMenuClick }: HeaderProps) {
   const { user, signOut } = useAuth();
   const { profileData } = useUserProfile();
   const { notifications } = useNotifications();
@@ -39,9 +44,19 @@ export function Header() {
   };
 
   return (
-    <header className="h-16 border-b border-border bg-card px-6 flex items-center justify-between sticky top-0 z-40">
-      {/* 1. Busca */}
-      <div className="relative w-96">
+    <header className="h-16 border-b border-border bg-card px-4 md:px-6 flex items-center justify-between sticky top-0 z-30">
+      {/* Hamburger Menu for mobile */}
+      <Button
+        variant="ghost"
+        size="icon"
+        className="md:hidden"
+        onClick={onMenuClick}
+      >
+        <Menu className="w-6 h-6" />
+      </Button>
+
+      {/* 1. Busca - hide on mobile */}
+      <div className="relative w-96 hidden md:block">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input 
           placeholder="Buscar processos, clientes..." 
@@ -49,7 +64,7 @@ export function Header() {
         />
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-4">
         
         {/* 2. Sino de Notificações (abre modal) */}
         <Button
@@ -71,7 +86,7 @@ export function Header() {
         {/* 3. Menu do Usuário */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="flex items-center gap-3 px-3 hover:bg-muted/50 rounded-full transition-all">
+            <Button variant="ghost" className="flex items-center gap-3 px-2 md:px-3 hover:bg-muted/50 rounded-full transition-all">
               <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-md shadow-primary/20">
                 <User className="w-4 h-4 text-primary-foreground" />
               </div>

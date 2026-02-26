@@ -28,6 +28,7 @@ export function usePetitions() {
       if (!user?.id) {
         return [];
       }
+      console.log("📜 Buscando petições do usuário:", user?.id);
       return apiClient.get<Petition[]>(`/petitions`);
     },
     enabled: !!user,
@@ -39,7 +40,7 @@ export function usePetitions() {
       return apiClient.post<Petition>("/petitions", newPetition);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["petitions"] });
+      queryClient.invalidateQueries({ queryKey: ["petitions", user?.id] });
       toast.success("Petição criada com sucesso!");
     },
     onError: (error: any) => {
@@ -53,7 +54,7 @@ export function usePetitions() {
       return apiClient.put<Petition>(`/petitions/${id}`, updates);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["petitions"] });
+      queryClient.invalidateQueries({ queryKey: ["petitions", user?.id] });
       toast.success("Petição atualizada!");
     },
     onError: (error: any) => {
@@ -67,7 +68,7 @@ export function usePetitions() {
       await apiClient.delete<void>(`/petitions/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["petitions"] });
+      queryClient.invalidateQueries({ queryKey: ["petitions", user?.id] });
       toast.success("Petição removida.");
     },
     onError: (error: any) => {

@@ -11,6 +11,7 @@ import {
   LogOut,
   FileText, 
   Gavel, 
+  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -24,7 +25,12 @@ const menuItems = [
   { title: "Agenda", url: "/agenda", icon: Calendar },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  isOpen?: boolean;
+  setIsOpen?: (open: boolean) => void;
+}
+
+export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,17 +42,36 @@ export function Sidebar() {
   };
 
   return (
+    <>
+    {/* Overlay para Mobile */}
+    <div 
+      className={cn(
+        "fixed inset-0 z-40 bg-black/50 md:hidden transition-opacity duration-300",
+        isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+      )}
+      onClick={() => setIsOpen?.(false)}
+    />
+
     <aside
       className={cn(
-        "bg-sidebar text-sidebar-foreground flex flex-col h-screen transition-all duration-300 ease-in-out",
-        collapsed ? "w-20" : "w-64"
+        "bg-sidebar text-sidebar-foreground flex flex-col h-screen z-50",
+        // Estilos para Mobile (padrão): menu fixo que desliza
+        "fixed inset-y-0 left-0 w-64 transform transition-transform duration-300 ease-in-out",
+        isOpen ? "translate-x-0" : "-translate-x-full",
+        // Estilos para Desktop (md e acima): menu relativo e colapsável
+        "md:relative md:translate-x-0 md:transition-all",
+        collapsed ? "md:w-20" : "md:w-64"
       )}
     >
       {/* Botão de Recolher no Topo (Direita) */}
       <div className="flex justify-end px-4 pt-4">
+        <button onClick={() => setIsOpen?.(false)} className="md:hidden p-1.5 text-sidebar-foreground/60 hover:text-sidebar-foreground">
+          <X className="w-5 h-5" />
+        </button>
+
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="p-1.5 rounded-lg text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-colors"
+          className="hidden md:block p-1.5 rounded-lg text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-colors"
         >
           {collapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
         </button>
@@ -80,6 +105,7 @@ export function Sidebar() {
               <li key={item.title}>
                 <NavLink
                   to={item.url}
+                  onClick={() => setIsOpen?.(false)}
                   className={cn(
                     "group flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200",
                     "hover:bg-sidebar-accent",
@@ -125,5 +151,6 @@ export function Sidebar() {
         </button>
       </div>
     </aside>
+    </>
   );
 }

@@ -11,3 +11,4 @@ export const GetprocessController: RequestHandler = async (req, res) => {
     return res.status(500).json({ message: 'Erro ao buscar processos' })
   }
 }
+

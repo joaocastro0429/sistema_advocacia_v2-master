@@ -18,7 +18,14 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Lawyers from "./pages/Lawyers"; 
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      gcTime: 1000 * 60 * 10, // 10 minutes (formerly cacheTime)
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>

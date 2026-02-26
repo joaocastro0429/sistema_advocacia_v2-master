@@ -1,5 +1,6 @@
 import { useState, useEffect, createContext, useContext, ReactNode } from "react";
 import { apiClient } from "@/lib/api-client";
+import { queryClient } from "@/App";
 
 interface User {
   id: string;
@@ -55,6 +56,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(false);
   }, []);
 
+  // Limpar cache quando usuário muda
+  useEffect(() => {
+    if (!user) {
+      console.log('👤 Usuário deslogado - invalidando queries');
+      queryClient.invalidateQueries();
+    } else {
+      console.log('👤 Usuário logado:', { id: user.id, email: user.email });
+    }
+  }, [user]);
+
   const signIn = async (email: string, password: string) => {
     try {
       const response = await apiClient.post<{ user: User; token: string }>(
@@ -80,23 +91,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = async (params: SignUpParams) => {
     try {
+      console.log('📝 Iniciando registro com dados:', { email: params.email, name: params.name });
+      
       // The backend expects `name`, so we pass it from params
-      await apiClient.post<User>("/register", params);
+      const response = await apiClient.post<User>("/register", params);
+      console.log('✅ Usuário registrado com sucesso:', response);
 
       // Após registrar, fazer login automaticamente
       const loginResult = await signIn(params.email, params.password);
       return loginResult;
     } catch (error) {
-      console.error("Register error:", error);
+      console.error("❌ Erro no registro:", error);
       return { error: error as Error };
     }
   };
 
   const signOut = async () => {
+    console.log('🚪 Realizando logout...');
+    
+    // Limpar todos os dados do localStorage relacionados a auth
     localStorage.removeItem("auth_token");
     localStorage.removeItem("auth_user");
+    
+    // Limpar qualquer outro dado de sessão
+    sessionStorage.clear();
+    
+    // Limpar cache do React Query
+    queryClient.clear();
+    console.log('🔄 Cache do React Query limpo');
+    
+    // Resetar estado
     setToken(null);
     setUser(null);
+    
+    console.log('✅ Logout completo - localStorage e cache limpos');
   };
 
   const isAuthenticated = !!token && !!user;

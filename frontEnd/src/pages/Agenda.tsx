@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Plus, Search, Pencil, Trash2, Calendar, Clock, MapPin } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -41,6 +42,8 @@ function normalizeEventType(value: string | undefined | null): keyof typeof even
 }
 
 export default function Agenda() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const { events, isLoading, createEvent, updateEvent, deleteEvent } = useEvents();
   const { clients } = useClients();
   const { cases } = useCases();
@@ -59,6 +62,30 @@ export default function Agenda() {
     description: null,
     reminder: true,
   });
+
+  useEffect(() => {
+    const state = location.state as { newAppointmentFromCase?: any } | null;
+    if (state?.newAppointmentFromCase) {
+      const { title, date, description, caseId, clientId } = state.newAppointmentFromCase;
+      
+      setFormData({
+        case_id: caseId || null,
+        client_id: clientId || null,
+        title: title || "",
+        event_type: "audiencia",
+        event_date: date ? String(date).split('T')[0] : "",
+        event_time: "",
+        location: null,
+        description: description || null,
+        reminder: true,
+      });
+      setEditingEvent(null);
+      setIsDialogOpen(true);
+      
+      // Limpa o state para não reabrir o modal ao navegar
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   const filteredEvents = events?.filter(
     (event) =>
@@ -133,7 +160,7 @@ export default function Agenda() {
           <h1 className="text-3xl font-serif font-bold text-slate-900">Agenda</h1>
           <p className="text-muted-foreground">Gerencie seus compromissos e prazos</p>
         </div>
-        <Button onClick={() => handleOpenDialog()} className="shadow-md">
+        <Button onClick={() => handleOpenDialog()} className="shadow-md bg-[#1e293b] text-[#fbbf24] hover:bg-slate-800">
           <Plus className="w-4 h-4 mr-2" />
           Novo Compromisso
         </Button>

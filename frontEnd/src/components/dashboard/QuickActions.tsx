@@ -9,26 +9,31 @@ const actions = [
     icon: Plus,
     path: "/processos",
     variant: "outline" as const,
+    className: "bg-amber-100 text-amber-900 border-amber-200 hover:bg-amber-200",
   },
   {
     label: "Novo Cliente",
     icon: UserPlus,
     path: "/clientes",
     variant: "outline" as const,
+    className: "bg-amber-100 text-amber-900 border-amber-200 hover:bg-amber-200",
   },
   {
     label: "Nova Petição",
     icon: FileText,
     path: "/petitions",
     variant: "outline" as const,
+    className: "bg-amber-100 text-amber-900 border-amber-200 hover:bg-amber-200",
   },
   {
     label: "Agendar",
     icon: Calendar,
     path: "/agenda",
     variant: "outline" as const,
+    className: "bg-amber-100 text-amber-900 border-amber-200 hover:bg-amber-200",
   },
 ];
+
 
 export function QuickActions() {
   const navigate = useNavigate();

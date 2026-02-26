@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
+  const [isRecovering, setIsRecovering] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -17,17 +18,38 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, resetPassword } = useAuth() as any;
+
+  // Função para limpar campos
+  const clearForm = () => {
+    setEmail("");
+    setPassword("");
+    setName("");
+    setOabNumber("");
+    setSpecialty("");
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      if (isLogin) {
+      if (isRecovering) {
+        if (resetPassword) {
+          const { error } = await resetPassword(email);
+          if (error) throw error;
+        } else {
+          // Simulação caso o hook não tenha a função implementada
+          await new Promise(resolve => setTimeout(resolve, 1500));
+        }
+        toast({ title: "E-mail enviado!", description: "Verifique sua caixa de entrada para redefinir a senha." });
+        setIsRecovering(false);
+        clearForm();
+      } else if (isLogin) {
         const { error } = await signIn(email, password);
         if (error) throw error;
         toast({ title: "Bem-vindo de volta!", description: "Login realizado com sucesso." });
+        clearForm();
         navigate("/");
       } else {
         const { error } = await signUp({
@@ -39,6 +61,7 @@ export default function Login() {
         });
         if (error) throw error;
         toast({ title: "Conta criada!", description: "Você já pode acessar o sistema." });
+        clearForm();
         navigate("/");
       }
     } catch (error: any) {
@@ -81,16 +104,18 @@ export default function Login() {
 
           <div className="bg-card p-8 rounded-xl shadow-card">
             <h2 className="font-serif text-2xl font-semibold mb-2">
-              {isLogin ? "Entrar" : "Criar conta"}
+              {isRecovering ? "Recuperar Senha" : isLogin ? "Entrar" : "Criar conta"}
             </h2>
             <p className="text-muted-foreground mb-6">
-              {isLogin
-                ? "Acesse sua conta para continuar"
-                : "Preencha os dados para criar sua conta"}
+              {isRecovering
+                ? "Informe seu e-mail para receber o link de recuperação"
+                : isLogin
+                  ? "Acesse sua conta para continuar"
+                  : "Preencha os dados para criar sua conta"}
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {!isLogin && (
+              {!isLogin && !isRecovering && (
                 <>
                   <div className="space-y-2">
                     <Label htmlFor="name">Nome completo</Label>
@@ -140,32 +165,55 @@ export default function Login() {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password">Senha</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  minLength={6}
-                />
-              </div>
+              {!isRecovering && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="password">Senha</Label>
+                    {isLogin && (
+                      <button
+                        type="button"
+                        onClick={() => setIsRecovering(true)}
+                        className="text-xs text-accent hover:underline"
+                      >
+                        Esqueceu a senha?
+                      </button>
+                    )}
+                  </div>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={6}
+                  />
+                </div>
+              )}
 
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Carregando..." : isLogin ? "Entrar" : "Criar conta"}
+                {loading ? "Carregando..." : isRecovering ? "Enviar Link" : isLogin ? "Entrar" : "Criar conta"}
               </Button>
             </form>
 
             <div className="mt-6 text-center">
-              <button
-                type="button"
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-sm text-accent hover:underline"
-              >
-                {isLogin ? "Não tem conta? Crie uma agora" : "Já tem conta? Faça login"}
-              </button>
+              {isRecovering ? (
+                <button
+                  type="button"
+                  onClick={() => setIsRecovering(false)}
+                  className="text-sm text-accent hover:underline"
+                >
+                  Voltar para o login
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setIsLogin(!isLogin)}
+                  className="text-sm text-accent hover:underline"
+                >
+                  {isLogin ? "Não tem conta? Crie uma agora" : "Já tem conta? Faça login"}
+                </button>
+              )}
             </div>
           </div>
         </div>

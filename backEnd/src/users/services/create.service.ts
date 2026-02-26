@@ -9,6 +9,18 @@ interface CreateUserProps {
 
 export const createUserService = async ({ name, email, password}: CreateUserProps) => {
     try {
+        console.log('📝 Iniciando criação de novo usuário:', { name, email });
+        
+        // Validar se email já existe
+        const existingUser = await prisma.user.findUnique({
+            where: { email }
+        });
+
+        if (existingUser) {
+            console.log('❌ Email já cadastrado:', email);
+            throw new Error('Este email já está cadastrado');
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const user = await prisma.user.create({
@@ -19,9 +31,13 @@ export const createUserService = async ({ name, email, password}: CreateUserProp
             },
         });
 
+        console.log('✅ Usuário criado com sucesso:', { id: user.id, email: user.email, name: user.name });
         return user;
     } catch (error) {
-        console.error(error);
+        console.error('❌ Erro ao criar usuário:', error);
+        if (error instanceof Error) {
+            throw error;
+        }
         throw new Error('Error creating user');
     }
 };

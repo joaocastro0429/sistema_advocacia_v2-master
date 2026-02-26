@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Plus, Search, Pencil, Trash2, Briefcase, CalendarDays, Gavel, ChevronDown } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, Briefcase, CalendarDays, Gavel, ChevronDown, Paperclip } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -38,6 +38,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useCases, CaseInput, Case } from "@/hooks/useCases";
 import { useClients } from "@/hooks/useClients";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const statusConfig = {
   em_andamento: { label: "Em Andamento", className: "bg-blue-100 text-blue-700 border-blue-200" },
@@ -53,11 +55,13 @@ export default function Cases() {
   const location = useLocation();
   const { cases, isLoading, createCase, updateCase, deleteCase } = useCases();
   const { clients } = useClients();
+  const { toast } = useToast();
   const [search, setSearch] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingCase, setEditingCase] = useState<string | null>(null);
+  const [createAppointment, setCreateAppointment] = useState(false);
   
-  const [formData, setFormData] = useState<CaseInput>({
+  const [formData, setFormData] = useState<CaseInput & { document_id?: string | null }>({
     client_id: "",
     case_number: "",
     case_type: "",
@@ -67,13 +71,33 @@ export default function Cases() {
     status: "em_andamento",
     value: null,
     notes: null,
-    trial_date: null, // Nova Data de Julgamento
+    document_id: null,
   });
 
-  const formatDate = (dateString: string | null | undefined) => {
-    if (!dateString) return "-";
-    return new Date(dateString).toLocaleDateString('pt-BR');
-  };
+  const formatDate = (date: string | Date | null | undefined) => {
+    if (!date) return "-";
+    if (date instanceof Date) {
+      return date.toLocaleDateString('pt-BR');
+    }
+    // Se for string, tenta converter
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return "-";
+    return d.toLocaleDateString('pt-BR');
+  }
+
+  const formatCurrency = (value: number | string | null | undefined) => {
+    if (value === null || value === undefined || value === "") return "-";
+    let numValue: number;
+    if (typeof value === 'string') {
+      // Remove caracteres não numéricos exceto vírgula e ponto
+      const clean = value.replace(/[^\d,\.]/g, '').replace(',', '.');
+      numValue = parseFloat(clean);
+    } else {
+      numValue = value;
+    }
+    if (isNaN(numValue)) return "-";
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(numValue);
+  }
 
   const filteredCases = cases?.filter(
     (c) =>
@@ -99,7 +123,7 @@ export default function Cases() {
         status: caseItem.status,
         value: caseItem.value,
         notes: caseItem.notes,
-        trial_date: caseItem.trial_date ?? null,
+        document_id: (caseItem as any).document_id || null,
       });
       setIsDialogOpen(true);
       navigate("/processos", { replace: true, state: {} });
@@ -119,14 +143,15 @@ export default function Cases() {
         status: caseItem.status,
         value: caseItem.value,
         notes: caseItem.notes,
-        trial_date: caseItem.trial_date,
+        document_id: (caseItem as any).document_id || null,
       });
     } else {
       setEditingCase(null);
       setFormData({
         client_id: "", case_number: "", case_type: "", court: null,
-        judge: null, subject: null, status: "em_andamento", value: null, notes: null, trial_date: null,
+        judge: null, subject: null, status: "em_andamento", value: null, notes: null, document_id: null,
       });
+      setCreateAppointment(false);
     }
     setIsDialogOpen(true);
   };
@@ -139,10 +164,11 @@ export default function Cases() {
     e.preventDefault();
     if (editingCase) {
       await updateCase.mutateAsync({ id: editingCase, ...formData });
+      setIsDialogOpen(false);
     } else {
       await createCase.mutateAsync(formData);
+      setIsDialogOpen(false);
     }
-    setIsDialogOpen(false);
   };
 
   const handleDelete = async (id: string) => {
@@ -181,8 +207,10 @@ export default function Cases() {
           <TableHeader className="bg-slate-50">
             <TableRow>
               <TableHead className="font-bold text-slate-700">Processo/Cliente</TableHead>
-              <TableHead className="font-bold text-slate-700">Datas (Cad./Julg.)</TableHead>
+              <TableHead className="font-bold text-slate-700">Vara / Tribunal</TableHead>
+              <TableHead className="font-bold text-slate-700">Data Julgamento</TableHead>
               <TableHead className="font-bold text-slate-700">Status</TableHead>
+              <TableHead className="font-bold text-slate-700">Valor da Causa</TableHead>
               <TableHead className="font-bold text-slate-700">Área</TableHead>
               <TableHead className="w-[100px] text-right font-bold text-slate-700 px-6">Ações</TableHead>
             </TableRow>
@@ -196,14 +224,10 @@ export default function Cases() {
                     <span className="font-semibold text-slate-800">{caseItem.clients?.name || "Não vinculado"}</span>
                   </div>
                 </TableCell>
+                <TableCell className="text-slate-600 text-sm">{caseItem.court || "-"}</TableCell>
                 <TableCell>
                   <div className="flex flex-col gap-1 text-[11px]">
-                    <span className="flex items-center gap-1 text-slate-500">
-                      <CalendarDays className="w-3 h-3" /> {formatDate(caseItem.created_at)}
-                    </span>
-                    <span className={cn("flex items-center gap-1 font-bold", caseItem.trial_date ? "text-amber-600" : "text-slate-300")}>
-                      <Gavel className="w-3 h-3" /> {formatDate(caseItem.trial_date) || "Não definida"}
-                    </span>
+                    {/* Data do caso removida */}
                   </div>
                 </TableCell>
                 <TableCell>
@@ -231,6 +255,15 @@ export default function Cases() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
+                <TableCell className="text-slate-600 text-sm font-medium">
+                  {formatCurrency(
+                    caseItem.value ??
+                    (caseItem as any).valor_causa ??
+                    (caseItem as any).valor ??
+                    (caseItem as any).amount ??
+                    ""
+                  )}
+                </TableCell>
                 <TableCell className="text-slate-600 text-sm font-medium">{caseItem.case_type}</TableCell>
                 <TableCell className="px-6">
                   <div className="flex items-center justify-end gap-1">
@@ -250,7 +283,7 @@ export default function Cases() {
 
       {/* Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl bg-white shadow-2xl">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white shadow-2xl">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">{editingCase ? "Editar Processo" : "Novo Processo"}</DialogTitle>
           </DialogHeader>
@@ -268,16 +301,6 @@ export default function Cases() {
               <div className="space-y-2">
                 <Label className="font-bold text-slate-700">Nº do Processo (CNJ) *</Label>
                 <Input value={formData.case_number} onChange={(e) => setFormData({ ...formData, case_number: e.target.value })} required />
-              </div>
-
-              <div className="space-y-2">
-                <Label className="font-bold text-slate-700">Data do Julgamento/Audiência</Label>
-                <Input 
-                  type="date" 
-                  value={formData.trial_date || ""} 
-                  onChange={(e) => setFormData({ ...formData, trial_date: e.target.value || null })} 
-                  className="bg-slate-50 focus:bg-white"
-                />
               </div>
 
               <div className="space-y-2">
@@ -308,7 +331,59 @@ export default function Cases() {
 
               <div className="space-y-2">
                 <Label className="font-bold text-slate-700">Valor da Causa (R$)</Label>
-                <Input type="number" value={formData.value || ""} onChange={(e) => setFormData({ ...formData, value: parseFloat(e.target.value) })} />
+                <Input
+                  type="number"
+                  value={formData.value ?? ""}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setFormData({ ...formData, value: v === "" ? null : parseFloat(v) });
+                  }}
+                />
+              </div>
+
+              <div className="md:col-span-2 space-y-2">
+                <Label htmlFor="document" className="font-bold text-slate-700 flex items-center gap-2">
+                  <Paperclip className="w-4 h-4" /> Documento Anexo
+                </Label>
+                <Input
+                  id="document"
+                  type="file"
+                  className="bg-slate-50 border-slate-200 focus:bg-white cursor-pointer"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      console.log("📤 Enviando arquivo para upload:", file.name);
+                      
+                      try {
+                        // Criar FormData com o arquivo
+                        const uploadFormData = new FormData();
+                        uploadFormData.append('file', file);
+                        
+                        // Enviar para o backend
+                        const response = await fetch('http://localhost:3333/api/processes/upload', {
+                          method: 'POST',
+                          body: uploadFormData,
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (result.success) {
+                          console.log('✅ Arquivo enviado com sucesso:', result.file);
+                          // Salvar o caminho do arquivo no formulário
+                          setFormData((prev) => ({ 
+                            ...prev, 
+                            document_id: result.file.path 
+                          }));
+                        } else {
+                          console.error('❌ Erro ao fazer upload:', result.message);
+                        }
+                      } catch (error) {
+                        console.error('❌ Erro na requisição de upload:', error);
+                      }
+                    }
+                  }}
+                />
+                <p className="text-[10px] text-slate-500">Selecione um arquivo para fazer upload automático.</p>
               </div>
 
               <div className="md:col-span-2 space-y-2">
@@ -316,6 +391,12 @@ export default function Cases() {
                 <Textarea value={formData.notes || ""} onChange={(e) => setFormData({ ...formData, notes: e.target.value })} rows={3} />
               </div>
             </div>
+
+            {!editingCase && (
+              <div className="md:col-span-2 flex items-start space-x-3 pt-5 border-t mt-4">
+                {/* Seção de agenda removida - trial_date não existe no tipo */}
+              </div>
+            )}
 
             <DialogFooter>
               <Button type="button" variant="ghost" onClick={() => setIsDialogOpen(false)}>Cancelar</Button>

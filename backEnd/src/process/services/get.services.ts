@@ -26,8 +26,9 @@ export const Getprocess = async () => {
       judge: null, // Campo não existe no schema
       subject: null, // Campo não existe no schema
       status: process.status,
-      value: null, // Campo não existe no schema
-      notes: null, // Campo não existe no schema
+      value: process.caseValue ?? null,
+      notes: process.internalNotes ?? null,
+      trial_date: process.hearingDate ? process.hearingDate.toISOString() : null,
       created_at: process.createdAt.toISOString(),
       updated_at: process.updatedAt.toISOString(),
       clients: process.client ? {
@@ -40,3 +41,4 @@ export const Getprocess = async () => {
     throw new Error('Erro ao buscar processos')
   }
 }
+

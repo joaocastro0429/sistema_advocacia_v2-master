@@ -130,18 +130,21 @@ const Index = () => {
           value={stats.totalClientes}
           subtitle="Cadastrados no sistema"
           icon={Users}
+          variant="accent"
         />
         <StatCard
           title="Petições por Status"
           value={stats.totalPeticoes}
           subtitle={peticoesStatusSubtitle}
           icon={FileText}
+          variant="accent"
         />
         <StatCard
           title="Petições por Tipo"
           value={stats.totalPeticoes}
           subtitle={peticoesTipoSubtitle}
           icon={FileText}
+          variant="accent"
         />
       </div>
 

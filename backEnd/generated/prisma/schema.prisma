@@ -69,7 +69,7 @@ model Process {
 
   // Novos campos
   hearingDate   DateTime
-  caseValue     Decimal  @db.Decimal(15, 2)
+  caseValue     Decimal  @db.Decimal(30, 15)
   internalNotes String   @db.Text
 
   createdAt DateTime @default(now())

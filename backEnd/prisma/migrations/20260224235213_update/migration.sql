@@ -2,10 +2,10 @@
 CREATE TYPE "AppointmentStatus" AS ENUM ('SCHEDULED', 'COMPLETED', 'CANCELED', 'NO_SHOW');
 
 -- CreateEnum
-CREATE TYPE "FilingStatus" AS ENUM ('DRAFT', 'PENDING', 'SUBMITTED', 'APPROVED', 'REJECTED');
+CREATE TYPE "PetitionStatus" AS ENUM ('DRAFT', 'PENDING', 'SUBMITTED', 'APPROVED', 'REJECTED');
 
 -- CreateEnum
-CREATE TYPE "FilingType" AS ENUM ('PETITION', 'RECOURSE', 'EVIDENCE', 'OTHER');
+CREATE TYPE "PetitionType" AS ENUM ('INITIAL_PETITION', 'PETITION', 'RECOURSE', 'EVIDENCE', 'OTHER');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -60,7 +60,7 @@ CREATE TABLE "processes" (
     "lawyerId" TEXT,
     "clientId" TEXT,
     "hearingDate" TIMESTAMP(3) NOT NULL,
-    "caseValue" DECIMAL(15,2) NOT NULL,
+    "caseValue" DECIMAL(30,15) NOT NULL,
     "internalNotes" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -101,20 +101,20 @@ CREATE TABLE "appointments" (
 );
 
 -- CreateTable
-CREATE TABLE "Filing" (
+CREATE TABLE "Petition" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
-    "type" "FilingType" NOT NULL,
-    "status" "FilingStatus" NOT NULL DEFAULT 'DRAFT',
+    "type" "PetitionType" NOT NULL,
+    "status" "PetitionStatus" NOT NULL DEFAULT 'DRAFT',
     "factsSummary" TEXT,
     "fileUrl" TEXT,
     "protocolNumber" TEXT,
     "processId" TEXT,
-    "clientId" TEXT NOT NULL,
-    "lawyerId" TEXT NOT NULL,
+    "clientId" TEXT,
+    "lawyerId" TEXT,
 
-    CONSTRAINT "Filing_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Petition_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -151,10 +151,10 @@ ALTER TABLE "appointments" ADD CONSTRAINT "appointments_lawyerId_fkey" FOREIGN K
 ALTER TABLE "appointments" ADD CONSTRAINT "appointments_processId_fkey" FOREIGN KEY ("processId") REFERENCES "processes"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Filing" ADD CONSTRAINT "Filing_processId_fkey" FOREIGN KEY ("processId") REFERENCES "processes"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Petition" ADD CONSTRAINT "Petition_processId_fkey" FOREIGN KEY ("processId") REFERENCES "processes"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Filing" ADD CONSTRAINT "Filing_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "clients"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Petition" ADD CONSTRAINT "Petition_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "clients"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Filing" ADD CONSTRAINT "Filing_lawyerId_fkey" FOREIGN KEY ("lawyerId") REFERENCES "lawyers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Petition" ADD CONSTRAINT "Petition_lawyerId_fkey" FOREIGN KEY ("lawyerId") REFERENCES "lawyers"("id") ON DELETE SET NULL ON UPDATE CASCADE;

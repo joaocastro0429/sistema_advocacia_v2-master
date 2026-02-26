@@ -1,6 +1,8 @@
 import 'dotenv/config'
 import express, { Request, Response, NextFunction } from 'express'
 import cors from 'cors'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import swaggerUi from 'swagger-ui-express'
 import swaggerSpec from './swagger'
 import { router as clientRoutes } from './clients/routes/client.routes'
@@ -10,6 +12,9 @@ import { appointmentRoutes } from './appointments/routes/routes'
 import { petitionRoutes } from './petitions/routes/routes' // Updated import
 import { loginRouter } from './login/routes/route'
 import { userRoutes } from './users/routes/routes'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const server = express()
 
@@ -29,6 +34,9 @@ server.use(cors({
 }))
 
 server.use(express.json())
+
+// Servir arquivos estáticos do diretório de uploads
+server.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')))
 
 server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 

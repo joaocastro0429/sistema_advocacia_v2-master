@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api-client";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 export interface Client {
   id: string;
@@ -22,13 +23,17 @@ export type ClientInput = Omit<Client, "id" | "created_at" | "updated_at">;
 export function useClients() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const { data: clients = [], isLoading, error } = useQuery({
-    queryKey: ["clients"],
+    queryKey: ["clients", user?.id],
     queryFn: async () => {
+      console.log(`👥 Buscando clientes do usuário: ${user?.id}`);
       const response = await apiClient.get<Client[]>("/clients");
+      console.log(`✅ ${response?.length || 0} clientes carregados`);
       return response || [];
     },
+    enabled: !!user?.id, // Só busca se houver usuário logado
   });
 
   const createClient = useMutation({
@@ -37,7 +42,7 @@ export function useClients() {
       return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clients"] });
+      queryClient.invalidateQueries({ queryKey: ["clients", user?.id] });
       toast({ title: "Cliente criado com sucesso!" });
     },
     onError: (error: Error) => {
@@ -51,7 +56,7 @@ export function useClients() {
       return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clients"] });
+      queryClient.invalidateQueries({ queryKey: ["clients", user?.id] });
       toast({ title: "Cliente atualizado com sucesso!" });
     },
     onError: (error: Error) => {
@@ -64,7 +69,7 @@ export function useClients() {
       await apiClient.delete(`/clients/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clients"] });
+      queryClient.invalidateQueries({ queryKey: ["clients", user?.id] });
       toast({ title: "Cliente excluído com sucesso!" });
     },
     onError: (error: Error) => {

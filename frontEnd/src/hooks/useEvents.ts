@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api-client";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 export interface Event {
   id: string;
@@ -27,14 +28,17 @@ export type EventInput = Omit<Event, "id" | "created_at" | "updated_at" | "clien
 
 export function useEvents() {
   const { toast } = useToast();
+  const { user } = useAuth();
   const queryClient = useQueryClient();
 
   const { data: events = [], isLoading, error } = useQuery({
-    queryKey: ["events"],
+    queryKey: ["events", user?.id],
     queryFn: async () => {
       const response = await apiClient.get<Event[]>("/appointments");
+      console.log("📅 Buscando eventos do usuário:", user?.id);
       return response || [];
     },
+    enabled: !!user?.id,
   });
 
   const createEvent = useMutation({
@@ -43,7 +47,7 @@ export function useEvents() {
       return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["events"] });
+      queryClient.invalidateQueries({ queryKey: ["events", user?.id] });
       toast({ title: "Compromisso criado com sucesso!" });
     },
     onError: (error: Error) => {
@@ -57,7 +61,7 @@ export function useEvents() {
       return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["events"] });
+      queryClient.invalidateQueries({ queryKey: ["events", user?.id] });
       toast({ title: "Compromisso atualizado com sucesso!" });
     },
     onError: (error: Error) => {
@@ -70,7 +74,7 @@ export function useEvents() {
       await apiClient.delete(`/appointments/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["events"] });
+      queryClient.invalidateQueries({ queryKey: ["events", user?.id] });
       toast({ title: "Compromisso excluído com sucesso!" });
     },
     onError: (error: Error) => {

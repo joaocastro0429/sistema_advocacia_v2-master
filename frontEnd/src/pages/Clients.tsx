@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Search, Pencil, Trash2, User, CalendarDays } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, User, CalendarDays, Paperclip } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -27,7 +27,7 @@ export default function Clients() {
   const [search, setSearch] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingClient, setEditingClient] = useState<string | null>(null);
-  const [formData, setFormData] = useState<ClientInput>({
+  const [formData, setFormData] = useState<ClientInput & { document_id?: string | null }>({
     name: "",
     email: null,
     phone: null,
@@ -37,6 +37,7 @@ export default function Clients() {
     state: null,
     zip_code: null,
     notes: null,
+    document_id: null,
   });
 
   // Função para formatar a data automática vinda do banco
@@ -65,6 +66,7 @@ export default function Clients() {
         state: client.state,
         zip_code: client.zip_code,
         notes: client.notes,
+        document_id: client.document_id || null,
       });
     } else {
       setEditingClient(null);
@@ -78,6 +80,7 @@ export default function Clients() {
         state: null,
         zip_code: null,
         notes: null,
+        document_id: null,
       });
     }
     setIsDialogOpen(true);
@@ -199,7 +202,7 @@ export default function Clients() {
 
       {/* Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl bg-white shadow-2xl border-none">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white shadow-2xl border-none">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">{editingClient ? "Editar Cliente" : "Novo Cliente"}</DialogTitle>
             <DialogDescription>
@@ -291,6 +294,51 @@ export default function Clients() {
                   className="bg-slate-50 border-slate-200 focus:bg-white uppercase text-center"
                   placeholder="SP"
                 />
+              </div>
+
+              <div className="md:col-span-2 space-y-2">
+                <Label htmlFor="document" className="font-bold text-slate-700 flex items-center gap-2">
+                  <Paperclip className="w-4 h-4" /> Documento Anexo
+                </Label>
+                <Input
+                  id="document"
+                  type="file"
+                  className="bg-slate-50 border-slate-200 focus:bg-white cursor-pointer"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      console.log("📤 Enviando arquivo para upload:", file.name);
+                      
+                      try {
+                        // Criar FormData com o arquivo
+                        const uploadFormData = new FormData();
+                        uploadFormData.append('file', file);
+                        
+                        // Enviar para o backend
+                        const response = await fetch('http://localhost:3333/api/processes/upload', {
+                          method: 'POST',
+                          body: uploadFormData,
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (result.success) {
+                          console.log('✅ Arquivo enviado com sucesso:', result.file);
+                          // Salvar o caminho do arquivo no formulário
+                          setFormData((prev) => ({ 
+                            ...prev, 
+                            document_id: result.file.path 
+                          }));
+                        } else {
+                          console.error('❌ Erro ao fazer upload:', result.message);
+                        }
+                      } catch (error) {
+                        console.error('❌ Erro na requisição de upload:', error);
+                      }
+                    }
+                  }}
+                />
+                <p className="text-[10px] text-slate-500">Selecione um arquivo para fazer upload automático.</p>
               </div>
 
               <div className="md:col-span-2 space-y-2">

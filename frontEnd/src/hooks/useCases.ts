@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api-client";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 export interface Case {
   id: string;
@@ -25,13 +26,17 @@ export type CaseInput = Omit<Case, "id" | "created_at" | "updated_at" | "clients
 export function useCases() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const { data: cases = [], isLoading, error } = useQuery({
-    queryKey: ["cases"],
+    queryKey: ["cases", user?.id],
     queryFn: async () => {
+      console.log(`📋 Buscando processos do usuário: ${user?.id}`);
       const response = await apiClient.get<Case[]>("/processes");
+      console.log(`✅ ${response?.length || 0} processos carregados`);
       return response || [];
     },
+    enabled: !!user?.id, // Só busca se houver usuário logado
   });
 
   const createCase = useMutation({
@@ -40,7 +45,7 @@ export function useCases() {
       return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cases"] });
+      queryClient.invalidateQueries({ queryKey: ["cases", user?.id] });
       toast({ title: "Processo criado com sucesso!" });
     },
     onError: (error: Error) => {
@@ -54,7 +59,7 @@ export function useCases() {
       return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cases"] });
+      queryClient.invalidateQueries({ queryKey: ["cases", user?.id] });
       toast({ title: "Processo atualizado com sucesso!" });
     },
     onError: (error: Error) => {
@@ -67,7 +72,7 @@ export function useCases() {
       await apiClient.delete(`/processes/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cases"] });
+      queryClient.invalidateQueries({ queryKey: ["cases", user?.id] });
       toast({ title: "Processo excluído com sucesso!" });
     },
     onError: (error: Error) => {

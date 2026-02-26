@@ -17,3 +17,4 @@ export const getClients = async () => {
     throw new Error('Erro ao buscar usuários')
   }
 }
+

@@ -21,11 +21,7 @@ export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: N
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id?: string; userId?: string; role?: string };
     // Normalizar para usar 'id' sempre, mas aceitar 'userId' também
-    req.user = {
-      id: decoded.id || decoded.userId,
-      userId: decoded.userId || decoded.id,
-      role: decoded.role,
-    };
+   req.user?.id
     next();
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {

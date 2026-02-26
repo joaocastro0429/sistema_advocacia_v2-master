@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api-client";
-import { useToast } from "@/hooks/use-toast"; // Assuming useToast is available
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 export interface Lawyer {
   id: string;
@@ -17,14 +18,17 @@ export type LawyerInput = Omit<Lawyer, "id" | "createdAt" | "updatedAt">;
 
 export function useLawyers() {
   const { toast } = useToast();
+  const { user } = useAuth();
   const queryClient = useQueryClient();
 
   const { data: lawyers = [], isLoading, error } = useQuery({
-    queryKey: ["lawyers"],
+    queryKey: ["lawyers", user?.id],
     queryFn: async () => {
-      const response = await apiClient.get<Lawyer[]>("/lawyers"); // Changed to /lawyers (plural)
+      const response = await apiClient.get<Lawyer[]>("/lawyers");
+      console.log("👨‍⚖️ Buscando advogados do usuário:", user?.id);
       return response || [];
     },
+    enabled: !!user?.id,
   });
 
   const createLawyer = useMutation({
@@ -33,7 +37,7 @@ export function useLawyers() {
       return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["lawyers"] });
+      queryClient.invalidateQueries({ queryKey: ["lawyers", user?.id] });
       toast({ title: "Advogado criado com sucesso!" });
     },
     onError: (error: Error) => {
@@ -47,7 +51,7 @@ export function useLawyers() {
       return response;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["lawyers"] });
+      queryClient.invalidateQueries({ queryKey: ["lawyers", user?.id] });
       toast({ title: "Advogado atualizado com sucesso!" });
     },
     onError: (error: Error) => {
@@ -60,7 +64,7 @@ export function useLawyers() {
       await apiClient.delete(`/lawyers/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["lawyers"] });
+      queryClient.invalidateQueries({ queryKey: ["lawyers", user?.id] });
       toast({ title: "Advogado excluído com sucesso!" });
     },
     onError: (error: Error) => {
