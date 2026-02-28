@@ -1,19 +1,30 @@
-import {prisma} from '../../lib/prisma'
+import { prisma } from "../../lib/prisma"
 
-export const GetById=async(id:string)=>{
-    try{
-        const appointment= await prisma.appointment.findUnique({
-            where:{id}
-        })
-        if(!appointment){
-            throw new Error("Lawyer not found")
+export const GetById = async (id: string, userId: string) => {
+  const appointment = await prisma.appointment.findFirst({
+    where: {
+      id,
+      userId,
+    },
+    include: {
+      client: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      process: {
+        select: {
+          id: true,
+          processNumber: true,
+        },
+      },
+    },
+  })
 
-        }
-
-    
-
-    return appointment
-  } catch (error) {
-    throw error
+  if (!appointment) {
+    throw new Error("Compromisso nao encontrado")
   }
-    }
+
+  return appointment
+}

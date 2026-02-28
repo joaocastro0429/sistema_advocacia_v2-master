@@ -15,8 +15,11 @@ function formatTime(date: Date): string {
   return `${hours}:${minutes}`
 }
 
-export const appointment = async () => {
+export const appointment = async (userId: string) => {
   const appointments = await prisma.appointment.findMany({
+    where: {
+      userId,
+    },
     include: {
       client: {
         select: {

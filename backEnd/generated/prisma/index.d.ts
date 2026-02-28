@@ -29,11 +29,6 @@ export type Client = $Result.DefaultSelection<Prisma.$ClientPayload>
  */
 export type Process = $Result.DefaultSelection<Prisma.$ProcessPayload>
 /**
- * Model Lawyer
- * 
- */
-export type Lawyer = $Result.DefaultSelection<Prisma.$LawyerPayload>
-/**
  * Model Appointment
  * 
  */
@@ -74,6 +69,10 @@ export const PetitionType: {
   PETITION: 'PETITION',
   RECOURSE: 'RECOURSE',
   EVIDENCE: 'EVIDENCE',
+  CONTESTATION: 'CONTESTATION',
+  REPLY: 'REPLY',
+  APPEAL: 'APPEAL',
+  MANIFESTATION: 'MANIFESTATION',
   OTHER: 'OTHER'
 };
 
@@ -239,16 +238,6 @@ export class PrismaClient<
     * ```
     */
   get process(): Prisma.ProcessDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.lawyer`: Exposes CRUD operations for the **Lawyer** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Lawyers
-    * const lawyers = await prisma.lawyer.findMany()
-    * ```
-    */
-  get lawyer(): Prisma.LawyerDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.appointment`: Exposes CRUD operations for the **Appointment** model.
@@ -706,7 +695,6 @@ export namespace Prisma {
     User: 'User',
     Client: 'Client',
     Process: 'Process',
-    Lawyer: 'Lawyer',
     Appointment: 'Appointment',
     Petition: 'Petition'
   };
@@ -724,7 +712,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "client" | "process" | "lawyer" | "appointment" | "petition"
+      modelProps: "user" | "client" | "process" | "appointment" | "petition"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -947,80 +935,6 @@ export namespace Prisma {
           count: {
             args: Prisma.ProcessCountArgs<ExtArgs>
             result: $Utils.Optional<ProcessCountAggregateOutputType> | number
-          }
-        }
-      }
-      Lawyer: {
-        payload: Prisma.$LawyerPayload<ExtArgs>
-        fields: Prisma.LawyerFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.LawyerFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LawyerPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.LawyerFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LawyerPayload>
-          }
-          findFirst: {
-            args: Prisma.LawyerFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LawyerPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.LawyerFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LawyerPayload>
-          }
-          findMany: {
-            args: Prisma.LawyerFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LawyerPayload>[]
-          }
-          create: {
-            args: Prisma.LawyerCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LawyerPayload>
-          }
-          createMany: {
-            args: Prisma.LawyerCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.LawyerCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LawyerPayload>[]
-          }
-          delete: {
-            args: Prisma.LawyerDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LawyerPayload>
-          }
-          update: {
-            args: Prisma.LawyerUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LawyerPayload>
-          }
-          deleteMany: {
-            args: Prisma.LawyerDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.LawyerUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.LawyerUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LawyerPayload>[]
-          }
-          upsert: {
-            args: Prisma.LawyerUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LawyerPayload>
-          }
-          aggregate: {
-            args: Prisma.LawyerAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateLawyer>
-          }
-          groupBy: {
-            args: Prisma.LawyerGroupByArgs<ExtArgs>
-            result: $Utils.Optional<LawyerGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.LawyerCountArgs<ExtArgs>
-            result: $Utils.Optional<LawyerCountAggregateOutputType> | number
           }
         }
       }
@@ -1283,7 +1197,6 @@ export namespace Prisma {
     user?: UserOmit
     client?: ClientOmit
     process?: ProcessOmit
-    lawyer?: LawyerOmit
     appointment?: AppointmentOmit
     petition?: PetitionOmit
   }
@@ -1362,6 +1275,64 @@ export namespace Prisma {
 
 
   /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    clients: number
+    processes: number
+    appointments: number
+    petitions: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    clients?: boolean | UserCountOutputTypeCountClientsArgs
+    processes?: boolean | UserCountOutputTypeCountProcessesArgs
+    appointments?: boolean | UserCountOutputTypeCountAppointmentsArgs
+    petitions?: boolean | UserCountOutputTypeCountPetitionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountClientsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ClientWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountProcessesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProcessWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAppointmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AppointmentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPetitionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PetitionWhereInput
+  }
+
+
+  /**
    * Count Type ClientCountOutputType
    */
 
@@ -1415,12 +1386,12 @@ export namespace Prisma {
    */
 
   export type ProcessCountOutputType = {
-    appointment: number
+    appointments: number
     petitions: number
   }
 
   export type ProcessCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    appointment?: boolean | ProcessCountOutputTypeCountAppointmentArgs
+    appointments?: boolean | ProcessCountOutputTypeCountAppointmentsArgs
     petitions?: boolean | ProcessCountOutputTypeCountPetitionsArgs
   }
 
@@ -1438,7 +1409,7 @@ export namespace Prisma {
   /**
    * ProcessCountOutputType without action
    */
-  export type ProcessCountOutputTypeCountAppointmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProcessCountOutputTypeCountAppointmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AppointmentWhereInput
   }
 
@@ -1446,55 +1417,6 @@ export namespace Prisma {
    * ProcessCountOutputType without action
    */
   export type ProcessCountOutputTypeCountPetitionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PetitionWhereInput
-  }
-
-
-  /**
-   * Count Type LawyerCountOutputType
-   */
-
-  export type LawyerCountOutputType = {
-    processes: number
-    appointment: number
-    petitions: number
-  }
-
-  export type LawyerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    processes?: boolean | LawyerCountOutputTypeCountProcessesArgs
-    appointment?: boolean | LawyerCountOutputTypeCountAppointmentArgs
-    petitions?: boolean | LawyerCountOutputTypeCountPetitionsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * LawyerCountOutputType without action
-   */
-  export type LawyerCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the LawyerCountOutputType
-     */
-    select?: LawyerCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * LawyerCountOutputType without action
-   */
-  export type LawyerCountOutputTypeCountProcessesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProcessWhereInput
-  }
-
-  /**
-   * LawyerCountOutputType without action
-   */
-  export type LawyerCountOutputTypeCountAppointmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AppointmentWhereInput
-  }
-
-  /**
-   * LawyerCountOutputType without action
-   */
-  export type LawyerCountOutputTypeCountPetitionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PetitionWhereInput
   }
 
@@ -1739,6 +1661,11 @@ export namespace Prisma {
     office?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    clients?: boolean | User$clientsArgs<ExtArgs>
+    processes?: boolean | User$processesArgs<ExtArgs>
+    appointments?: boolean | User$appointmentsArgs<ExtArgs>
+    petitions?: boolean | User$petitionsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1793,10 +1720,24 @@ export namespace Prisma {
   }
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "active" | "oab" | "oab_uf" | "cpf" | "phone" | "specialty" | "office" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    clients?: boolean | User$clientsArgs<ExtArgs>
+    processes?: boolean | User$processesArgs<ExtArgs>
+    appointments?: boolean | User$appointmentsArgs<ExtArgs>
+    petitions?: boolean | User$petitionsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
-    objects: {}
+    objects: {
+      clients: Prisma.$ClientPayload<ExtArgs>[]
+      processes: Prisma.$ProcessPayload<ExtArgs>[]
+      appointments: Prisma.$AppointmentPayload<ExtArgs>[]
+      petitions: Prisma.$PetitionPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string | null
@@ -2206,6 +2147,10 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    clients<T extends User$clientsArgs<ExtArgs> = {}>(args?: Subset<T, User$clientsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    processes<T extends User$processesArgs<ExtArgs> = {}>(args?: Subset<T, User$processesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    appointments<T extends User$appointmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$appointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    petitions<T extends User$petitionsArgs<ExtArgs> = {}>(args?: Subset<T, User$petitionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PetitionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2266,6 +2211,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -2284,6 +2233,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -2301,6 +2254,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -2350,6 +2307,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where?: UserWhereInput
@@ -2398,6 +2359,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which Users to fetch.
      */
     where?: UserWhereInput
@@ -2440,6 +2405,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to create a User.
      */
@@ -2488,6 +2457,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to update a User.
      */
@@ -2555,6 +2528,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The filter to search for the User to update in case it exists.
      */
     where: UserWhereUniqueInput
@@ -2581,6 +2558,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter which User to delete.
      */
     where: UserWhereUniqueInput
@@ -2601,6 +2582,102 @@ export namespace Prisma {
   }
 
   /**
+   * User.clients
+   */
+  export type User$clientsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Client
+     */
+    select?: ClientSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Client
+     */
+    omit?: ClientOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClientInclude<ExtArgs> | null
+    where?: ClientWhereInput
+    orderBy?: ClientOrderByWithRelationInput | ClientOrderByWithRelationInput[]
+    cursor?: ClientWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClientScalarFieldEnum | ClientScalarFieldEnum[]
+  }
+
+  /**
+   * User.processes
+   */
+  export type User$processesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Process
+     */
+    select?: ProcessSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Process
+     */
+    omit?: ProcessOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProcessInclude<ExtArgs> | null
+    where?: ProcessWhereInput
+    orderBy?: ProcessOrderByWithRelationInput | ProcessOrderByWithRelationInput[]
+    cursor?: ProcessWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProcessScalarFieldEnum | ProcessScalarFieldEnum[]
+  }
+
+  /**
+   * User.appointments
+   */
+  export type User$appointmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Appointment
+     */
+    select?: AppointmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Appointment
+     */
+    omit?: AppointmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AppointmentInclude<ExtArgs> | null
+    where?: AppointmentWhereInput
+    orderBy?: AppointmentOrderByWithRelationInput | AppointmentOrderByWithRelationInput[]
+    cursor?: AppointmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AppointmentScalarFieldEnum | AppointmentScalarFieldEnum[]
+  }
+
+  /**
+   * User.petitions
+   */
+  export type User$petitionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Petition
+     */
+    select?: PetitionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Petition
+     */
+    omit?: PetitionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PetitionInclude<ExtArgs> | null
+    where?: PetitionWhereInput
+    orderBy?: PetitionOrderByWithRelationInput | PetitionOrderByWithRelationInput[]
+    cursor?: PetitionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PetitionScalarFieldEnum | PetitionScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2612,6 +2689,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
   }
 
 
@@ -2632,15 +2713,10 @@ export namespace Prisma {
     phone: string | null
     cpf: string | null
     cnpj: string | null
-    cpf_cnpj: string | null
     address: string | null
     city: string | null
     state: string | null
-    zip_code: string | null
-    notes: string | null
-    dateOfBirth: Date | null
-    maritalStatus: string | null
-    profession: string | null
+    userId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2652,15 +2728,10 @@ export namespace Prisma {
     phone: string | null
     cpf: string | null
     cnpj: string | null
-    cpf_cnpj: string | null
     address: string | null
     city: string | null
     state: string | null
-    zip_code: string | null
-    notes: string | null
-    dateOfBirth: Date | null
-    maritalStatus: string | null
-    profession: string | null
+    userId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2672,15 +2743,10 @@ export namespace Prisma {
     phone: number
     cpf: number
     cnpj: number
-    cpf_cnpj: number
     address: number
     city: number
     state: number
-    zip_code: number
-    notes: number
-    dateOfBirth: number
-    maritalStatus: number
-    profession: number
+    userId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2694,15 +2760,10 @@ export namespace Prisma {
     phone?: true
     cpf?: true
     cnpj?: true
-    cpf_cnpj?: true
     address?: true
     city?: true
     state?: true
-    zip_code?: true
-    notes?: true
-    dateOfBirth?: true
-    maritalStatus?: true
-    profession?: true
+    userId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2714,15 +2775,10 @@ export namespace Prisma {
     phone?: true
     cpf?: true
     cnpj?: true
-    cpf_cnpj?: true
     address?: true
     city?: true
     state?: true
-    zip_code?: true
-    notes?: true
-    dateOfBirth?: true
-    maritalStatus?: true
-    profession?: true
+    userId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2734,15 +2790,10 @@ export namespace Prisma {
     phone?: true
     cpf?: true
     cnpj?: true
-    cpf_cnpj?: true
     address?: true
     city?: true
     state?: true
-    zip_code?: true
-    notes?: true
-    dateOfBirth?: true
-    maritalStatus?: true
-    profession?: true
+    userId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2827,15 +2878,10 @@ export namespace Prisma {
     phone: string | null
     cpf: string | null
     cnpj: string | null
-    cpf_cnpj: string | null
     address: string | null
     city: string | null
     state: string | null
-    zip_code: string | null
-    notes: string | null
-    dateOfBirth: Date | null
-    maritalStatus: string | null
-    profession: string | null
+    userId: string
     createdAt: Date
     updatedAt: Date
     _count: ClientCountAggregateOutputType | null
@@ -2864,17 +2910,13 @@ export namespace Prisma {
     phone?: boolean
     cpf?: boolean
     cnpj?: boolean
-    cpf_cnpj?: boolean
     address?: boolean
     city?: boolean
     state?: boolean
-    zip_code?: boolean
-    notes?: boolean
-    dateOfBirth?: boolean
-    maritalStatus?: boolean
-    profession?: boolean
+    userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
     appointments?: boolean | Client$appointmentsArgs<ExtArgs>
     processes?: boolean | Client$processesArgs<ExtArgs>
     petitions?: boolean | Client$petitionsArgs<ExtArgs>
@@ -2888,17 +2930,13 @@ export namespace Prisma {
     phone?: boolean
     cpf?: boolean
     cnpj?: boolean
-    cpf_cnpj?: boolean
     address?: boolean
     city?: boolean
     state?: boolean
-    zip_code?: boolean
-    notes?: boolean
-    dateOfBirth?: boolean
-    maritalStatus?: boolean
-    profession?: boolean
+    userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["client"]>
 
   export type ClientSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2908,17 +2946,13 @@ export namespace Prisma {
     phone?: boolean
     cpf?: boolean
     cnpj?: boolean
-    cpf_cnpj?: boolean
     address?: boolean
     city?: boolean
     state?: boolean
-    zip_code?: boolean
-    notes?: boolean
-    dateOfBirth?: boolean
-    maritalStatus?: boolean
-    profession?: boolean
+    userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["client"]>
 
   export type ClientSelectScalar = {
@@ -2928,32 +2962,33 @@ export namespace Prisma {
     phone?: boolean
     cpf?: boolean
     cnpj?: boolean
-    cpf_cnpj?: boolean
     address?: boolean
     city?: boolean
     state?: boolean
-    zip_code?: boolean
-    notes?: boolean
-    dateOfBirth?: boolean
-    maritalStatus?: boolean
-    profession?: boolean
+    userId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ClientOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "cpf" | "cnpj" | "cpf_cnpj" | "address" | "city" | "state" | "zip_code" | "notes" | "dateOfBirth" | "maritalStatus" | "profession" | "createdAt" | "updatedAt", ExtArgs["result"]["client"]>
+  export type ClientOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "cpf" | "cnpj" | "address" | "city" | "state" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["client"]>
   export type ClientInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
     appointments?: boolean | Client$appointmentsArgs<ExtArgs>
     processes?: boolean | Client$processesArgs<ExtArgs>
     petitions?: boolean | Client$petitionsArgs<ExtArgs>
     _count?: boolean | ClientCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type ClientIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type ClientIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ClientIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ClientIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
 
   export type $ClientPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Client"
     objects: {
+      user: Prisma.$UserPayload<ExtArgs>
       appointments: Prisma.$AppointmentPayload<ExtArgs>[]
       processes: Prisma.$ProcessPayload<ExtArgs>[]
       petitions: Prisma.$PetitionPayload<ExtArgs>[]
@@ -2965,15 +3000,10 @@ export namespace Prisma {
       phone: string | null
       cpf: string | null
       cnpj: string | null
-      cpf_cnpj: string | null
       address: string | null
       city: string | null
       state: string | null
-      zip_code: string | null
-      notes: string | null
-      dateOfBirth: Date | null
-      maritalStatus: string | null
-      profession: string | null
+      userId: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["client"]>
@@ -3370,6 +3400,7 @@ export namespace Prisma {
    */
   export interface Prisma__ClientClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     appointments<T extends Client$appointmentsArgs<ExtArgs> = {}>(args?: Subset<T, Client$appointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     processes<T extends Client$processesArgs<ExtArgs> = {}>(args?: Subset<T, Client$processesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     petitions<T extends Client$petitionsArgs<ExtArgs> = {}>(args?: Subset<T, Client$petitionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PetitionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3408,15 +3439,10 @@ export namespace Prisma {
     readonly phone: FieldRef<"Client", 'String'>
     readonly cpf: FieldRef<"Client", 'String'>
     readonly cnpj: FieldRef<"Client", 'String'>
-    readonly cpf_cnpj: FieldRef<"Client", 'String'>
     readonly address: FieldRef<"Client", 'String'>
     readonly city: FieldRef<"Client", 'String'>
     readonly state: FieldRef<"Client", 'String'>
-    readonly zip_code: FieldRef<"Client", 'String'>
-    readonly notes: FieldRef<"Client", 'String'>
-    readonly dateOfBirth: FieldRef<"Client", 'DateTime'>
-    readonly maritalStatus: FieldRef<"Client", 'String'>
-    readonly profession: FieldRef<"Client", 'String'>
+    readonly userId: FieldRef<"Client", 'String'>
     readonly createdAt: FieldRef<"Client", 'DateTime'>
     readonly updatedAt: FieldRef<"Client", 'DateTime'>
   }
@@ -3668,6 +3694,10 @@ export namespace Prisma {
      */
     data: ClientCreateManyInput | ClientCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClientIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -3738,6 +3768,10 @@ export namespace Prisma {
      * Limit how many Clients to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClientIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -3923,11 +3957,11 @@ export namespace Prisma {
     court: string | null
     type: string | null
     status: string | null
-    lawyerId: string | null
-    clientId: string | null
     hearingDate: Date | null
     caseValue: Decimal | null
     internalNotes: string | null
+    userId: string | null
+    clientId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3938,11 +3972,11 @@ export namespace Prisma {
     court: string | null
     type: string | null
     status: string | null
-    lawyerId: string | null
-    clientId: string | null
     hearingDate: Date | null
     caseValue: Decimal | null
     internalNotes: string | null
+    userId: string | null
+    clientId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3953,11 +3987,11 @@ export namespace Prisma {
     court: number
     type: number
     status: number
-    lawyerId: number
-    clientId: number
     hearingDate: number
     caseValue: number
     internalNotes: number
+    userId: number
+    clientId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -3978,11 +4012,11 @@ export namespace Prisma {
     court?: true
     type?: true
     status?: true
-    lawyerId?: true
-    clientId?: true
     hearingDate?: true
     caseValue?: true
     internalNotes?: true
+    userId?: true
+    clientId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3993,11 +4027,11 @@ export namespace Prisma {
     court?: true
     type?: true
     status?: true
-    lawyerId?: true
-    clientId?: true
     hearingDate?: true
     caseValue?: true
     internalNotes?: true
+    userId?: true
+    clientId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4008,11 +4042,11 @@ export namespace Prisma {
     court?: true
     type?: true
     status?: true
-    lawyerId?: true
-    clientId?: true
     hearingDate?: true
     caseValue?: true
     internalNotes?: true
+    userId?: true
+    clientId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4110,11 +4144,11 @@ export namespace Prisma {
     court: string
     type: string
     status: string
-    lawyerId: string | null
-    clientId: string | null
     hearingDate: Date
     caseValue: Decimal
     internalNotes: string
+    userId: string
+    clientId: string | null
     createdAt: Date
     updatedAt: Date
     _count: ProcessCountAggregateOutputType | null
@@ -4144,16 +4178,16 @@ export namespace Prisma {
     court?: boolean
     type?: boolean
     status?: boolean
-    lawyerId?: boolean
-    clientId?: boolean
     hearingDate?: boolean
     caseValue?: boolean
     internalNotes?: boolean
+    userId?: boolean
+    clientId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    lawyer?: boolean | Process$lawyerArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
     client?: boolean | Process$clientArgs<ExtArgs>
-    appointment?: boolean | Process$appointmentArgs<ExtArgs>
+    appointments?: boolean | Process$appointmentsArgs<ExtArgs>
     petitions?: boolean | Process$petitionsArgs<ExtArgs>
     _count?: boolean | ProcessCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["process"]>
@@ -4164,14 +4198,14 @@ export namespace Prisma {
     court?: boolean
     type?: boolean
     status?: boolean
-    lawyerId?: boolean
-    clientId?: boolean
     hearingDate?: boolean
     caseValue?: boolean
     internalNotes?: boolean
+    userId?: boolean
+    clientId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    lawyer?: boolean | Process$lawyerArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
     client?: boolean | Process$clientArgs<ExtArgs>
   }, ExtArgs["result"]["process"]>
 
@@ -4181,14 +4215,14 @@ export namespace Prisma {
     court?: boolean
     type?: boolean
     status?: boolean
-    lawyerId?: boolean
-    clientId?: boolean
     hearingDate?: boolean
     caseValue?: boolean
     internalNotes?: boolean
+    userId?: boolean
+    clientId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    lawyer?: boolean | Process$lawyerArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
     client?: boolean | Process$clientArgs<ExtArgs>
   }, ExtArgs["result"]["process"]>
 
@@ -4198,38 +4232,38 @@ export namespace Prisma {
     court?: boolean
     type?: boolean
     status?: boolean
-    lawyerId?: boolean
-    clientId?: boolean
     hearingDate?: boolean
     caseValue?: boolean
     internalNotes?: boolean
+    userId?: boolean
+    clientId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ProcessOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "processNumber" | "court" | "type" | "status" | "lawyerId" | "clientId" | "hearingDate" | "caseValue" | "internalNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["process"]>
+  export type ProcessOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "processNumber" | "court" | "type" | "status" | "hearingDate" | "caseValue" | "internalNotes" | "userId" | "clientId" | "createdAt" | "updatedAt", ExtArgs["result"]["process"]>
   export type ProcessInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    lawyer?: boolean | Process$lawyerArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
     client?: boolean | Process$clientArgs<ExtArgs>
-    appointment?: boolean | Process$appointmentArgs<ExtArgs>
+    appointments?: boolean | Process$appointmentsArgs<ExtArgs>
     petitions?: boolean | Process$petitionsArgs<ExtArgs>
     _count?: boolean | ProcessCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProcessIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    lawyer?: boolean | Process$lawyerArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
     client?: boolean | Process$clientArgs<ExtArgs>
   }
   export type ProcessIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    lawyer?: boolean | Process$lawyerArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
     client?: boolean | Process$clientArgs<ExtArgs>
   }
 
   export type $ProcessPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Process"
     objects: {
-      lawyer: Prisma.$LawyerPayload<ExtArgs> | null
+      user: Prisma.$UserPayload<ExtArgs>
       client: Prisma.$ClientPayload<ExtArgs> | null
-      appointment: Prisma.$AppointmentPayload<ExtArgs>[]
+      appointments: Prisma.$AppointmentPayload<ExtArgs>[]
       petitions: Prisma.$PetitionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -4238,11 +4272,11 @@ export namespace Prisma {
       court: string
       type: string
       status: string
-      lawyerId: string | null
-      clientId: string | null
       hearingDate: Date
       caseValue: Prisma.Decimal
       internalNotes: string
+      userId: string
+      clientId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["process"]>
@@ -4639,9 +4673,9 @@ export namespace Prisma {
    */
   export interface Prisma__ProcessClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    lawyer<T extends Process$lawyerArgs<ExtArgs> = {}>(args?: Subset<T, Process$lawyerArgs<ExtArgs>>): Prisma__LawyerClient<$Result.GetResult<Prisma.$LawyerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     client<T extends Process$clientArgs<ExtArgs> = {}>(args?: Subset<T, Process$clientArgs<ExtArgs>>): Prisma__ClientClient<$Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    appointment<T extends Process$appointmentArgs<ExtArgs> = {}>(args?: Subset<T, Process$appointmentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    appointments<T extends Process$appointmentsArgs<ExtArgs> = {}>(args?: Subset<T, Process$appointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     petitions<T extends Process$petitionsArgs<ExtArgs> = {}>(args?: Subset<T, Process$petitionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PetitionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -4677,11 +4711,11 @@ export namespace Prisma {
     readonly court: FieldRef<"Process", 'String'>
     readonly type: FieldRef<"Process", 'String'>
     readonly status: FieldRef<"Process", 'String'>
-    readonly lawyerId: FieldRef<"Process", 'String'>
-    readonly clientId: FieldRef<"Process", 'String'>
     readonly hearingDate: FieldRef<"Process", 'DateTime'>
     readonly caseValue: FieldRef<"Process", 'Decimal'>
     readonly internalNotes: FieldRef<"Process", 'String'>
+    readonly userId: FieldRef<"Process", 'String'>
+    readonly clientId: FieldRef<"Process", 'String'>
     readonly createdAt: FieldRef<"Process", 'DateTime'>
     readonly updatedAt: FieldRef<"Process", 'DateTime'>
   }
@@ -5080,25 +5114,6 @@ export namespace Prisma {
   }
 
   /**
-   * Process.lawyer
-   */
-  export type Process$lawyerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Lawyer
-     */
-    select?: LawyerSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Lawyer
-     */
-    omit?: LawyerOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LawyerInclude<ExtArgs> | null
-    where?: LawyerWhereInput
-  }
-
-  /**
    * Process.client
    */
   export type Process$clientArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5118,9 +5133,9 @@ export namespace Prisma {
   }
 
   /**
-   * Process.appointment
+   * Process.appointments
    */
-  export type Process$appointmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Process$appointmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Appointment
      */
@@ -5185,1171 +5200,6 @@ export namespace Prisma {
 
 
   /**
-   * Model Lawyer
-   */
-
-  export type AggregateLawyer = {
-    _count: LawyerCountAggregateOutputType | null
-    _min: LawyerMinAggregateOutputType | null
-    _max: LawyerMaxAggregateOutputType | null
-  }
-
-  export type LawyerMinAggregateOutputType = {
-    id: string | null
-    name: string | null
-    email: string | null
-    oabNumber: string | null
-    specialty: string | null
-    phone: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type LawyerMaxAggregateOutputType = {
-    id: string | null
-    name: string | null
-    email: string | null
-    oabNumber: string | null
-    specialty: string | null
-    phone: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type LawyerCountAggregateOutputType = {
-    id: number
-    name: number
-    email: number
-    oabNumber: number
-    specialty: number
-    phone: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type LawyerMinAggregateInputType = {
-    id?: true
-    name?: true
-    email?: true
-    oabNumber?: true
-    specialty?: true
-    phone?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type LawyerMaxAggregateInputType = {
-    id?: true
-    name?: true
-    email?: true
-    oabNumber?: true
-    specialty?: true
-    phone?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type LawyerCountAggregateInputType = {
-    id?: true
-    name?: true
-    email?: true
-    oabNumber?: true
-    specialty?: true
-    phone?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type LawyerAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Lawyer to aggregate.
-     */
-    where?: LawyerWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Lawyers to fetch.
-     */
-    orderBy?: LawyerOrderByWithRelationInput | LawyerOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: LawyerWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Lawyers from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Lawyers.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Lawyers
-    **/
-    _count?: true | LawyerCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: LawyerMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: LawyerMaxAggregateInputType
-  }
-
-  export type GetLawyerAggregateType<T extends LawyerAggregateArgs> = {
-        [P in keyof T & keyof AggregateLawyer]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateLawyer[P]>
-      : GetScalarType<T[P], AggregateLawyer[P]>
-  }
-
-
-
-
-  export type LawyerGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: LawyerWhereInput
-    orderBy?: LawyerOrderByWithAggregationInput | LawyerOrderByWithAggregationInput[]
-    by: LawyerScalarFieldEnum[] | LawyerScalarFieldEnum
-    having?: LawyerScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: LawyerCountAggregateInputType | true
-    _min?: LawyerMinAggregateInputType
-    _max?: LawyerMaxAggregateInputType
-  }
-
-  export type LawyerGroupByOutputType = {
-    id: string
-    name: string
-    email: string
-    oabNumber: string
-    specialty: string
-    phone: string | null
-    createdAt: Date
-    updatedAt: Date
-    _count: LawyerCountAggregateOutputType | null
-    _min: LawyerMinAggregateOutputType | null
-    _max: LawyerMaxAggregateOutputType | null
-  }
-
-  type GetLawyerGroupByPayload<T extends LawyerGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<LawyerGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof LawyerGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], LawyerGroupByOutputType[P]>
-            : GetScalarType<T[P], LawyerGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type LawyerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    email?: boolean
-    oabNumber?: boolean
-    specialty?: boolean
-    phone?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    processes?: boolean | Lawyer$processesArgs<ExtArgs>
-    appointment?: boolean | Lawyer$appointmentArgs<ExtArgs>
-    petitions?: boolean | Lawyer$petitionsArgs<ExtArgs>
-    _count?: boolean | LawyerCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["lawyer"]>
-
-  export type LawyerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    email?: boolean
-    oabNumber?: boolean
-    specialty?: boolean
-    phone?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }, ExtArgs["result"]["lawyer"]>
-
-  export type LawyerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    email?: boolean
-    oabNumber?: boolean
-    specialty?: boolean
-    phone?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }, ExtArgs["result"]["lawyer"]>
-
-  export type LawyerSelectScalar = {
-    id?: boolean
-    name?: boolean
-    email?: boolean
-    oabNumber?: boolean
-    specialty?: boolean
-    phone?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type LawyerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "oabNumber" | "specialty" | "phone" | "createdAt" | "updatedAt", ExtArgs["result"]["lawyer"]>
-  export type LawyerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    processes?: boolean | Lawyer$processesArgs<ExtArgs>
-    appointment?: boolean | Lawyer$appointmentArgs<ExtArgs>
-    petitions?: boolean | Lawyer$petitionsArgs<ExtArgs>
-    _count?: boolean | LawyerCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type LawyerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type LawyerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-
-  export type $LawyerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Lawyer"
-    objects: {
-      processes: Prisma.$ProcessPayload<ExtArgs>[]
-      appointment: Prisma.$AppointmentPayload<ExtArgs>[]
-      petitions: Prisma.$PetitionPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      name: string
-      email: string
-      oabNumber: string
-      specialty: string
-      phone: string | null
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["lawyer"]>
-    composites: {}
-  }
-
-  type LawyerGetPayload<S extends boolean | null | undefined | LawyerDefaultArgs> = $Result.GetResult<Prisma.$LawyerPayload, S>
-
-  type LawyerCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<LawyerFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: LawyerCountAggregateInputType | true
-    }
-
-  export interface LawyerDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Lawyer'], meta: { name: 'Lawyer' } }
-    /**
-     * Find zero or one Lawyer that matches the filter.
-     * @param {LawyerFindUniqueArgs} args - Arguments to find a Lawyer
-     * @example
-     * // Get one Lawyer
-     * const lawyer = await prisma.lawyer.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends LawyerFindUniqueArgs>(args: SelectSubset<T, LawyerFindUniqueArgs<ExtArgs>>): Prisma__LawyerClient<$Result.GetResult<Prisma.$LawyerPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Lawyer that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {LawyerFindUniqueOrThrowArgs} args - Arguments to find a Lawyer
-     * @example
-     * // Get one Lawyer
-     * const lawyer = await prisma.lawyer.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends LawyerFindUniqueOrThrowArgs>(args: SelectSubset<T, LawyerFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LawyerClient<$Result.GetResult<Prisma.$LawyerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Lawyer that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {LawyerFindFirstArgs} args - Arguments to find a Lawyer
-     * @example
-     * // Get one Lawyer
-     * const lawyer = await prisma.lawyer.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends LawyerFindFirstArgs>(args?: SelectSubset<T, LawyerFindFirstArgs<ExtArgs>>): Prisma__LawyerClient<$Result.GetResult<Prisma.$LawyerPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Lawyer that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {LawyerFindFirstOrThrowArgs} args - Arguments to find a Lawyer
-     * @example
-     * // Get one Lawyer
-     * const lawyer = await prisma.lawyer.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends LawyerFindFirstOrThrowArgs>(args?: SelectSubset<T, LawyerFindFirstOrThrowArgs<ExtArgs>>): Prisma__LawyerClient<$Result.GetResult<Prisma.$LawyerPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Lawyers that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {LawyerFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Lawyers
-     * const lawyers = await prisma.lawyer.findMany()
-     * 
-     * // Get first 10 Lawyers
-     * const lawyers = await prisma.lawyer.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const lawyerWithIdOnly = await prisma.lawyer.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends LawyerFindManyArgs>(args?: SelectSubset<T, LawyerFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LawyerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Lawyer.
-     * @param {LawyerCreateArgs} args - Arguments to create a Lawyer.
-     * @example
-     * // Create one Lawyer
-     * const Lawyer = await prisma.lawyer.create({
-     *   data: {
-     *     // ... data to create a Lawyer
-     *   }
-     * })
-     * 
-     */
-    create<T extends LawyerCreateArgs>(args: SelectSubset<T, LawyerCreateArgs<ExtArgs>>): Prisma__LawyerClient<$Result.GetResult<Prisma.$LawyerPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Lawyers.
-     * @param {LawyerCreateManyArgs} args - Arguments to create many Lawyers.
-     * @example
-     * // Create many Lawyers
-     * const lawyer = await prisma.lawyer.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends LawyerCreateManyArgs>(args?: SelectSubset<T, LawyerCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Lawyers and returns the data saved in the database.
-     * @param {LawyerCreateManyAndReturnArgs} args - Arguments to create many Lawyers.
-     * @example
-     * // Create many Lawyers
-     * const lawyer = await prisma.lawyer.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Lawyers and only return the `id`
-     * const lawyerWithIdOnly = await prisma.lawyer.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends LawyerCreateManyAndReturnArgs>(args?: SelectSubset<T, LawyerCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LawyerPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Lawyer.
-     * @param {LawyerDeleteArgs} args - Arguments to delete one Lawyer.
-     * @example
-     * // Delete one Lawyer
-     * const Lawyer = await prisma.lawyer.delete({
-     *   where: {
-     *     // ... filter to delete one Lawyer
-     *   }
-     * })
-     * 
-     */
-    delete<T extends LawyerDeleteArgs>(args: SelectSubset<T, LawyerDeleteArgs<ExtArgs>>): Prisma__LawyerClient<$Result.GetResult<Prisma.$LawyerPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Lawyer.
-     * @param {LawyerUpdateArgs} args - Arguments to update one Lawyer.
-     * @example
-     * // Update one Lawyer
-     * const lawyer = await prisma.lawyer.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends LawyerUpdateArgs>(args: SelectSubset<T, LawyerUpdateArgs<ExtArgs>>): Prisma__LawyerClient<$Result.GetResult<Prisma.$LawyerPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Lawyers.
-     * @param {LawyerDeleteManyArgs} args - Arguments to filter Lawyers to delete.
-     * @example
-     * // Delete a few Lawyers
-     * const { count } = await prisma.lawyer.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends LawyerDeleteManyArgs>(args?: SelectSubset<T, LawyerDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Lawyers.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {LawyerUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Lawyers
-     * const lawyer = await prisma.lawyer.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends LawyerUpdateManyArgs>(args: SelectSubset<T, LawyerUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Lawyers and returns the data updated in the database.
-     * @param {LawyerUpdateManyAndReturnArgs} args - Arguments to update many Lawyers.
-     * @example
-     * // Update many Lawyers
-     * const lawyer = await prisma.lawyer.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Lawyers and only return the `id`
-     * const lawyerWithIdOnly = await prisma.lawyer.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends LawyerUpdateManyAndReturnArgs>(args: SelectSubset<T, LawyerUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LawyerPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Lawyer.
-     * @param {LawyerUpsertArgs} args - Arguments to update or create a Lawyer.
-     * @example
-     * // Update or create a Lawyer
-     * const lawyer = await prisma.lawyer.upsert({
-     *   create: {
-     *     // ... data to create a Lawyer
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Lawyer we want to update
-     *   }
-     * })
-     */
-    upsert<T extends LawyerUpsertArgs>(args: SelectSubset<T, LawyerUpsertArgs<ExtArgs>>): Prisma__LawyerClient<$Result.GetResult<Prisma.$LawyerPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Lawyers.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {LawyerCountArgs} args - Arguments to filter Lawyers to count.
-     * @example
-     * // Count the number of Lawyers
-     * const count = await prisma.lawyer.count({
-     *   where: {
-     *     // ... the filter for the Lawyers we want to count
-     *   }
-     * })
-    **/
-    count<T extends LawyerCountArgs>(
-      args?: Subset<T, LawyerCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], LawyerCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Lawyer.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {LawyerAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends LawyerAggregateArgs>(args: Subset<T, LawyerAggregateArgs>): Prisma.PrismaPromise<GetLawyerAggregateType<T>>
-
-    /**
-     * Group by Lawyer.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {LawyerGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends LawyerGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: LawyerGroupByArgs['orderBy'] }
-        : { orderBy?: LawyerGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, LawyerGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLawyerGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Lawyer model
-   */
-  readonly fields: LawyerFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Lawyer.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__LawyerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    processes<T extends Lawyer$processesArgs<ExtArgs> = {}>(args?: Subset<T, Lawyer$processesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    appointment<T extends Lawyer$appointmentArgs<ExtArgs> = {}>(args?: Subset<T, Lawyer$appointmentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    petitions<T extends Lawyer$petitionsArgs<ExtArgs> = {}>(args?: Subset<T, Lawyer$petitionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PetitionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Lawyer model
-   */
-  interface LawyerFieldRefs {
-    readonly id: FieldRef<"Lawyer", 'String'>
-    readonly name: FieldRef<"Lawyer", 'String'>
-    readonly email: FieldRef<"Lawyer", 'String'>
-    readonly oabNumber: FieldRef<"Lawyer", 'String'>
-    readonly specialty: FieldRef<"Lawyer", 'String'>
-    readonly phone: FieldRef<"Lawyer", 'String'>
-    readonly createdAt: FieldRef<"Lawyer", 'DateTime'>
-    readonly updatedAt: FieldRef<"Lawyer", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Lawyer findUnique
-   */
-  export type LawyerFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Lawyer
-     */
-    select?: LawyerSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Lawyer
-     */
-    omit?: LawyerOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LawyerInclude<ExtArgs> | null
-    /**
-     * Filter, which Lawyer to fetch.
-     */
-    where: LawyerWhereUniqueInput
-  }
-
-  /**
-   * Lawyer findUniqueOrThrow
-   */
-  export type LawyerFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Lawyer
-     */
-    select?: LawyerSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Lawyer
-     */
-    omit?: LawyerOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LawyerInclude<ExtArgs> | null
-    /**
-     * Filter, which Lawyer to fetch.
-     */
-    where: LawyerWhereUniqueInput
-  }
-
-  /**
-   * Lawyer findFirst
-   */
-  export type LawyerFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Lawyer
-     */
-    select?: LawyerSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Lawyer
-     */
-    omit?: LawyerOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LawyerInclude<ExtArgs> | null
-    /**
-     * Filter, which Lawyer to fetch.
-     */
-    where?: LawyerWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Lawyers to fetch.
-     */
-    orderBy?: LawyerOrderByWithRelationInput | LawyerOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Lawyers.
-     */
-    cursor?: LawyerWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Lawyers from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Lawyers.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Lawyers.
-     */
-    distinct?: LawyerScalarFieldEnum | LawyerScalarFieldEnum[]
-  }
-
-  /**
-   * Lawyer findFirstOrThrow
-   */
-  export type LawyerFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Lawyer
-     */
-    select?: LawyerSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Lawyer
-     */
-    omit?: LawyerOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LawyerInclude<ExtArgs> | null
-    /**
-     * Filter, which Lawyer to fetch.
-     */
-    where?: LawyerWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Lawyers to fetch.
-     */
-    orderBy?: LawyerOrderByWithRelationInput | LawyerOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Lawyers.
-     */
-    cursor?: LawyerWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Lawyers from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Lawyers.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Lawyers.
-     */
-    distinct?: LawyerScalarFieldEnum | LawyerScalarFieldEnum[]
-  }
-
-  /**
-   * Lawyer findMany
-   */
-  export type LawyerFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Lawyer
-     */
-    select?: LawyerSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Lawyer
-     */
-    omit?: LawyerOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LawyerInclude<ExtArgs> | null
-    /**
-     * Filter, which Lawyers to fetch.
-     */
-    where?: LawyerWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Lawyers to fetch.
-     */
-    orderBy?: LawyerOrderByWithRelationInput | LawyerOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Lawyers.
-     */
-    cursor?: LawyerWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Lawyers from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Lawyers.
-     */
-    skip?: number
-    distinct?: LawyerScalarFieldEnum | LawyerScalarFieldEnum[]
-  }
-
-  /**
-   * Lawyer create
-   */
-  export type LawyerCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Lawyer
-     */
-    select?: LawyerSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Lawyer
-     */
-    omit?: LawyerOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LawyerInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Lawyer.
-     */
-    data: XOR<LawyerCreateInput, LawyerUncheckedCreateInput>
-  }
-
-  /**
-   * Lawyer createMany
-   */
-  export type LawyerCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Lawyers.
-     */
-    data: LawyerCreateManyInput | LawyerCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Lawyer createManyAndReturn
-   */
-  export type LawyerCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Lawyer
-     */
-    select?: LawyerSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Lawyer
-     */
-    omit?: LawyerOmit<ExtArgs> | null
-    /**
-     * The data used to create many Lawyers.
-     */
-    data: LawyerCreateManyInput | LawyerCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Lawyer update
-   */
-  export type LawyerUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Lawyer
-     */
-    select?: LawyerSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Lawyer
-     */
-    omit?: LawyerOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LawyerInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Lawyer.
-     */
-    data: XOR<LawyerUpdateInput, LawyerUncheckedUpdateInput>
-    /**
-     * Choose, which Lawyer to update.
-     */
-    where: LawyerWhereUniqueInput
-  }
-
-  /**
-   * Lawyer updateMany
-   */
-  export type LawyerUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Lawyers.
-     */
-    data: XOR<LawyerUpdateManyMutationInput, LawyerUncheckedUpdateManyInput>
-    /**
-     * Filter which Lawyers to update
-     */
-    where?: LawyerWhereInput
-    /**
-     * Limit how many Lawyers to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Lawyer updateManyAndReturn
-   */
-  export type LawyerUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Lawyer
-     */
-    select?: LawyerSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Lawyer
-     */
-    omit?: LawyerOmit<ExtArgs> | null
-    /**
-     * The data used to update Lawyers.
-     */
-    data: XOR<LawyerUpdateManyMutationInput, LawyerUncheckedUpdateManyInput>
-    /**
-     * Filter which Lawyers to update
-     */
-    where?: LawyerWhereInput
-    /**
-     * Limit how many Lawyers to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Lawyer upsert
-   */
-  export type LawyerUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Lawyer
-     */
-    select?: LawyerSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Lawyer
-     */
-    omit?: LawyerOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LawyerInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Lawyer to update in case it exists.
-     */
-    where: LawyerWhereUniqueInput
-    /**
-     * In case the Lawyer found by the `where` argument doesn't exist, create a new Lawyer with this data.
-     */
-    create: XOR<LawyerCreateInput, LawyerUncheckedCreateInput>
-    /**
-     * In case the Lawyer was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<LawyerUpdateInput, LawyerUncheckedUpdateInput>
-  }
-
-  /**
-   * Lawyer delete
-   */
-  export type LawyerDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Lawyer
-     */
-    select?: LawyerSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Lawyer
-     */
-    omit?: LawyerOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LawyerInclude<ExtArgs> | null
-    /**
-     * Filter which Lawyer to delete.
-     */
-    where: LawyerWhereUniqueInput
-  }
-
-  /**
-   * Lawyer deleteMany
-   */
-  export type LawyerDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Lawyers to delete
-     */
-    where?: LawyerWhereInput
-    /**
-     * Limit how many Lawyers to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Lawyer.processes
-   */
-  export type Lawyer$processesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Process
-     */
-    select?: ProcessSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Process
-     */
-    omit?: ProcessOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProcessInclude<ExtArgs> | null
-    where?: ProcessWhereInput
-    orderBy?: ProcessOrderByWithRelationInput | ProcessOrderByWithRelationInput[]
-    cursor?: ProcessWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ProcessScalarFieldEnum | ProcessScalarFieldEnum[]
-  }
-
-  /**
-   * Lawyer.appointment
-   */
-  export type Lawyer$appointmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Appointment
-     */
-    select?: AppointmentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Appointment
-     */
-    omit?: AppointmentOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AppointmentInclude<ExtArgs> | null
-    where?: AppointmentWhereInput
-    orderBy?: AppointmentOrderByWithRelationInput | AppointmentOrderByWithRelationInput[]
-    cursor?: AppointmentWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AppointmentScalarFieldEnum | AppointmentScalarFieldEnum[]
-  }
-
-  /**
-   * Lawyer.petitions
-   */
-  export type Lawyer$petitionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Petition
-     */
-    select?: PetitionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Petition
-     */
-    omit?: PetitionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PetitionInclude<ExtArgs> | null
-    where?: PetitionWhereInput
-    orderBy?: PetitionOrderByWithRelationInput | PetitionOrderByWithRelationInput[]
-    cursor?: PetitionWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PetitionScalarFieldEnum | PetitionScalarFieldEnum[]
-  }
-
-  /**
-   * Lawyer without action
-   */
-  export type LawyerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Lawyer
-     */
-    select?: LawyerSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Lawyer
-     */
-    omit?: LawyerOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LawyerInclude<ExtArgs> | null
-  }
-
-
-  /**
    * Model Appointment
    */
 
@@ -6367,8 +5217,8 @@ export namespace Prisma {
     status: $Enums.AppointmentStatus | null
     eventType: string | null
     location: string | null
+    userId: string | null
     clientId: string | null
-    lawyerId: string | null
     processId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -6382,8 +5232,8 @@ export namespace Prisma {
     status: $Enums.AppointmentStatus | null
     eventType: string | null
     location: string | null
+    userId: string | null
     clientId: string | null
-    lawyerId: string | null
     processId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -6397,8 +5247,8 @@ export namespace Prisma {
     status: number
     eventType: number
     location: number
+    userId: number
     clientId: number
-    lawyerId: number
     processId: number
     createdAt: number
     updatedAt: number
@@ -6414,8 +5264,8 @@ export namespace Prisma {
     status?: true
     eventType?: true
     location?: true
+    userId?: true
     clientId?: true
-    lawyerId?: true
     processId?: true
     createdAt?: true
     updatedAt?: true
@@ -6429,8 +5279,8 @@ export namespace Prisma {
     status?: true
     eventType?: true
     location?: true
+    userId?: true
     clientId?: true
-    lawyerId?: true
     processId?: true
     createdAt?: true
     updatedAt?: true
@@ -6444,8 +5294,8 @@ export namespace Prisma {
     status?: true
     eventType?: true
     location?: true
+    userId?: true
     clientId?: true
-    lawyerId?: true
     processId?: true
     createdAt?: true
     updatedAt?: true
@@ -6532,8 +5382,8 @@ export namespace Prisma {
     status: $Enums.AppointmentStatus
     eventType: string | null
     location: string | null
+    userId: string
     clientId: string | null
-    lawyerId: string | null
     processId: string | null
     createdAt: Date
     updatedAt: Date
@@ -6564,13 +5414,13 @@ export namespace Prisma {
     status?: boolean
     eventType?: boolean
     location?: boolean
+    userId?: boolean
     clientId?: boolean
-    lawyerId?: boolean
     processId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
     client?: boolean | Appointment$clientArgs<ExtArgs>
-    lawyer?: boolean | Appointment$lawyerArgs<ExtArgs>
     process?: boolean | Appointment$processArgs<ExtArgs>
   }, ExtArgs["result"]["appointment"]>
 
@@ -6582,13 +5432,13 @@ export namespace Prisma {
     status?: boolean
     eventType?: boolean
     location?: boolean
+    userId?: boolean
     clientId?: boolean
-    lawyerId?: boolean
     processId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
     client?: boolean | Appointment$clientArgs<ExtArgs>
-    lawyer?: boolean | Appointment$lawyerArgs<ExtArgs>
     process?: boolean | Appointment$processArgs<ExtArgs>
   }, ExtArgs["result"]["appointment"]>
 
@@ -6600,13 +5450,13 @@ export namespace Prisma {
     status?: boolean
     eventType?: boolean
     location?: boolean
+    userId?: boolean
     clientId?: boolean
-    lawyerId?: boolean
     processId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
     client?: boolean | Appointment$clientArgs<ExtArgs>
-    lawyer?: boolean | Appointment$lawyerArgs<ExtArgs>
     process?: boolean | Appointment$processArgs<ExtArgs>
   }, ExtArgs["result"]["appointment"]>
 
@@ -6618,35 +5468,35 @@ export namespace Prisma {
     status?: boolean
     eventType?: boolean
     location?: boolean
+    userId?: boolean
     clientId?: boolean
-    lawyerId?: boolean
     processId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AppointmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "date" | "status" | "eventType" | "location" | "clientId" | "lawyerId" | "processId" | "createdAt" | "updatedAt", ExtArgs["result"]["appointment"]>
+  export type AppointmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "date" | "status" | "eventType" | "location" | "userId" | "clientId" | "processId" | "createdAt" | "updatedAt", ExtArgs["result"]["appointment"]>
   export type AppointmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
     client?: boolean | Appointment$clientArgs<ExtArgs>
-    lawyer?: boolean | Appointment$lawyerArgs<ExtArgs>
     process?: boolean | Appointment$processArgs<ExtArgs>
   }
   export type AppointmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
     client?: boolean | Appointment$clientArgs<ExtArgs>
-    lawyer?: boolean | Appointment$lawyerArgs<ExtArgs>
     process?: boolean | Appointment$processArgs<ExtArgs>
   }
   export type AppointmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
     client?: boolean | Appointment$clientArgs<ExtArgs>
-    lawyer?: boolean | Appointment$lawyerArgs<ExtArgs>
     process?: boolean | Appointment$processArgs<ExtArgs>
   }
 
   export type $AppointmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Appointment"
     objects: {
+      user: Prisma.$UserPayload<ExtArgs>
       client: Prisma.$ClientPayload<ExtArgs> | null
-      lawyer: Prisma.$LawyerPayload<ExtArgs> | null
       process: Prisma.$ProcessPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -6657,8 +5507,8 @@ export namespace Prisma {
       status: $Enums.AppointmentStatus
       eventType: string | null
       location: string | null
+      userId: string
       clientId: string | null
-      lawyerId: string | null
       processId: string | null
       createdAt: Date
       updatedAt: Date
@@ -7056,8 +5906,8 @@ export namespace Prisma {
    */
   export interface Prisma__AppointmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     client<T extends Appointment$clientArgs<ExtArgs> = {}>(args?: Subset<T, Appointment$clientArgs<ExtArgs>>): Prisma__ClientClient<$Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    lawyer<T extends Appointment$lawyerArgs<ExtArgs> = {}>(args?: Subset<T, Appointment$lawyerArgs<ExtArgs>>): Prisma__LawyerClient<$Result.GetResult<Prisma.$LawyerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     process<T extends Appointment$processArgs<ExtArgs> = {}>(args?: Subset<T, Appointment$processArgs<ExtArgs>>): Prisma__ProcessClient<$Result.GetResult<Prisma.$ProcessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -7095,8 +5945,8 @@ export namespace Prisma {
     readonly status: FieldRef<"Appointment", 'AppointmentStatus'>
     readonly eventType: FieldRef<"Appointment", 'String'>
     readonly location: FieldRef<"Appointment", 'String'>
+    readonly userId: FieldRef<"Appointment", 'String'>
     readonly clientId: FieldRef<"Appointment", 'String'>
-    readonly lawyerId: FieldRef<"Appointment", 'String'>
     readonly processId: FieldRef<"Appointment", 'String'>
     readonly createdAt: FieldRef<"Appointment", 'DateTime'>
     readonly updatedAt: FieldRef<"Appointment", 'DateTime'>
@@ -7515,25 +6365,6 @@ export namespace Prisma {
   }
 
   /**
-   * Appointment.lawyer
-   */
-  export type Appointment$lawyerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Lawyer
-     */
-    select?: LawyerSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Lawyer
-     */
-    omit?: LawyerOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LawyerInclude<ExtArgs> | null
-    where?: LawyerWhereInput
-  }
-
-  /**
    * Appointment.process
    */
   export type Appointment$processArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7577,94 +6408,154 @@ export namespace Prisma {
 
   export type AggregatePetition = {
     _count: PetitionCountAggregateOutputType | null
+    _avg: PetitionAvgAggregateOutputType | null
+    _sum: PetitionSumAggregateOutputType | null
     _min: PetitionMinAggregateOutputType | null
     _max: PetitionMaxAggregateOutputType | null
+  }
+
+  export type PetitionAvgAggregateOutputType = {
+    caseValue: Decimal | null
+  }
+
+  export type PetitionSumAggregateOutputType = {
+    caseValue: Decimal | null
   }
 
   export type PetitionMinAggregateOutputType = {
     id: string | null
     title: string | null
+    defendant: string | null
+    addressing: string | null
+    facts: string | null
+    legalBasis: string | null
+    caseValue: Decimal | null
+    closingLocation: string | null
     description: string | null
     type: $Enums.PetitionType | null
     status: $Enums.PetitionStatus | null
-    factsSummary: string | null
     fileUrl: string | null
     protocolNumber: string | null
+    userId: string | null
     processId: string | null
     clientId: string | null
-    lawyerId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type PetitionMaxAggregateOutputType = {
     id: string | null
     title: string | null
+    defendant: string | null
+    addressing: string | null
+    facts: string | null
+    legalBasis: string | null
+    caseValue: Decimal | null
+    closingLocation: string | null
     description: string | null
     type: $Enums.PetitionType | null
     status: $Enums.PetitionStatus | null
-    factsSummary: string | null
     fileUrl: string | null
     protocolNumber: string | null
+    userId: string | null
     processId: string | null
     clientId: string | null
-    lawyerId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type PetitionCountAggregateOutputType = {
     id: number
     title: number
+    defendant: number
+    addressing: number
+    facts: number
+    legalBasis: number
+    caseValue: number
+    closingLocation: number
     description: number
     type: number
     status: number
-    factsSummary: number
     fileUrl: number
     protocolNumber: number
+    userId: number
     processId: number
     clientId: number
-    lawyerId: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
 
+  export type PetitionAvgAggregateInputType = {
+    caseValue?: true
+  }
+
+  export type PetitionSumAggregateInputType = {
+    caseValue?: true
+  }
+
   export type PetitionMinAggregateInputType = {
     id?: true
     title?: true
+    defendant?: true
+    addressing?: true
+    facts?: true
+    legalBasis?: true
+    caseValue?: true
+    closingLocation?: true
     description?: true
     type?: true
     status?: true
-    factsSummary?: true
     fileUrl?: true
     protocolNumber?: true
+    userId?: true
     processId?: true
     clientId?: true
-    lawyerId?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type PetitionMaxAggregateInputType = {
     id?: true
     title?: true
+    defendant?: true
+    addressing?: true
+    facts?: true
+    legalBasis?: true
+    caseValue?: true
+    closingLocation?: true
     description?: true
     type?: true
     status?: true
-    factsSummary?: true
     fileUrl?: true
     protocolNumber?: true
+    userId?: true
     processId?: true
     clientId?: true
-    lawyerId?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type PetitionCountAggregateInputType = {
     id?: true
     title?: true
+    defendant?: true
+    addressing?: true
+    facts?: true
+    legalBasis?: true
+    caseValue?: true
+    closingLocation?: true
     description?: true
     type?: true
     status?: true
-    factsSummary?: true
     fileUrl?: true
     protocolNumber?: true
+    userId?: true
     processId?: true
     clientId?: true
-    lawyerId?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -7706,6 +6597,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: PetitionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PetitionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: PetitionMinAggregateInputType
@@ -7736,6 +6639,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: PetitionCountAggregateInputType | true
+    _avg?: PetitionAvgAggregateInputType
+    _sum?: PetitionSumAggregateInputType
     _min?: PetitionMinAggregateInputType
     _max?: PetitionMaxAggregateInputType
   }
@@ -7743,16 +6648,25 @@ export namespace Prisma {
   export type PetitionGroupByOutputType = {
     id: string
     title: string
+    defendant: string
+    addressing: string | null
+    facts: string | null
+    legalBasis: string | null
+    caseValue: Decimal | null
+    closingLocation: string | null
     description: string | null
     type: $Enums.PetitionType
     status: $Enums.PetitionStatus
-    factsSummary: string | null
     fileUrl: string | null
     protocolNumber: string | null
+    userId: string
     processId: string | null
     clientId: string | null
-    lawyerId: string | null
+    createdAt: Date
+    updatedAt: Date
     _count: PetitionCountAggregateOutputType | null
+    _avg: PetitionAvgAggregateOutputType | null
+    _sum: PetitionSumAggregateOutputType | null
     _min: PetitionMinAggregateOutputType | null
     _max: PetitionMaxAggregateOutputType | null
   }
@@ -7774,104 +6688,139 @@ export namespace Prisma {
   export type PetitionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
+    defendant?: boolean
+    addressing?: boolean
+    facts?: boolean
+    legalBasis?: boolean
+    caseValue?: boolean
+    closingLocation?: boolean
     description?: boolean
     type?: boolean
     status?: boolean
-    factsSummary?: boolean
     fileUrl?: boolean
     protocolNumber?: boolean
+    userId?: boolean
     processId?: boolean
     clientId?: boolean
-    lawyerId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
     process?: boolean | Petition$processArgs<ExtArgs>
     client?: boolean | Petition$clientArgs<ExtArgs>
-    lawyer?: boolean | Petition$lawyerArgs<ExtArgs>
   }, ExtArgs["result"]["petition"]>
 
   export type PetitionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
+    defendant?: boolean
+    addressing?: boolean
+    facts?: boolean
+    legalBasis?: boolean
+    caseValue?: boolean
+    closingLocation?: boolean
     description?: boolean
     type?: boolean
     status?: boolean
-    factsSummary?: boolean
     fileUrl?: boolean
     protocolNumber?: boolean
+    userId?: boolean
     processId?: boolean
     clientId?: boolean
-    lawyerId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
     process?: boolean | Petition$processArgs<ExtArgs>
     client?: boolean | Petition$clientArgs<ExtArgs>
-    lawyer?: boolean | Petition$lawyerArgs<ExtArgs>
   }, ExtArgs["result"]["petition"]>
 
   export type PetitionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
+    defendant?: boolean
+    addressing?: boolean
+    facts?: boolean
+    legalBasis?: boolean
+    caseValue?: boolean
+    closingLocation?: boolean
     description?: boolean
     type?: boolean
     status?: boolean
-    factsSummary?: boolean
     fileUrl?: boolean
     protocolNumber?: boolean
+    userId?: boolean
     processId?: boolean
     clientId?: boolean
-    lawyerId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
     process?: boolean | Petition$processArgs<ExtArgs>
     client?: boolean | Petition$clientArgs<ExtArgs>
-    lawyer?: boolean | Petition$lawyerArgs<ExtArgs>
   }, ExtArgs["result"]["petition"]>
 
   export type PetitionSelectScalar = {
     id?: boolean
     title?: boolean
+    defendant?: boolean
+    addressing?: boolean
+    facts?: boolean
+    legalBasis?: boolean
+    caseValue?: boolean
+    closingLocation?: boolean
     description?: boolean
     type?: boolean
     status?: boolean
-    factsSummary?: boolean
     fileUrl?: boolean
     protocolNumber?: boolean
+    userId?: boolean
     processId?: boolean
     clientId?: boolean
-    lawyerId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type PetitionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "type" | "status" | "factsSummary" | "fileUrl" | "protocolNumber" | "processId" | "clientId" | "lawyerId", ExtArgs["result"]["petition"]>
+  export type PetitionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "defendant" | "addressing" | "facts" | "legalBasis" | "caseValue" | "closingLocation" | "description" | "type" | "status" | "fileUrl" | "protocolNumber" | "userId" | "processId" | "clientId" | "createdAt" | "updatedAt", ExtArgs["result"]["petition"]>
   export type PetitionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
     process?: boolean | Petition$processArgs<ExtArgs>
     client?: boolean | Petition$clientArgs<ExtArgs>
-    lawyer?: boolean | Petition$lawyerArgs<ExtArgs>
   }
   export type PetitionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
     process?: boolean | Petition$processArgs<ExtArgs>
     client?: boolean | Petition$clientArgs<ExtArgs>
-    lawyer?: boolean | Petition$lawyerArgs<ExtArgs>
   }
   export type PetitionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
     process?: boolean | Petition$processArgs<ExtArgs>
     client?: boolean | Petition$clientArgs<ExtArgs>
-    lawyer?: boolean | Petition$lawyerArgs<ExtArgs>
   }
 
   export type $PetitionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Petition"
     objects: {
+      user: Prisma.$UserPayload<ExtArgs>
       process: Prisma.$ProcessPayload<ExtArgs> | null
       client: Prisma.$ClientPayload<ExtArgs> | null
-      lawyer: Prisma.$LawyerPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       title: string
+      defendant: string
+      addressing: string | null
+      facts: string | null
+      legalBasis: string | null
+      caseValue: Prisma.Decimal | null
+      closingLocation: string | null
       description: string | null
       type: $Enums.PetitionType
       status: $Enums.PetitionStatus
-      factsSummary: string | null
       fileUrl: string | null
       protocolNumber: string | null
+      userId: string
       processId: string | null
       clientId: string | null
-      lawyerId: string | null
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["petition"]>
     composites: {}
   }
@@ -8266,9 +7215,9 @@ export namespace Prisma {
    */
   export interface Prisma__PetitionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     process<T extends Petition$processArgs<ExtArgs> = {}>(args?: Subset<T, Petition$processArgs<ExtArgs>>): Prisma__ProcessClient<$Result.GetResult<Prisma.$ProcessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     client<T extends Petition$clientArgs<ExtArgs> = {}>(args?: Subset<T, Petition$clientArgs<ExtArgs>>): Prisma__ClientClient<$Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    lawyer<T extends Petition$lawyerArgs<ExtArgs> = {}>(args?: Subset<T, Petition$lawyerArgs<ExtArgs>>): Prisma__LawyerClient<$Result.GetResult<Prisma.$LawyerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8300,15 +7249,22 @@ export namespace Prisma {
   interface PetitionFieldRefs {
     readonly id: FieldRef<"Petition", 'String'>
     readonly title: FieldRef<"Petition", 'String'>
+    readonly defendant: FieldRef<"Petition", 'String'>
+    readonly addressing: FieldRef<"Petition", 'String'>
+    readonly facts: FieldRef<"Petition", 'String'>
+    readonly legalBasis: FieldRef<"Petition", 'String'>
+    readonly caseValue: FieldRef<"Petition", 'Decimal'>
+    readonly closingLocation: FieldRef<"Petition", 'String'>
     readonly description: FieldRef<"Petition", 'String'>
     readonly type: FieldRef<"Petition", 'PetitionType'>
     readonly status: FieldRef<"Petition", 'PetitionStatus'>
-    readonly factsSummary: FieldRef<"Petition", 'String'>
     readonly fileUrl: FieldRef<"Petition", 'String'>
     readonly protocolNumber: FieldRef<"Petition", 'String'>
+    readonly userId: FieldRef<"Petition", 'String'>
     readonly processId: FieldRef<"Petition", 'String'>
     readonly clientId: FieldRef<"Petition", 'String'>
-    readonly lawyerId: FieldRef<"Petition", 'String'>
+    readonly createdAt: FieldRef<"Petition", 'DateTime'>
+    readonly updatedAt: FieldRef<"Petition", 'DateTime'>
   }
     
 
@@ -8743,25 +7699,6 @@ export namespace Prisma {
   }
 
   /**
-   * Petition.lawyer
-   */
-  export type Petition$lawyerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Lawyer
-     */
-    select?: LawyerSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Lawyer
-     */
-    omit?: LawyerOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LawyerInclude<ExtArgs> | null
-    where?: LawyerWhereInput
-  }
-
-  /**
    * Petition without action
    */
   export type PetitionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8821,15 +7758,10 @@ export namespace Prisma {
     phone: 'phone',
     cpf: 'cpf',
     cnpj: 'cnpj',
-    cpf_cnpj: 'cpf_cnpj',
     address: 'address',
     city: 'city',
     state: 'state',
-    zip_code: 'zip_code',
-    notes: 'notes',
-    dateOfBirth: 'dateOfBirth',
-    maritalStatus: 'maritalStatus',
-    profession: 'profession',
+    userId: 'userId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -8843,30 +7775,16 @@ export namespace Prisma {
     court: 'court',
     type: 'type',
     status: 'status',
-    lawyerId: 'lawyerId',
-    clientId: 'clientId',
     hearingDate: 'hearingDate',
     caseValue: 'caseValue',
     internalNotes: 'internalNotes',
+    userId: 'userId',
+    clientId: 'clientId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type ProcessScalarFieldEnum = (typeof ProcessScalarFieldEnum)[keyof typeof ProcessScalarFieldEnum]
-
-
-  export const LawyerScalarFieldEnum: {
-    id: 'id',
-    name: 'name',
-    email: 'email',
-    oabNumber: 'oabNumber',
-    specialty: 'specialty',
-    phone: 'phone',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type LawyerScalarFieldEnum = (typeof LawyerScalarFieldEnum)[keyof typeof LawyerScalarFieldEnum]
 
 
   export const AppointmentScalarFieldEnum: {
@@ -8877,8 +7795,8 @@ export namespace Prisma {
     status: 'status',
     eventType: 'eventType',
     location: 'location',
+    userId: 'userId',
     clientId: 'clientId',
-    lawyerId: 'lawyerId',
     processId: 'processId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -8890,15 +7808,22 @@ export namespace Prisma {
   export const PetitionScalarFieldEnum: {
     id: 'id',
     title: 'title',
+    defendant: 'defendant',
+    addressing: 'addressing',
+    facts: 'facts',
+    legalBasis: 'legalBasis',
+    caseValue: 'caseValue',
+    closingLocation: 'closingLocation',
     description: 'description',
     type: 'type',
     status: 'status',
-    factsSummary: 'factsSummary',
     fileUrl: 'fileUrl',
     protocolNumber: 'protocolNumber',
+    userId: 'userId',
     processId: 'processId',
     clientId: 'clientId',
-    lawyerId: 'lawyerId'
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type PetitionScalarFieldEnum = (typeof PetitionScalarFieldEnum)[keyof typeof PetitionScalarFieldEnum]
@@ -9059,6 +7984,10 @@ export namespace Prisma {
     office?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    clients?: ClientListRelationFilter
+    processes?: ProcessListRelationFilter
+    appointments?: AppointmentListRelationFilter
+    petitions?: PetitionListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -9076,6 +8005,10 @@ export namespace Prisma {
     office?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    clients?: ClientOrderByRelationAggregateInput
+    processes?: ProcessOrderByRelationAggregateInput
+    appointments?: AppointmentOrderByRelationAggregateInput
+    petitions?: PetitionOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -9096,6 +8029,10 @@ export namespace Prisma {
     office?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    clients?: ClientListRelationFilter
+    processes?: ProcessListRelationFilter
+    appointments?: AppointmentListRelationFilter
+    petitions?: PetitionListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -9148,17 +8085,13 @@ export namespace Prisma {
     phone?: StringNullableFilter<"Client"> | string | null
     cpf?: StringNullableFilter<"Client"> | string | null
     cnpj?: StringNullableFilter<"Client"> | string | null
-    cpf_cnpj?: StringNullableFilter<"Client"> | string | null
     address?: StringNullableFilter<"Client"> | string | null
     city?: StringNullableFilter<"Client"> | string | null
     state?: StringNullableFilter<"Client"> | string | null
-    zip_code?: StringNullableFilter<"Client"> | string | null
-    notes?: StringNullableFilter<"Client"> | string | null
-    dateOfBirth?: DateTimeNullableFilter<"Client"> | Date | string | null
-    maritalStatus?: StringNullableFilter<"Client"> | string | null
-    profession?: StringNullableFilter<"Client"> | string | null
+    userId?: StringFilter<"Client"> | string
     createdAt?: DateTimeFilter<"Client"> | Date | string
     updatedAt?: DateTimeFilter<"Client"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     appointments?: AppointmentListRelationFilter
     processes?: ProcessListRelationFilter
     petitions?: PetitionListRelationFilter
@@ -9171,17 +8104,13 @@ export namespace Prisma {
     phone?: SortOrderInput | SortOrder
     cpf?: SortOrderInput | SortOrder
     cnpj?: SortOrderInput | SortOrder
-    cpf_cnpj?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
     state?: SortOrderInput | SortOrder
-    zip_code?: SortOrderInput | SortOrder
-    notes?: SortOrderInput | SortOrder
-    dateOfBirth?: SortOrderInput | SortOrder
-    maritalStatus?: SortOrderInput | SortOrder
-    profession?: SortOrderInput | SortOrder
+    userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
     appointments?: AppointmentOrderByRelationAggregateInput
     processes?: ProcessOrderByRelationAggregateInput
     petitions?: PetitionOrderByRelationAggregateInput
@@ -9189,29 +8118,27 @@ export namespace Prisma {
 
   export type ClientWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    cpf?: string
-    cnpj?: string
+    cpf_userId?: ClientCpfUserIdCompoundUniqueInput
+    cnpj_userId?: ClientCnpjUserIdCompoundUniqueInput
     AND?: ClientWhereInput | ClientWhereInput[]
     OR?: ClientWhereInput[]
     NOT?: ClientWhereInput | ClientWhereInput[]
     name?: StringFilter<"Client"> | string
     email?: StringNullableFilter<"Client"> | string | null
     phone?: StringNullableFilter<"Client"> | string | null
-    cpf_cnpj?: StringNullableFilter<"Client"> | string | null
+    cpf?: StringNullableFilter<"Client"> | string | null
+    cnpj?: StringNullableFilter<"Client"> | string | null
     address?: StringNullableFilter<"Client"> | string | null
     city?: StringNullableFilter<"Client"> | string | null
     state?: StringNullableFilter<"Client"> | string | null
-    zip_code?: StringNullableFilter<"Client"> | string | null
-    notes?: StringNullableFilter<"Client"> | string | null
-    dateOfBirth?: DateTimeNullableFilter<"Client"> | Date | string | null
-    maritalStatus?: StringNullableFilter<"Client"> | string | null
-    profession?: StringNullableFilter<"Client"> | string | null
+    userId?: StringFilter<"Client"> | string
     createdAt?: DateTimeFilter<"Client"> | Date | string
     updatedAt?: DateTimeFilter<"Client"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     appointments?: AppointmentListRelationFilter
     processes?: ProcessListRelationFilter
     petitions?: PetitionListRelationFilter
-  }, "id" | "cpf" | "cnpj">
+  }, "id" | "cpf_userId" | "cnpj_userId">
 
   export type ClientOrderByWithAggregationInput = {
     id?: SortOrder
@@ -9220,15 +8147,10 @@ export namespace Prisma {
     phone?: SortOrderInput | SortOrder
     cpf?: SortOrderInput | SortOrder
     cnpj?: SortOrderInput | SortOrder
-    cpf_cnpj?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
     state?: SortOrderInput | SortOrder
-    zip_code?: SortOrderInput | SortOrder
-    notes?: SortOrderInput | SortOrder
-    dateOfBirth?: SortOrderInput | SortOrder
-    maritalStatus?: SortOrderInput | SortOrder
-    profession?: SortOrderInput | SortOrder
+    userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ClientCountOrderByAggregateInput
@@ -9246,15 +8168,10 @@ export namespace Prisma {
     phone?: StringNullableWithAggregatesFilter<"Client"> | string | null
     cpf?: StringNullableWithAggregatesFilter<"Client"> | string | null
     cnpj?: StringNullableWithAggregatesFilter<"Client"> | string | null
-    cpf_cnpj?: StringNullableWithAggregatesFilter<"Client"> | string | null
     address?: StringNullableWithAggregatesFilter<"Client"> | string | null
     city?: StringNullableWithAggregatesFilter<"Client"> | string | null
     state?: StringNullableWithAggregatesFilter<"Client"> | string | null
-    zip_code?: StringNullableWithAggregatesFilter<"Client"> | string | null
-    notes?: StringNullableWithAggregatesFilter<"Client"> | string | null
-    dateOfBirth?: DateTimeNullableWithAggregatesFilter<"Client"> | Date | string | null
-    maritalStatus?: StringNullableWithAggregatesFilter<"Client"> | string | null
-    profession?: StringNullableWithAggregatesFilter<"Client"> | string | null
+    userId?: StringWithAggregatesFilter<"Client"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Client"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Client"> | Date | string
   }
@@ -9268,16 +8185,16 @@ export namespace Prisma {
     court?: StringFilter<"Process"> | string
     type?: StringFilter<"Process"> | string
     status?: StringFilter<"Process"> | string
-    lawyerId?: StringNullableFilter<"Process"> | string | null
-    clientId?: StringNullableFilter<"Process"> | string | null
     hearingDate?: DateTimeFilter<"Process"> | Date | string
     caseValue?: DecimalFilter<"Process"> | Decimal | DecimalJsLike | number | string
     internalNotes?: StringFilter<"Process"> | string
+    userId?: StringFilter<"Process"> | string
+    clientId?: StringNullableFilter<"Process"> | string | null
     createdAt?: DateTimeFilter<"Process"> | Date | string
     updatedAt?: DateTimeFilter<"Process"> | Date | string
-    lawyer?: XOR<LawyerNullableScalarRelationFilter, LawyerWhereInput> | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     client?: XOR<ClientNullableScalarRelationFilter, ClientWhereInput> | null
-    appointment?: AppointmentListRelationFilter
+    appointments?: AppointmentListRelationFilter
     petitions?: PetitionListRelationFilter
   }
 
@@ -9287,40 +8204,41 @@ export namespace Prisma {
     court?: SortOrder
     type?: SortOrder
     status?: SortOrder
-    lawyerId?: SortOrderInput | SortOrder
-    clientId?: SortOrderInput | SortOrder
     hearingDate?: SortOrder
     caseValue?: SortOrder
     internalNotes?: SortOrder
+    userId?: SortOrder
+    clientId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    lawyer?: LawyerOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
     client?: ClientOrderByWithRelationInput
-    appointment?: AppointmentOrderByRelationAggregateInput
+    appointments?: AppointmentOrderByRelationAggregateInput
     petitions?: PetitionOrderByRelationAggregateInput
   }
 
   export type ProcessWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    processNumber?: string
+    processNumber_userId?: ProcessProcessNumberUserIdCompoundUniqueInput
     AND?: ProcessWhereInput | ProcessWhereInput[]
     OR?: ProcessWhereInput[]
     NOT?: ProcessWhereInput | ProcessWhereInput[]
+    processNumber?: StringFilter<"Process"> | string
     court?: StringFilter<"Process"> | string
     type?: StringFilter<"Process"> | string
     status?: StringFilter<"Process"> | string
-    lawyerId?: StringNullableFilter<"Process"> | string | null
-    clientId?: StringNullableFilter<"Process"> | string | null
     hearingDate?: DateTimeFilter<"Process"> | Date | string
     caseValue?: DecimalFilter<"Process"> | Decimal | DecimalJsLike | number | string
     internalNotes?: StringFilter<"Process"> | string
+    userId?: StringFilter<"Process"> | string
+    clientId?: StringNullableFilter<"Process"> | string | null
     createdAt?: DateTimeFilter<"Process"> | Date | string
     updatedAt?: DateTimeFilter<"Process"> | Date | string
-    lawyer?: XOR<LawyerNullableScalarRelationFilter, LawyerWhereInput> | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     client?: XOR<ClientNullableScalarRelationFilter, ClientWhereInput> | null
-    appointment?: AppointmentListRelationFilter
+    appointments?: AppointmentListRelationFilter
     petitions?: PetitionListRelationFilter
-  }, "id" | "processNumber">
+  }, "id" | "processNumber_userId">
 
   export type ProcessOrderByWithAggregationInput = {
     id?: SortOrder
@@ -9328,11 +8246,11 @@ export namespace Prisma {
     court?: SortOrder
     type?: SortOrder
     status?: SortOrder
-    lawyerId?: SortOrderInput | SortOrder
-    clientId?: SortOrderInput | SortOrder
     hearingDate?: SortOrder
     caseValue?: SortOrder
     internalNotes?: SortOrder
+    userId?: SortOrder
+    clientId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ProcessCountOrderByAggregateInput
@@ -9351,89 +8269,13 @@ export namespace Prisma {
     court?: StringWithAggregatesFilter<"Process"> | string
     type?: StringWithAggregatesFilter<"Process"> | string
     status?: StringWithAggregatesFilter<"Process"> | string
-    lawyerId?: StringNullableWithAggregatesFilter<"Process"> | string | null
-    clientId?: StringNullableWithAggregatesFilter<"Process"> | string | null
     hearingDate?: DateTimeWithAggregatesFilter<"Process"> | Date | string
     caseValue?: DecimalWithAggregatesFilter<"Process"> | Decimal | DecimalJsLike | number | string
     internalNotes?: StringWithAggregatesFilter<"Process"> | string
+    userId?: StringWithAggregatesFilter<"Process"> | string
+    clientId?: StringNullableWithAggregatesFilter<"Process"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Process"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Process"> | Date | string
-  }
-
-  export type LawyerWhereInput = {
-    AND?: LawyerWhereInput | LawyerWhereInput[]
-    OR?: LawyerWhereInput[]
-    NOT?: LawyerWhereInput | LawyerWhereInput[]
-    id?: StringFilter<"Lawyer"> | string
-    name?: StringFilter<"Lawyer"> | string
-    email?: StringFilter<"Lawyer"> | string
-    oabNumber?: StringFilter<"Lawyer"> | string
-    specialty?: StringFilter<"Lawyer"> | string
-    phone?: StringNullableFilter<"Lawyer"> | string | null
-    createdAt?: DateTimeFilter<"Lawyer"> | Date | string
-    updatedAt?: DateTimeFilter<"Lawyer"> | Date | string
-    processes?: ProcessListRelationFilter
-    appointment?: AppointmentListRelationFilter
-    petitions?: PetitionListRelationFilter
-  }
-
-  export type LawyerOrderByWithRelationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
-    oabNumber?: SortOrder
-    specialty?: SortOrder
-    phone?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    processes?: ProcessOrderByRelationAggregateInput
-    appointment?: AppointmentOrderByRelationAggregateInput
-    petitions?: PetitionOrderByRelationAggregateInput
-  }
-
-  export type LawyerWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    email?: string
-    oabNumber?: string
-    AND?: LawyerWhereInput | LawyerWhereInput[]
-    OR?: LawyerWhereInput[]
-    NOT?: LawyerWhereInput | LawyerWhereInput[]
-    name?: StringFilter<"Lawyer"> | string
-    specialty?: StringFilter<"Lawyer"> | string
-    phone?: StringNullableFilter<"Lawyer"> | string | null
-    createdAt?: DateTimeFilter<"Lawyer"> | Date | string
-    updatedAt?: DateTimeFilter<"Lawyer"> | Date | string
-    processes?: ProcessListRelationFilter
-    appointment?: AppointmentListRelationFilter
-    petitions?: PetitionListRelationFilter
-  }, "id" | "email" | "oabNumber">
-
-  export type LawyerOrderByWithAggregationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
-    oabNumber?: SortOrder
-    specialty?: SortOrder
-    phone?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: LawyerCountOrderByAggregateInput
-    _max?: LawyerMaxOrderByAggregateInput
-    _min?: LawyerMinOrderByAggregateInput
-  }
-
-  export type LawyerScalarWhereWithAggregatesInput = {
-    AND?: LawyerScalarWhereWithAggregatesInput | LawyerScalarWhereWithAggregatesInput[]
-    OR?: LawyerScalarWhereWithAggregatesInput[]
-    NOT?: LawyerScalarWhereWithAggregatesInput | LawyerScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Lawyer"> | string
-    name?: StringWithAggregatesFilter<"Lawyer"> | string
-    email?: StringWithAggregatesFilter<"Lawyer"> | string
-    oabNumber?: StringWithAggregatesFilter<"Lawyer"> | string
-    specialty?: StringWithAggregatesFilter<"Lawyer"> | string
-    phone?: StringNullableWithAggregatesFilter<"Lawyer"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"Lawyer"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Lawyer"> | Date | string
   }
 
   export type AppointmentWhereInput = {
@@ -9447,13 +8289,13 @@ export namespace Prisma {
     status?: EnumAppointmentStatusFilter<"Appointment"> | $Enums.AppointmentStatus
     eventType?: StringNullableFilter<"Appointment"> | string | null
     location?: StringNullableFilter<"Appointment"> | string | null
+    userId?: StringFilter<"Appointment"> | string
     clientId?: StringNullableFilter<"Appointment"> | string | null
-    lawyerId?: StringNullableFilter<"Appointment"> | string | null
     processId?: StringNullableFilter<"Appointment"> | string | null
     createdAt?: DateTimeFilter<"Appointment"> | Date | string
     updatedAt?: DateTimeFilter<"Appointment"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     client?: XOR<ClientNullableScalarRelationFilter, ClientWhereInput> | null
-    lawyer?: XOR<LawyerNullableScalarRelationFilter, LawyerWhereInput> | null
     process?: XOR<ProcessNullableScalarRelationFilter, ProcessWhereInput> | null
   }
 
@@ -9465,13 +8307,13 @@ export namespace Prisma {
     status?: SortOrder
     eventType?: SortOrderInput | SortOrder
     location?: SortOrderInput | SortOrder
+    userId?: SortOrder
     clientId?: SortOrderInput | SortOrder
-    lawyerId?: SortOrderInput | SortOrder
     processId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
     client?: ClientOrderByWithRelationInput
-    lawyer?: LawyerOrderByWithRelationInput
     process?: ProcessOrderByWithRelationInput
   }
 
@@ -9486,13 +8328,13 @@ export namespace Prisma {
     status?: EnumAppointmentStatusFilter<"Appointment"> | $Enums.AppointmentStatus
     eventType?: StringNullableFilter<"Appointment"> | string | null
     location?: StringNullableFilter<"Appointment"> | string | null
+    userId?: StringFilter<"Appointment"> | string
     clientId?: StringNullableFilter<"Appointment"> | string | null
-    lawyerId?: StringNullableFilter<"Appointment"> | string | null
     processId?: StringNullableFilter<"Appointment"> | string | null
     createdAt?: DateTimeFilter<"Appointment"> | Date | string
     updatedAt?: DateTimeFilter<"Appointment"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     client?: XOR<ClientNullableScalarRelationFilter, ClientWhereInput> | null
-    lawyer?: XOR<LawyerNullableScalarRelationFilter, LawyerWhereInput> | null
     process?: XOR<ProcessNullableScalarRelationFilter, ProcessWhereInput> | null
   }, "id">
 
@@ -9504,8 +8346,8 @@ export namespace Prisma {
     status?: SortOrder
     eventType?: SortOrderInput | SortOrder
     location?: SortOrderInput | SortOrder
+    userId?: SortOrder
     clientId?: SortOrderInput | SortOrder
-    lawyerId?: SortOrderInput | SortOrder
     processId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -9525,8 +8367,8 @@ export namespace Prisma {
     status?: EnumAppointmentStatusWithAggregatesFilter<"Appointment"> | $Enums.AppointmentStatus
     eventType?: StringNullableWithAggregatesFilter<"Appointment"> | string | null
     location?: StringNullableWithAggregatesFilter<"Appointment"> | string | null
+    userId?: StringWithAggregatesFilter<"Appointment"> | string
     clientId?: StringNullableWithAggregatesFilter<"Appointment"> | string | null
-    lawyerId?: StringNullableWithAggregatesFilter<"Appointment"> | string | null
     processId?: StringNullableWithAggregatesFilter<"Appointment"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Appointment"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Appointment"> | Date | string
@@ -9538,35 +8380,49 @@ export namespace Prisma {
     NOT?: PetitionWhereInput | PetitionWhereInput[]
     id?: StringFilter<"Petition"> | string
     title?: StringFilter<"Petition"> | string
+    defendant?: StringFilter<"Petition"> | string
+    addressing?: StringNullableFilter<"Petition"> | string | null
+    facts?: StringNullableFilter<"Petition"> | string | null
+    legalBasis?: StringNullableFilter<"Petition"> | string | null
+    caseValue?: DecimalNullableFilter<"Petition"> | Decimal | DecimalJsLike | number | string | null
+    closingLocation?: StringNullableFilter<"Petition"> | string | null
     description?: StringNullableFilter<"Petition"> | string | null
     type?: EnumPetitionTypeFilter<"Petition"> | $Enums.PetitionType
     status?: EnumPetitionStatusFilter<"Petition"> | $Enums.PetitionStatus
-    factsSummary?: StringNullableFilter<"Petition"> | string | null
     fileUrl?: StringNullableFilter<"Petition"> | string | null
     protocolNumber?: StringNullableFilter<"Petition"> | string | null
+    userId?: StringFilter<"Petition"> | string
     processId?: StringNullableFilter<"Petition"> | string | null
     clientId?: StringNullableFilter<"Petition"> | string | null
-    lawyerId?: StringNullableFilter<"Petition"> | string | null
+    createdAt?: DateTimeFilter<"Petition"> | Date | string
+    updatedAt?: DateTimeFilter<"Petition"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     process?: XOR<ProcessNullableScalarRelationFilter, ProcessWhereInput> | null
     client?: XOR<ClientNullableScalarRelationFilter, ClientWhereInput> | null
-    lawyer?: XOR<LawyerNullableScalarRelationFilter, LawyerWhereInput> | null
   }
 
   export type PetitionOrderByWithRelationInput = {
     id?: SortOrder
     title?: SortOrder
+    defendant?: SortOrder
+    addressing?: SortOrderInput | SortOrder
+    facts?: SortOrderInput | SortOrder
+    legalBasis?: SortOrderInput | SortOrder
+    caseValue?: SortOrderInput | SortOrder
+    closingLocation?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     type?: SortOrder
     status?: SortOrder
-    factsSummary?: SortOrderInput | SortOrder
     fileUrl?: SortOrderInput | SortOrder
     protocolNumber?: SortOrderInput | SortOrder
+    userId?: SortOrder
     processId?: SortOrderInput | SortOrder
     clientId?: SortOrderInput | SortOrder
-    lawyerId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
     process?: ProcessOrderByWithRelationInput
     client?: ClientOrderByWithRelationInput
-    lawyer?: LawyerOrderByWithRelationInput
   }
 
   export type PetitionWhereUniqueInput = Prisma.AtLeast<{
@@ -9575,35 +8431,51 @@ export namespace Prisma {
     OR?: PetitionWhereInput[]
     NOT?: PetitionWhereInput | PetitionWhereInput[]
     title?: StringFilter<"Petition"> | string
+    defendant?: StringFilter<"Petition"> | string
+    addressing?: StringNullableFilter<"Petition"> | string | null
+    facts?: StringNullableFilter<"Petition"> | string | null
+    legalBasis?: StringNullableFilter<"Petition"> | string | null
+    caseValue?: DecimalNullableFilter<"Petition"> | Decimal | DecimalJsLike | number | string | null
+    closingLocation?: StringNullableFilter<"Petition"> | string | null
     description?: StringNullableFilter<"Petition"> | string | null
     type?: EnumPetitionTypeFilter<"Petition"> | $Enums.PetitionType
     status?: EnumPetitionStatusFilter<"Petition"> | $Enums.PetitionStatus
-    factsSummary?: StringNullableFilter<"Petition"> | string | null
     fileUrl?: StringNullableFilter<"Petition"> | string | null
     protocolNumber?: StringNullableFilter<"Petition"> | string | null
+    userId?: StringFilter<"Petition"> | string
     processId?: StringNullableFilter<"Petition"> | string | null
     clientId?: StringNullableFilter<"Petition"> | string | null
-    lawyerId?: StringNullableFilter<"Petition"> | string | null
+    createdAt?: DateTimeFilter<"Petition"> | Date | string
+    updatedAt?: DateTimeFilter<"Petition"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     process?: XOR<ProcessNullableScalarRelationFilter, ProcessWhereInput> | null
     client?: XOR<ClientNullableScalarRelationFilter, ClientWhereInput> | null
-    lawyer?: XOR<LawyerNullableScalarRelationFilter, LawyerWhereInput> | null
   }, "id">
 
   export type PetitionOrderByWithAggregationInput = {
     id?: SortOrder
     title?: SortOrder
+    defendant?: SortOrder
+    addressing?: SortOrderInput | SortOrder
+    facts?: SortOrderInput | SortOrder
+    legalBasis?: SortOrderInput | SortOrder
+    caseValue?: SortOrderInput | SortOrder
+    closingLocation?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     type?: SortOrder
     status?: SortOrder
-    factsSummary?: SortOrderInput | SortOrder
     fileUrl?: SortOrderInput | SortOrder
     protocolNumber?: SortOrderInput | SortOrder
+    userId?: SortOrder
     processId?: SortOrderInput | SortOrder
     clientId?: SortOrderInput | SortOrder
-    lawyerId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: PetitionCountOrderByAggregateInput
+    _avg?: PetitionAvgOrderByAggregateInput
     _max?: PetitionMaxOrderByAggregateInput
     _min?: PetitionMinOrderByAggregateInput
+    _sum?: PetitionSumOrderByAggregateInput
   }
 
   export type PetitionScalarWhereWithAggregatesInput = {
@@ -9612,15 +8484,22 @@ export namespace Prisma {
     NOT?: PetitionScalarWhereWithAggregatesInput | PetitionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Petition"> | string
     title?: StringWithAggregatesFilter<"Petition"> | string
+    defendant?: StringWithAggregatesFilter<"Petition"> | string
+    addressing?: StringNullableWithAggregatesFilter<"Petition"> | string | null
+    facts?: StringNullableWithAggregatesFilter<"Petition"> | string | null
+    legalBasis?: StringNullableWithAggregatesFilter<"Petition"> | string | null
+    caseValue?: DecimalNullableWithAggregatesFilter<"Petition"> | Decimal | DecimalJsLike | number | string | null
+    closingLocation?: StringNullableWithAggregatesFilter<"Petition"> | string | null
     description?: StringNullableWithAggregatesFilter<"Petition"> | string | null
     type?: EnumPetitionTypeWithAggregatesFilter<"Petition"> | $Enums.PetitionType
     status?: EnumPetitionStatusWithAggregatesFilter<"Petition"> | $Enums.PetitionStatus
-    factsSummary?: StringNullableWithAggregatesFilter<"Petition"> | string | null
     fileUrl?: StringNullableWithAggregatesFilter<"Petition"> | string | null
     protocolNumber?: StringNullableWithAggregatesFilter<"Petition"> | string | null
+    userId?: StringWithAggregatesFilter<"Petition"> | string
     processId?: StringNullableWithAggregatesFilter<"Petition"> | string | null
     clientId?: StringNullableWithAggregatesFilter<"Petition"> | string | null
-    lawyerId?: StringNullableWithAggregatesFilter<"Petition"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Petition"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Petition"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -9638,6 +8517,10 @@ export namespace Prisma {
     office?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    clients?: ClientCreateNestedManyWithoutUserInput
+    processes?: ProcessCreateNestedManyWithoutUserInput
+    appointments?: AppointmentCreateNestedManyWithoutUserInput
+    petitions?: PetitionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -9655,6 +8538,10 @@ export namespace Prisma {
     office?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    clients?: ClientUncheckedCreateNestedManyWithoutUserInput
+    processes?: ProcessUncheckedCreateNestedManyWithoutUserInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutUserInput
+    petitions?: PetitionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -9672,6 +8559,10 @@ export namespace Prisma {
     office?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clients?: ClientUpdateManyWithoutUserNestedInput
+    processes?: ProcessUpdateManyWithoutUserNestedInput
+    appointments?: AppointmentUpdateManyWithoutUserNestedInput
+    petitions?: PetitionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -9689,6 +8580,10 @@ export namespace Prisma {
     office?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clients?: ClientUncheckedUpdateManyWithoutUserNestedInput
+    processes?: ProcessUncheckedUpdateManyWithoutUserNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutUserNestedInput
+    petitions?: PetitionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -9749,17 +8644,12 @@ export namespace Prisma {
     phone?: string | null
     cpf?: string | null
     cnpj?: string | null
-    cpf_cnpj?: string | null
     address?: string | null
     city?: string | null
     state?: string | null
-    zip_code?: string | null
-    notes?: string | null
-    dateOfBirth?: Date | string | null
-    maritalStatus?: string | null
-    profession?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutClientsInput
     appointments?: AppointmentCreateNestedManyWithoutClientInput
     processes?: ProcessCreateNestedManyWithoutClientInput
     petitions?: PetitionCreateNestedManyWithoutClientInput
@@ -9772,15 +8662,10 @@ export namespace Prisma {
     phone?: string | null
     cpf?: string | null
     cnpj?: string | null
-    cpf_cnpj?: string | null
     address?: string | null
     city?: string | null
     state?: string | null
-    zip_code?: string | null
-    notes?: string | null
-    dateOfBirth?: Date | string | null
-    maritalStatus?: string | null
-    profession?: string | null
+    userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
     appointments?: AppointmentUncheckedCreateNestedManyWithoutClientInput
@@ -9795,17 +8680,12 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     cpf?: NullableStringFieldUpdateOperationsInput | string | null
     cnpj?: NullableStringFieldUpdateOperationsInput | string | null
-    cpf_cnpj?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
-    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
-    profession?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutClientsNestedInput
     appointments?: AppointmentUpdateManyWithoutClientNestedInput
     processes?: ProcessUpdateManyWithoutClientNestedInput
     petitions?: PetitionUpdateManyWithoutClientNestedInput
@@ -9818,15 +8698,10 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     cpf?: NullableStringFieldUpdateOperationsInput | string | null
     cnpj?: NullableStringFieldUpdateOperationsInput | string | null
-    cpf_cnpj?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
-    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
-    profession?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUncheckedUpdateManyWithoutClientNestedInput
@@ -9841,15 +8716,10 @@ export namespace Prisma {
     phone?: string | null
     cpf?: string | null
     cnpj?: string | null
-    cpf_cnpj?: string | null
     address?: string | null
     city?: string | null
     state?: string | null
-    zip_code?: string | null
-    notes?: string | null
-    dateOfBirth?: Date | string | null
-    maritalStatus?: string | null
-    profession?: string | null
+    userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9861,15 +8731,9 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     cpf?: NullableStringFieldUpdateOperationsInput | string | null
     cnpj?: NullableStringFieldUpdateOperationsInput | string | null
-    cpf_cnpj?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
-    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
-    profession?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9881,15 +8745,10 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     cpf?: NullableStringFieldUpdateOperationsInput | string | null
     cnpj?: NullableStringFieldUpdateOperationsInput | string | null
-    cpf_cnpj?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
-    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
-    profession?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9905,9 +8764,9 @@ export namespace Prisma {
     internalNotes: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    lawyer?: LawyerCreateNestedOneWithoutProcessesInput
+    user: UserCreateNestedOneWithoutProcessesInput
     client?: ClientCreateNestedOneWithoutProcessesInput
-    appointment?: AppointmentCreateNestedManyWithoutProcessInput
+    appointments?: AppointmentCreateNestedManyWithoutProcessInput
     petitions?: PetitionCreateNestedManyWithoutProcessInput
   }
 
@@ -9917,14 +8776,14 @@ export namespace Prisma {
     court: string
     type: string
     status?: string
-    lawyerId?: string | null
-    clientId?: string | null
     hearingDate: Date | string
     caseValue: Decimal | DecimalJsLike | number | string
     internalNotes: string
+    userId: string
+    clientId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    appointment?: AppointmentUncheckedCreateNestedManyWithoutProcessInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutProcessInput
     petitions?: PetitionUncheckedCreateNestedManyWithoutProcessInput
   }
 
@@ -9939,9 +8798,9 @@ export namespace Prisma {
     internalNotes?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lawyer?: LawyerUpdateOneWithoutProcessesNestedInput
+    user?: UserUpdateOneRequiredWithoutProcessesNestedInput
     client?: ClientUpdateOneWithoutProcessesNestedInput
-    appointment?: AppointmentUpdateManyWithoutProcessNestedInput
+    appointments?: AppointmentUpdateManyWithoutProcessNestedInput
     petitions?: PetitionUpdateManyWithoutProcessNestedInput
   }
 
@@ -9951,14 +8810,14 @@ export namespace Prisma {
     court?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
-    lawyerId?: NullableStringFieldUpdateOperationsInput | string | null
-    clientId?: NullableStringFieldUpdateOperationsInput | string | null
     hearingDate?: DateTimeFieldUpdateOperationsInput | Date | string
     caseValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     internalNotes?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    appointment?: AppointmentUncheckedUpdateManyWithoutProcessNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutProcessNestedInput
     petitions?: PetitionUncheckedUpdateManyWithoutProcessNestedInput
   }
 
@@ -9968,11 +8827,11 @@ export namespace Prisma {
     court: string
     type: string
     status?: string
-    lawyerId?: string | null
-    clientId?: string | null
     hearingDate: Date | string
     caseValue: Decimal | DecimalJsLike | number | string
     internalNotes: string
+    userId: string
+    clientId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9996,100 +8855,11 @@ export namespace Prisma {
     court?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
-    lawyerId?: NullableStringFieldUpdateOperationsInput | string | null
-    clientId?: NullableStringFieldUpdateOperationsInput | string | null
     hearingDate?: DateTimeFieldUpdateOperationsInput | Date | string
     caseValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     internalNotes?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type LawyerCreateInput = {
-    id?: string
-    name: string
-    email: string
-    oabNumber: string
-    specialty: string
-    phone?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    processes?: ProcessCreateNestedManyWithoutLawyerInput
-    appointment?: AppointmentCreateNestedManyWithoutLawyerInput
-    petitions?: PetitionCreateNestedManyWithoutLawyerInput
-  }
-
-  export type LawyerUncheckedCreateInput = {
-    id?: string
-    name: string
-    email: string
-    oabNumber: string
-    specialty: string
-    phone?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    processes?: ProcessUncheckedCreateNestedManyWithoutLawyerInput
-    appointment?: AppointmentUncheckedCreateNestedManyWithoutLawyerInput
-    petitions?: PetitionUncheckedCreateNestedManyWithoutLawyerInput
-  }
-
-  export type LawyerUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    oabNumber?: StringFieldUpdateOperationsInput | string
-    specialty?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    processes?: ProcessUpdateManyWithoutLawyerNestedInput
-    appointment?: AppointmentUpdateManyWithoutLawyerNestedInput
-    petitions?: PetitionUpdateManyWithoutLawyerNestedInput
-  }
-
-  export type LawyerUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    oabNumber?: StringFieldUpdateOperationsInput | string
-    specialty?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    processes?: ProcessUncheckedUpdateManyWithoutLawyerNestedInput
-    appointment?: AppointmentUncheckedUpdateManyWithoutLawyerNestedInput
-    petitions?: PetitionUncheckedUpdateManyWithoutLawyerNestedInput
-  }
-
-  export type LawyerCreateManyInput = {
-    id?: string
-    name: string
-    email: string
-    oabNumber: string
-    specialty: string
-    phone?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type LawyerUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    oabNumber?: StringFieldUpdateOperationsInput | string
-    specialty?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type LawyerUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    oabNumber?: StringFieldUpdateOperationsInput | string
-    specialty?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10104,9 +8874,9 @@ export namespace Prisma {
     location?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutAppointmentsInput
     client?: ClientCreateNestedOneWithoutAppointmentsInput
-    lawyer?: LawyerCreateNestedOneWithoutAppointmentInput
-    process?: ProcessCreateNestedOneWithoutAppointmentInput
+    process?: ProcessCreateNestedOneWithoutAppointmentsInput
   }
 
   export type AppointmentUncheckedCreateInput = {
@@ -10117,8 +8887,8 @@ export namespace Prisma {
     status?: $Enums.AppointmentStatus
     eventType?: string | null
     location?: string | null
+    userId: string
     clientId?: string | null
-    lawyerId?: string | null
     processId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -10134,9 +8904,9 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutAppointmentsNestedInput
     client?: ClientUpdateOneWithoutAppointmentsNestedInput
-    lawyer?: LawyerUpdateOneWithoutAppointmentNestedInput
-    process?: ProcessUpdateOneWithoutAppointmentNestedInput
+    process?: ProcessUpdateOneWithoutAppointmentsNestedInput
   }
 
   export type AppointmentUncheckedUpdateInput = {
@@ -10147,8 +8917,8 @@ export namespace Prisma {
     status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
     eventType?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
-    lawyerId?: NullableStringFieldUpdateOperationsInput | string | null
     processId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10162,8 +8932,8 @@ export namespace Prisma {
     status?: $Enums.AppointmentStatus
     eventType?: string | null
     location?: string | null
+    userId: string
     clientId?: string | null
-    lawyerId?: string | null
     processId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -10189,8 +8959,8 @@ export namespace Prisma {
     status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
     eventType?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
-    lawyerId?: NullableStringFieldUpdateOperationsInput | string | null
     processId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10199,96 +8969,145 @@ export namespace Prisma {
   export type PetitionCreateInput = {
     id?: string
     title: string
+    defendant: string
+    addressing?: string | null
+    facts?: string | null
+    legalBasis?: string | null
+    caseValue?: Decimal | DecimalJsLike | number | string | null
+    closingLocation?: string | null
     description?: string | null
     type: $Enums.PetitionType
     status?: $Enums.PetitionStatus
-    factsSummary?: string | null
     fileUrl?: string | null
     protocolNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutPetitionsInput
     process?: ProcessCreateNestedOneWithoutPetitionsInput
     client?: ClientCreateNestedOneWithoutPetitionsInput
-    lawyer?: LawyerCreateNestedOneWithoutPetitionsInput
   }
 
   export type PetitionUncheckedCreateInput = {
     id?: string
     title: string
+    defendant: string
+    addressing?: string | null
+    facts?: string | null
+    legalBasis?: string | null
+    caseValue?: Decimal | DecimalJsLike | number | string | null
+    closingLocation?: string | null
     description?: string | null
     type: $Enums.PetitionType
     status?: $Enums.PetitionStatus
-    factsSummary?: string | null
     fileUrl?: string | null
     protocolNumber?: string | null
+    userId: string
     processId?: string | null
     clientId?: string | null
-    lawyerId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type PetitionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    defendant?: StringFieldUpdateOperationsInput | string
+    addressing?: NullableStringFieldUpdateOperationsInput | string | null
+    facts?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    caseValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    closingLocation?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumPetitionTypeFieldUpdateOperationsInput | $Enums.PetitionType
     status?: EnumPetitionStatusFieldUpdateOperationsInput | $Enums.PetitionStatus
-    factsSummary?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     protocolNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPetitionsNestedInput
     process?: ProcessUpdateOneWithoutPetitionsNestedInput
     client?: ClientUpdateOneWithoutPetitionsNestedInput
-    lawyer?: LawyerUpdateOneWithoutPetitionsNestedInput
   }
 
   export type PetitionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    defendant?: StringFieldUpdateOperationsInput | string
+    addressing?: NullableStringFieldUpdateOperationsInput | string | null
+    facts?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    caseValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    closingLocation?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumPetitionTypeFieldUpdateOperationsInput | $Enums.PetitionType
     status?: EnumPetitionStatusFieldUpdateOperationsInput | $Enums.PetitionStatus
-    factsSummary?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     protocolNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
     processId?: NullableStringFieldUpdateOperationsInput | string | null
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
-    lawyerId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PetitionCreateManyInput = {
     id?: string
     title: string
+    defendant: string
+    addressing?: string | null
+    facts?: string | null
+    legalBasis?: string | null
+    caseValue?: Decimal | DecimalJsLike | number | string | null
+    closingLocation?: string | null
     description?: string | null
     type: $Enums.PetitionType
     status?: $Enums.PetitionStatus
-    factsSummary?: string | null
     fileUrl?: string | null
     protocolNumber?: string | null
+    userId: string
     processId?: string | null
     clientId?: string | null
-    lawyerId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type PetitionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    defendant?: StringFieldUpdateOperationsInput | string
+    addressing?: NullableStringFieldUpdateOperationsInput | string | null
+    facts?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    caseValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    closingLocation?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumPetitionTypeFieldUpdateOperationsInput | $Enums.PetitionType
     status?: EnumPetitionStatusFieldUpdateOperationsInput | $Enums.PetitionStatus
-    factsSummary?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     protocolNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PetitionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    defendant?: StringFieldUpdateOperationsInput | string
+    addressing?: NullableStringFieldUpdateOperationsInput | string | null
+    facts?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    caseValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    closingLocation?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumPetitionTypeFieldUpdateOperationsInput | $Enums.PetitionType
     status?: EnumPetitionStatusFieldUpdateOperationsInput | $Enums.PetitionStatus
-    factsSummary?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     protocolNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
     processId?: NullableStringFieldUpdateOperationsInput | string | null
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
-    lawyerId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -10337,9 +9156,49 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type ClientListRelationFilter = {
+    every?: ClientWhereInput
+    some?: ClientWhereInput
+    none?: ClientWhereInput
+  }
+
+  export type ProcessListRelationFilter = {
+    every?: ProcessWhereInput
+    some?: ProcessWhereInput
+    none?: ProcessWhereInput
+  }
+
+  export type AppointmentListRelationFilter = {
+    every?: AppointmentWhereInput
+    some?: AppointmentWhereInput
+    none?: AppointmentWhereInput
+  }
+
+  export type PetitionListRelationFilter = {
+    every?: PetitionWhereInput
+    some?: PetitionWhereInput
+    none?: PetitionWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
+  }
+
+  export type ClientOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProcessOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AppointmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PetitionOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type UserCountOrderByAggregateInput = {
@@ -10451,45 +9310,19 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
   }
 
-  export type AppointmentListRelationFilter = {
-    every?: AppointmentWhereInput
-    some?: AppointmentWhereInput
-    none?: AppointmentWhereInput
+  export type ClientCpfUserIdCompoundUniqueInput = {
+    cpf: string
+    userId: string
   }
 
-  export type ProcessListRelationFilter = {
-    every?: ProcessWhereInput
-    some?: ProcessWhereInput
-    none?: ProcessWhereInput
-  }
-
-  export type PetitionListRelationFilter = {
-    every?: PetitionWhereInput
-    some?: PetitionWhereInput
-    none?: PetitionWhereInput
-  }
-
-  export type AppointmentOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ProcessOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type PetitionOrderByRelationAggregateInput = {
-    _count?: SortOrder
+  export type ClientCnpjUserIdCompoundUniqueInput = {
+    cnpj: string
+    userId: string
   }
 
   export type ClientCountOrderByAggregateInput = {
@@ -10499,15 +9332,10 @@ export namespace Prisma {
     phone?: SortOrder
     cpf?: SortOrder
     cnpj?: SortOrder
-    cpf_cnpj?: SortOrder
     address?: SortOrder
     city?: SortOrder
     state?: SortOrder
-    zip_code?: SortOrder
-    notes?: SortOrder
-    dateOfBirth?: SortOrder
-    maritalStatus?: SortOrder
-    profession?: SortOrder
+    userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -10519,15 +9347,10 @@ export namespace Prisma {
     phone?: SortOrder
     cpf?: SortOrder
     cnpj?: SortOrder
-    cpf_cnpj?: SortOrder
     address?: SortOrder
     city?: SortOrder
     state?: SortOrder
-    zip_code?: SortOrder
-    notes?: SortOrder
-    dateOfBirth?: SortOrder
-    maritalStatus?: SortOrder
-    profession?: SortOrder
+    userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -10539,31 +9362,12 @@ export namespace Prisma {
     phone?: SortOrder
     cpf?: SortOrder
     cnpj?: SortOrder
-    cpf_cnpj?: SortOrder
     address?: SortOrder
     city?: SortOrder
     state?: SortOrder
-    zip_code?: SortOrder
-    notes?: SortOrder
-    dateOfBirth?: SortOrder
-    maritalStatus?: SortOrder
-    profession?: SortOrder
+    userId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type DecimalFilter<$PrismaModel = never> = {
@@ -10577,14 +9381,14 @@ export namespace Prisma {
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
-  export type LawyerNullableScalarRelationFilter = {
-    is?: LawyerWhereInput | null
-    isNot?: LawyerWhereInput | null
-  }
-
   export type ClientNullableScalarRelationFilter = {
     is?: ClientWhereInput | null
     isNot?: ClientWhereInput | null
+  }
+
+  export type ProcessProcessNumberUserIdCompoundUniqueInput = {
+    processNumber: string
+    userId: string
   }
 
   export type ProcessCountOrderByAggregateInput = {
@@ -10593,11 +9397,11 @@ export namespace Prisma {
     court?: SortOrder
     type?: SortOrder
     status?: SortOrder
-    lawyerId?: SortOrder
-    clientId?: SortOrder
     hearingDate?: SortOrder
     caseValue?: SortOrder
     internalNotes?: SortOrder
+    userId?: SortOrder
+    clientId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -10612,11 +9416,11 @@ export namespace Prisma {
     court?: SortOrder
     type?: SortOrder
     status?: SortOrder
-    lawyerId?: SortOrder
-    clientId?: SortOrder
     hearingDate?: SortOrder
     caseValue?: SortOrder
     internalNotes?: SortOrder
+    userId?: SortOrder
+    clientId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -10627,11 +9431,11 @@ export namespace Prisma {
     court?: SortOrder
     type?: SortOrder
     status?: SortOrder
-    lawyerId?: SortOrder
-    clientId?: SortOrder
     hearingDate?: SortOrder
     caseValue?: SortOrder
     internalNotes?: SortOrder
+    userId?: SortOrder
+    clientId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -10656,39 +9460,6 @@ export namespace Prisma {
     _max?: NestedDecimalFilter<$PrismaModel>
   }
 
-  export type LawyerCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
-    oabNumber?: SortOrder
-    specialty?: SortOrder
-    phone?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type LawyerMaxOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
-    oabNumber?: SortOrder
-    specialty?: SortOrder
-    phone?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type LawyerMinOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
-    oabNumber?: SortOrder
-    specialty?: SortOrder
-    phone?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
   export type EnumAppointmentStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.AppointmentStatus | EnumAppointmentStatusFieldRefInput<$PrismaModel>
     in?: $Enums.AppointmentStatus[] | ListEnumAppointmentStatusFieldRefInput<$PrismaModel>
@@ -10709,8 +9480,8 @@ export namespace Prisma {
     status?: SortOrder
     eventType?: SortOrder
     location?: SortOrder
+    userId?: SortOrder
     clientId?: SortOrder
-    lawyerId?: SortOrder
     processId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -10724,8 +9495,8 @@ export namespace Prisma {
     status?: SortOrder
     eventType?: SortOrder
     location?: SortOrder
+    userId?: SortOrder
     clientId?: SortOrder
-    lawyerId?: SortOrder
     processId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -10739,8 +9510,8 @@ export namespace Prisma {
     status?: SortOrder
     eventType?: SortOrder
     location?: SortOrder
+    userId?: SortOrder
     clientId?: SortOrder
-    lawyerId?: SortOrder
     processId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -10754,6 +9525,17 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAppointmentStatusFilter<$PrismaModel>
     _max?: NestedEnumAppointmentStatusFilter<$PrismaModel>
+  }
+
+  export type DecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
   }
 
   export type EnumPetitionTypeFilter<$PrismaModel = never> = {
@@ -10773,43 +9555,88 @@ export namespace Prisma {
   export type PetitionCountOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
+    defendant?: SortOrder
+    addressing?: SortOrder
+    facts?: SortOrder
+    legalBasis?: SortOrder
+    caseValue?: SortOrder
+    closingLocation?: SortOrder
     description?: SortOrder
     type?: SortOrder
     status?: SortOrder
-    factsSummary?: SortOrder
     fileUrl?: SortOrder
     protocolNumber?: SortOrder
+    userId?: SortOrder
     processId?: SortOrder
     clientId?: SortOrder
-    lawyerId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PetitionAvgOrderByAggregateInput = {
+    caseValue?: SortOrder
   }
 
   export type PetitionMaxOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
+    defendant?: SortOrder
+    addressing?: SortOrder
+    facts?: SortOrder
+    legalBasis?: SortOrder
+    caseValue?: SortOrder
+    closingLocation?: SortOrder
     description?: SortOrder
     type?: SortOrder
     status?: SortOrder
-    factsSummary?: SortOrder
     fileUrl?: SortOrder
     protocolNumber?: SortOrder
+    userId?: SortOrder
     processId?: SortOrder
     clientId?: SortOrder
-    lawyerId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type PetitionMinOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
+    defendant?: SortOrder
+    addressing?: SortOrder
+    facts?: SortOrder
+    legalBasis?: SortOrder
+    caseValue?: SortOrder
+    closingLocation?: SortOrder
     description?: SortOrder
     type?: SortOrder
     status?: SortOrder
-    factsSummary?: SortOrder
     fileUrl?: SortOrder
     protocolNumber?: SortOrder
+    userId?: SortOrder
     processId?: SortOrder
     clientId?: SortOrder
-    lawyerId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PetitionSumOrderByAggregateInput = {
+    caseValue?: SortOrder
+  }
+
+  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type EnumPetitionTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -10832,6 +9659,62 @@ export namespace Prisma {
     _max?: NestedEnumPetitionStatusFilter<$PrismaModel>
   }
 
+  export type ClientCreateNestedManyWithoutUserInput = {
+    create?: XOR<ClientCreateWithoutUserInput, ClientUncheckedCreateWithoutUserInput> | ClientCreateWithoutUserInput[] | ClientUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ClientCreateOrConnectWithoutUserInput | ClientCreateOrConnectWithoutUserInput[]
+    createMany?: ClientCreateManyUserInputEnvelope
+    connect?: ClientWhereUniqueInput | ClientWhereUniqueInput[]
+  }
+
+  export type ProcessCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProcessCreateWithoutUserInput, ProcessUncheckedCreateWithoutUserInput> | ProcessCreateWithoutUserInput[] | ProcessUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProcessCreateOrConnectWithoutUserInput | ProcessCreateOrConnectWithoutUserInput[]
+    createMany?: ProcessCreateManyUserInputEnvelope
+    connect?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
+  }
+
+  export type AppointmentCreateNestedManyWithoutUserInput = {
+    create?: XOR<AppointmentCreateWithoutUserInput, AppointmentUncheckedCreateWithoutUserInput> | AppointmentCreateWithoutUserInput[] | AppointmentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AppointmentCreateOrConnectWithoutUserInput | AppointmentCreateOrConnectWithoutUserInput[]
+    createMany?: AppointmentCreateManyUserInputEnvelope
+    connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+  }
+
+  export type PetitionCreateNestedManyWithoutUserInput = {
+    create?: XOR<PetitionCreateWithoutUserInput, PetitionUncheckedCreateWithoutUserInput> | PetitionCreateWithoutUserInput[] | PetitionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PetitionCreateOrConnectWithoutUserInput | PetitionCreateOrConnectWithoutUserInput[]
+    createMany?: PetitionCreateManyUserInputEnvelope
+    connect?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
+  }
+
+  export type ClientUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ClientCreateWithoutUserInput, ClientUncheckedCreateWithoutUserInput> | ClientCreateWithoutUserInput[] | ClientUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ClientCreateOrConnectWithoutUserInput | ClientCreateOrConnectWithoutUserInput[]
+    createMany?: ClientCreateManyUserInputEnvelope
+    connect?: ClientWhereUniqueInput | ClientWhereUniqueInput[]
+  }
+
+  export type ProcessUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProcessCreateWithoutUserInput, ProcessUncheckedCreateWithoutUserInput> | ProcessCreateWithoutUserInput[] | ProcessUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProcessCreateOrConnectWithoutUserInput | ProcessCreateOrConnectWithoutUserInput[]
+    createMany?: ProcessCreateManyUserInputEnvelope
+    connect?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
+  }
+
+  export type AppointmentUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<AppointmentCreateWithoutUserInput, AppointmentUncheckedCreateWithoutUserInput> | AppointmentCreateWithoutUserInput[] | AppointmentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AppointmentCreateOrConnectWithoutUserInput | AppointmentCreateOrConnectWithoutUserInput[]
+    createMany?: AppointmentCreateManyUserInputEnvelope
+    connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+  }
+
+  export type PetitionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PetitionCreateWithoutUserInput, PetitionUncheckedCreateWithoutUserInput> | PetitionCreateWithoutUserInput[] | PetitionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PetitionCreateOrConnectWithoutUserInput | PetitionCreateOrConnectWithoutUserInput[]
+    createMany?: PetitionCreateManyUserInputEnvelope
+    connect?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -10846,6 +9729,124 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type ClientUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ClientCreateWithoutUserInput, ClientUncheckedCreateWithoutUserInput> | ClientCreateWithoutUserInput[] | ClientUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ClientCreateOrConnectWithoutUserInput | ClientCreateOrConnectWithoutUserInput[]
+    upsert?: ClientUpsertWithWhereUniqueWithoutUserInput | ClientUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ClientCreateManyUserInputEnvelope
+    set?: ClientWhereUniqueInput | ClientWhereUniqueInput[]
+    disconnect?: ClientWhereUniqueInput | ClientWhereUniqueInput[]
+    delete?: ClientWhereUniqueInput | ClientWhereUniqueInput[]
+    connect?: ClientWhereUniqueInput | ClientWhereUniqueInput[]
+    update?: ClientUpdateWithWhereUniqueWithoutUserInput | ClientUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ClientUpdateManyWithWhereWithoutUserInput | ClientUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ClientScalarWhereInput | ClientScalarWhereInput[]
+  }
+
+  export type ProcessUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProcessCreateWithoutUserInput, ProcessUncheckedCreateWithoutUserInput> | ProcessCreateWithoutUserInput[] | ProcessUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProcessCreateOrConnectWithoutUserInput | ProcessCreateOrConnectWithoutUserInput[]
+    upsert?: ProcessUpsertWithWhereUniqueWithoutUserInput | ProcessUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProcessCreateManyUserInputEnvelope
+    set?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
+    disconnect?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
+    delete?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
+    connect?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
+    update?: ProcessUpdateWithWhereUniqueWithoutUserInput | ProcessUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProcessUpdateManyWithWhereWithoutUserInput | ProcessUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProcessScalarWhereInput | ProcessScalarWhereInput[]
+  }
+
+  export type AppointmentUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AppointmentCreateWithoutUserInput, AppointmentUncheckedCreateWithoutUserInput> | AppointmentCreateWithoutUserInput[] | AppointmentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AppointmentCreateOrConnectWithoutUserInput | AppointmentCreateOrConnectWithoutUserInput[]
+    upsert?: AppointmentUpsertWithWhereUniqueWithoutUserInput | AppointmentUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AppointmentCreateManyUserInputEnvelope
+    set?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+    disconnect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+    delete?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+    connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+    update?: AppointmentUpdateWithWhereUniqueWithoutUserInput | AppointmentUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AppointmentUpdateManyWithWhereWithoutUserInput | AppointmentUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AppointmentScalarWhereInput | AppointmentScalarWhereInput[]
+  }
+
+  export type PetitionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PetitionCreateWithoutUserInput, PetitionUncheckedCreateWithoutUserInput> | PetitionCreateWithoutUserInput[] | PetitionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PetitionCreateOrConnectWithoutUserInput | PetitionCreateOrConnectWithoutUserInput[]
+    upsert?: PetitionUpsertWithWhereUniqueWithoutUserInput | PetitionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PetitionCreateManyUserInputEnvelope
+    set?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
+    disconnect?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
+    delete?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
+    connect?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
+    update?: PetitionUpdateWithWhereUniqueWithoutUserInput | PetitionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PetitionUpdateManyWithWhereWithoutUserInput | PetitionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PetitionScalarWhereInput | PetitionScalarWhereInput[]
+  }
+
+  export type ClientUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ClientCreateWithoutUserInput, ClientUncheckedCreateWithoutUserInput> | ClientCreateWithoutUserInput[] | ClientUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ClientCreateOrConnectWithoutUserInput | ClientCreateOrConnectWithoutUserInput[]
+    upsert?: ClientUpsertWithWhereUniqueWithoutUserInput | ClientUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ClientCreateManyUserInputEnvelope
+    set?: ClientWhereUniqueInput | ClientWhereUniqueInput[]
+    disconnect?: ClientWhereUniqueInput | ClientWhereUniqueInput[]
+    delete?: ClientWhereUniqueInput | ClientWhereUniqueInput[]
+    connect?: ClientWhereUniqueInput | ClientWhereUniqueInput[]
+    update?: ClientUpdateWithWhereUniqueWithoutUserInput | ClientUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ClientUpdateManyWithWhereWithoutUserInput | ClientUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ClientScalarWhereInput | ClientScalarWhereInput[]
+  }
+
+  export type ProcessUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProcessCreateWithoutUserInput, ProcessUncheckedCreateWithoutUserInput> | ProcessCreateWithoutUserInput[] | ProcessUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProcessCreateOrConnectWithoutUserInput | ProcessCreateOrConnectWithoutUserInput[]
+    upsert?: ProcessUpsertWithWhereUniqueWithoutUserInput | ProcessUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProcessCreateManyUserInputEnvelope
+    set?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
+    disconnect?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
+    delete?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
+    connect?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
+    update?: ProcessUpdateWithWhereUniqueWithoutUserInput | ProcessUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProcessUpdateManyWithWhereWithoutUserInput | ProcessUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProcessScalarWhereInput | ProcessScalarWhereInput[]
+  }
+
+  export type AppointmentUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AppointmentCreateWithoutUserInput, AppointmentUncheckedCreateWithoutUserInput> | AppointmentCreateWithoutUserInput[] | AppointmentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AppointmentCreateOrConnectWithoutUserInput | AppointmentCreateOrConnectWithoutUserInput[]
+    upsert?: AppointmentUpsertWithWhereUniqueWithoutUserInput | AppointmentUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AppointmentCreateManyUserInputEnvelope
+    set?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+    disconnect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+    delete?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+    connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+    update?: AppointmentUpdateWithWhereUniqueWithoutUserInput | AppointmentUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AppointmentUpdateManyWithWhereWithoutUserInput | AppointmentUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AppointmentScalarWhereInput | AppointmentScalarWhereInput[]
+  }
+
+  export type PetitionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PetitionCreateWithoutUserInput, PetitionUncheckedCreateWithoutUserInput> | PetitionCreateWithoutUserInput[] | PetitionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PetitionCreateOrConnectWithoutUserInput | PetitionCreateOrConnectWithoutUserInput[]
+    upsert?: PetitionUpsertWithWhereUniqueWithoutUserInput | PetitionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PetitionCreateManyUserInputEnvelope
+    set?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
+    disconnect?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
+    delete?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
+    connect?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
+    update?: PetitionUpdateWithWhereUniqueWithoutUserInput | PetitionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PetitionUpdateManyWithWhereWithoutUserInput | PetitionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PetitionScalarWhereInput | PetitionScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutClientsInput = {
+    create?: XOR<UserCreateWithoutClientsInput, UserUncheckedCreateWithoutClientsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutClientsInput
+    connect?: UserWhereUniqueInput
   }
 
   export type AppointmentCreateNestedManyWithoutClientInput = {
@@ -10890,8 +9891,12 @@ export namespace Prisma {
     connect?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
   }
 
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
+  export type UserUpdateOneRequiredWithoutClientsNestedInput = {
+    create?: XOR<UserCreateWithoutClientsInput, UserUncheckedCreateWithoutClientsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutClientsInput
+    upsert?: UserUpsertWithoutClientsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutClientsInput, UserUpdateWithoutClientsInput>, UserUncheckedUpdateWithoutClientsInput>
   }
 
   export type AppointmentUpdateManyWithoutClientNestedInput = {
@@ -10978,10 +9983,10 @@ export namespace Prisma {
     deleteMany?: PetitionScalarWhereInput | PetitionScalarWhereInput[]
   }
 
-  export type LawyerCreateNestedOneWithoutProcessesInput = {
-    create?: XOR<LawyerCreateWithoutProcessesInput, LawyerUncheckedCreateWithoutProcessesInput>
-    connectOrCreate?: LawyerCreateOrConnectWithoutProcessesInput
-    connect?: LawyerWhereUniqueInput
+  export type UserCreateNestedOneWithoutProcessesInput = {
+    create?: XOR<UserCreateWithoutProcessesInput, UserUncheckedCreateWithoutProcessesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutProcessesInput
+    connect?: UserWhereUniqueInput
   }
 
   export type ClientCreateNestedOneWithoutProcessesInput = {
@@ -11026,14 +10031,12 @@ export namespace Prisma {
     divide?: Decimal | DecimalJsLike | number | string
   }
 
-  export type LawyerUpdateOneWithoutProcessesNestedInput = {
-    create?: XOR<LawyerCreateWithoutProcessesInput, LawyerUncheckedCreateWithoutProcessesInput>
-    connectOrCreate?: LawyerCreateOrConnectWithoutProcessesInput
-    upsert?: LawyerUpsertWithoutProcessesInput
-    disconnect?: LawyerWhereInput | boolean
-    delete?: LawyerWhereInput | boolean
-    connect?: LawyerWhereUniqueInput
-    update?: XOR<XOR<LawyerUpdateToOneWithWhereWithoutProcessesInput, LawyerUpdateWithoutProcessesInput>, LawyerUncheckedUpdateWithoutProcessesInput>
+  export type UserUpdateOneRequiredWithoutProcessesNestedInput = {
+    create?: XOR<UserCreateWithoutProcessesInput, UserUncheckedCreateWithoutProcessesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutProcessesInput
+    upsert?: UserUpsertWithoutProcessesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutProcessesInput, UserUpdateWithoutProcessesInput>, UserUncheckedUpdateWithoutProcessesInput>
   }
 
   export type ClientUpdateOneWithoutProcessesNestedInput = {
@@ -11102,130 +10105,10 @@ export namespace Prisma {
     deleteMany?: PetitionScalarWhereInput | PetitionScalarWhereInput[]
   }
 
-  export type ProcessCreateNestedManyWithoutLawyerInput = {
-    create?: XOR<ProcessCreateWithoutLawyerInput, ProcessUncheckedCreateWithoutLawyerInput> | ProcessCreateWithoutLawyerInput[] | ProcessUncheckedCreateWithoutLawyerInput[]
-    connectOrCreate?: ProcessCreateOrConnectWithoutLawyerInput | ProcessCreateOrConnectWithoutLawyerInput[]
-    createMany?: ProcessCreateManyLawyerInputEnvelope
-    connect?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
-  }
-
-  export type AppointmentCreateNestedManyWithoutLawyerInput = {
-    create?: XOR<AppointmentCreateWithoutLawyerInput, AppointmentUncheckedCreateWithoutLawyerInput> | AppointmentCreateWithoutLawyerInput[] | AppointmentUncheckedCreateWithoutLawyerInput[]
-    connectOrCreate?: AppointmentCreateOrConnectWithoutLawyerInput | AppointmentCreateOrConnectWithoutLawyerInput[]
-    createMany?: AppointmentCreateManyLawyerInputEnvelope
-    connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
-  }
-
-  export type PetitionCreateNestedManyWithoutLawyerInput = {
-    create?: XOR<PetitionCreateWithoutLawyerInput, PetitionUncheckedCreateWithoutLawyerInput> | PetitionCreateWithoutLawyerInput[] | PetitionUncheckedCreateWithoutLawyerInput[]
-    connectOrCreate?: PetitionCreateOrConnectWithoutLawyerInput | PetitionCreateOrConnectWithoutLawyerInput[]
-    createMany?: PetitionCreateManyLawyerInputEnvelope
-    connect?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
-  }
-
-  export type ProcessUncheckedCreateNestedManyWithoutLawyerInput = {
-    create?: XOR<ProcessCreateWithoutLawyerInput, ProcessUncheckedCreateWithoutLawyerInput> | ProcessCreateWithoutLawyerInput[] | ProcessUncheckedCreateWithoutLawyerInput[]
-    connectOrCreate?: ProcessCreateOrConnectWithoutLawyerInput | ProcessCreateOrConnectWithoutLawyerInput[]
-    createMany?: ProcessCreateManyLawyerInputEnvelope
-    connect?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
-  }
-
-  export type AppointmentUncheckedCreateNestedManyWithoutLawyerInput = {
-    create?: XOR<AppointmentCreateWithoutLawyerInput, AppointmentUncheckedCreateWithoutLawyerInput> | AppointmentCreateWithoutLawyerInput[] | AppointmentUncheckedCreateWithoutLawyerInput[]
-    connectOrCreate?: AppointmentCreateOrConnectWithoutLawyerInput | AppointmentCreateOrConnectWithoutLawyerInput[]
-    createMany?: AppointmentCreateManyLawyerInputEnvelope
-    connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
-  }
-
-  export type PetitionUncheckedCreateNestedManyWithoutLawyerInput = {
-    create?: XOR<PetitionCreateWithoutLawyerInput, PetitionUncheckedCreateWithoutLawyerInput> | PetitionCreateWithoutLawyerInput[] | PetitionUncheckedCreateWithoutLawyerInput[]
-    connectOrCreate?: PetitionCreateOrConnectWithoutLawyerInput | PetitionCreateOrConnectWithoutLawyerInput[]
-    createMany?: PetitionCreateManyLawyerInputEnvelope
-    connect?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
-  }
-
-  export type ProcessUpdateManyWithoutLawyerNestedInput = {
-    create?: XOR<ProcessCreateWithoutLawyerInput, ProcessUncheckedCreateWithoutLawyerInput> | ProcessCreateWithoutLawyerInput[] | ProcessUncheckedCreateWithoutLawyerInput[]
-    connectOrCreate?: ProcessCreateOrConnectWithoutLawyerInput | ProcessCreateOrConnectWithoutLawyerInput[]
-    upsert?: ProcessUpsertWithWhereUniqueWithoutLawyerInput | ProcessUpsertWithWhereUniqueWithoutLawyerInput[]
-    createMany?: ProcessCreateManyLawyerInputEnvelope
-    set?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
-    disconnect?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
-    delete?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
-    connect?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
-    update?: ProcessUpdateWithWhereUniqueWithoutLawyerInput | ProcessUpdateWithWhereUniqueWithoutLawyerInput[]
-    updateMany?: ProcessUpdateManyWithWhereWithoutLawyerInput | ProcessUpdateManyWithWhereWithoutLawyerInput[]
-    deleteMany?: ProcessScalarWhereInput | ProcessScalarWhereInput[]
-  }
-
-  export type AppointmentUpdateManyWithoutLawyerNestedInput = {
-    create?: XOR<AppointmentCreateWithoutLawyerInput, AppointmentUncheckedCreateWithoutLawyerInput> | AppointmentCreateWithoutLawyerInput[] | AppointmentUncheckedCreateWithoutLawyerInput[]
-    connectOrCreate?: AppointmentCreateOrConnectWithoutLawyerInput | AppointmentCreateOrConnectWithoutLawyerInput[]
-    upsert?: AppointmentUpsertWithWhereUniqueWithoutLawyerInput | AppointmentUpsertWithWhereUniqueWithoutLawyerInput[]
-    createMany?: AppointmentCreateManyLawyerInputEnvelope
-    set?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
-    disconnect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
-    delete?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
-    connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
-    update?: AppointmentUpdateWithWhereUniqueWithoutLawyerInput | AppointmentUpdateWithWhereUniqueWithoutLawyerInput[]
-    updateMany?: AppointmentUpdateManyWithWhereWithoutLawyerInput | AppointmentUpdateManyWithWhereWithoutLawyerInput[]
-    deleteMany?: AppointmentScalarWhereInput | AppointmentScalarWhereInput[]
-  }
-
-  export type PetitionUpdateManyWithoutLawyerNestedInput = {
-    create?: XOR<PetitionCreateWithoutLawyerInput, PetitionUncheckedCreateWithoutLawyerInput> | PetitionCreateWithoutLawyerInput[] | PetitionUncheckedCreateWithoutLawyerInput[]
-    connectOrCreate?: PetitionCreateOrConnectWithoutLawyerInput | PetitionCreateOrConnectWithoutLawyerInput[]
-    upsert?: PetitionUpsertWithWhereUniqueWithoutLawyerInput | PetitionUpsertWithWhereUniqueWithoutLawyerInput[]
-    createMany?: PetitionCreateManyLawyerInputEnvelope
-    set?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
-    disconnect?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
-    delete?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
-    connect?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
-    update?: PetitionUpdateWithWhereUniqueWithoutLawyerInput | PetitionUpdateWithWhereUniqueWithoutLawyerInput[]
-    updateMany?: PetitionUpdateManyWithWhereWithoutLawyerInput | PetitionUpdateManyWithWhereWithoutLawyerInput[]
-    deleteMany?: PetitionScalarWhereInput | PetitionScalarWhereInput[]
-  }
-
-  export type ProcessUncheckedUpdateManyWithoutLawyerNestedInput = {
-    create?: XOR<ProcessCreateWithoutLawyerInput, ProcessUncheckedCreateWithoutLawyerInput> | ProcessCreateWithoutLawyerInput[] | ProcessUncheckedCreateWithoutLawyerInput[]
-    connectOrCreate?: ProcessCreateOrConnectWithoutLawyerInput | ProcessCreateOrConnectWithoutLawyerInput[]
-    upsert?: ProcessUpsertWithWhereUniqueWithoutLawyerInput | ProcessUpsertWithWhereUniqueWithoutLawyerInput[]
-    createMany?: ProcessCreateManyLawyerInputEnvelope
-    set?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
-    disconnect?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
-    delete?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
-    connect?: ProcessWhereUniqueInput | ProcessWhereUniqueInput[]
-    update?: ProcessUpdateWithWhereUniqueWithoutLawyerInput | ProcessUpdateWithWhereUniqueWithoutLawyerInput[]
-    updateMany?: ProcessUpdateManyWithWhereWithoutLawyerInput | ProcessUpdateManyWithWhereWithoutLawyerInput[]
-    deleteMany?: ProcessScalarWhereInput | ProcessScalarWhereInput[]
-  }
-
-  export type AppointmentUncheckedUpdateManyWithoutLawyerNestedInput = {
-    create?: XOR<AppointmentCreateWithoutLawyerInput, AppointmentUncheckedCreateWithoutLawyerInput> | AppointmentCreateWithoutLawyerInput[] | AppointmentUncheckedCreateWithoutLawyerInput[]
-    connectOrCreate?: AppointmentCreateOrConnectWithoutLawyerInput | AppointmentCreateOrConnectWithoutLawyerInput[]
-    upsert?: AppointmentUpsertWithWhereUniqueWithoutLawyerInput | AppointmentUpsertWithWhereUniqueWithoutLawyerInput[]
-    createMany?: AppointmentCreateManyLawyerInputEnvelope
-    set?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
-    disconnect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
-    delete?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
-    connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
-    update?: AppointmentUpdateWithWhereUniqueWithoutLawyerInput | AppointmentUpdateWithWhereUniqueWithoutLawyerInput[]
-    updateMany?: AppointmentUpdateManyWithWhereWithoutLawyerInput | AppointmentUpdateManyWithWhereWithoutLawyerInput[]
-    deleteMany?: AppointmentScalarWhereInput | AppointmentScalarWhereInput[]
-  }
-
-  export type PetitionUncheckedUpdateManyWithoutLawyerNestedInput = {
-    create?: XOR<PetitionCreateWithoutLawyerInput, PetitionUncheckedCreateWithoutLawyerInput> | PetitionCreateWithoutLawyerInput[] | PetitionUncheckedCreateWithoutLawyerInput[]
-    connectOrCreate?: PetitionCreateOrConnectWithoutLawyerInput | PetitionCreateOrConnectWithoutLawyerInput[]
-    upsert?: PetitionUpsertWithWhereUniqueWithoutLawyerInput | PetitionUpsertWithWhereUniqueWithoutLawyerInput[]
-    createMany?: PetitionCreateManyLawyerInputEnvelope
-    set?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
-    disconnect?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
-    delete?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
-    connect?: PetitionWhereUniqueInput | PetitionWhereUniqueInput[]
-    update?: PetitionUpdateWithWhereUniqueWithoutLawyerInput | PetitionUpdateWithWhereUniqueWithoutLawyerInput[]
-    updateMany?: PetitionUpdateManyWithWhereWithoutLawyerInput | PetitionUpdateManyWithWhereWithoutLawyerInput[]
-    deleteMany?: PetitionScalarWhereInput | PetitionScalarWhereInput[]
+  export type UserCreateNestedOneWithoutAppointmentsInput = {
+    create?: XOR<UserCreateWithoutAppointmentsInput, UserUncheckedCreateWithoutAppointmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAppointmentsInput
+    connect?: UserWhereUniqueInput
   }
 
   export type ClientCreateNestedOneWithoutAppointmentsInput = {
@@ -11234,20 +10117,22 @@ export namespace Prisma {
     connect?: ClientWhereUniqueInput
   }
 
-  export type LawyerCreateNestedOneWithoutAppointmentInput = {
-    create?: XOR<LawyerCreateWithoutAppointmentInput, LawyerUncheckedCreateWithoutAppointmentInput>
-    connectOrCreate?: LawyerCreateOrConnectWithoutAppointmentInput
-    connect?: LawyerWhereUniqueInput
-  }
-
-  export type ProcessCreateNestedOneWithoutAppointmentInput = {
-    create?: XOR<ProcessCreateWithoutAppointmentInput, ProcessUncheckedCreateWithoutAppointmentInput>
-    connectOrCreate?: ProcessCreateOrConnectWithoutAppointmentInput
+  export type ProcessCreateNestedOneWithoutAppointmentsInput = {
+    create?: XOR<ProcessCreateWithoutAppointmentsInput, ProcessUncheckedCreateWithoutAppointmentsInput>
+    connectOrCreate?: ProcessCreateOrConnectWithoutAppointmentsInput
     connect?: ProcessWhereUniqueInput
   }
 
   export type EnumAppointmentStatusFieldUpdateOperationsInput = {
     set?: $Enums.AppointmentStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutAppointmentsNestedInput = {
+    create?: XOR<UserCreateWithoutAppointmentsInput, UserUncheckedCreateWithoutAppointmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAppointmentsInput
+    upsert?: UserUpsertWithoutAppointmentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAppointmentsInput, UserUpdateWithoutAppointmentsInput>, UserUncheckedUpdateWithoutAppointmentsInput>
   }
 
   export type ClientUpdateOneWithoutAppointmentsNestedInput = {
@@ -11260,24 +10145,20 @@ export namespace Prisma {
     update?: XOR<XOR<ClientUpdateToOneWithWhereWithoutAppointmentsInput, ClientUpdateWithoutAppointmentsInput>, ClientUncheckedUpdateWithoutAppointmentsInput>
   }
 
-  export type LawyerUpdateOneWithoutAppointmentNestedInput = {
-    create?: XOR<LawyerCreateWithoutAppointmentInput, LawyerUncheckedCreateWithoutAppointmentInput>
-    connectOrCreate?: LawyerCreateOrConnectWithoutAppointmentInput
-    upsert?: LawyerUpsertWithoutAppointmentInput
-    disconnect?: LawyerWhereInput | boolean
-    delete?: LawyerWhereInput | boolean
-    connect?: LawyerWhereUniqueInput
-    update?: XOR<XOR<LawyerUpdateToOneWithWhereWithoutAppointmentInput, LawyerUpdateWithoutAppointmentInput>, LawyerUncheckedUpdateWithoutAppointmentInput>
-  }
-
-  export type ProcessUpdateOneWithoutAppointmentNestedInput = {
-    create?: XOR<ProcessCreateWithoutAppointmentInput, ProcessUncheckedCreateWithoutAppointmentInput>
-    connectOrCreate?: ProcessCreateOrConnectWithoutAppointmentInput
-    upsert?: ProcessUpsertWithoutAppointmentInput
+  export type ProcessUpdateOneWithoutAppointmentsNestedInput = {
+    create?: XOR<ProcessCreateWithoutAppointmentsInput, ProcessUncheckedCreateWithoutAppointmentsInput>
+    connectOrCreate?: ProcessCreateOrConnectWithoutAppointmentsInput
+    upsert?: ProcessUpsertWithoutAppointmentsInput
     disconnect?: ProcessWhereInput | boolean
     delete?: ProcessWhereInput | boolean
     connect?: ProcessWhereUniqueInput
-    update?: XOR<XOR<ProcessUpdateToOneWithWhereWithoutAppointmentInput, ProcessUpdateWithoutAppointmentInput>, ProcessUncheckedUpdateWithoutAppointmentInput>
+    update?: XOR<XOR<ProcessUpdateToOneWithWhereWithoutAppointmentsInput, ProcessUpdateWithoutAppointmentsInput>, ProcessUncheckedUpdateWithoutAppointmentsInput>
+  }
+
+  export type UserCreateNestedOneWithoutPetitionsInput = {
+    create?: XOR<UserCreateWithoutPetitionsInput, UserUncheckedCreateWithoutPetitionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPetitionsInput
+    connect?: UserWhereUniqueInput
   }
 
   export type ProcessCreateNestedOneWithoutPetitionsInput = {
@@ -11292,10 +10173,12 @@ export namespace Prisma {
     connect?: ClientWhereUniqueInput
   }
 
-  export type LawyerCreateNestedOneWithoutPetitionsInput = {
-    create?: XOR<LawyerCreateWithoutPetitionsInput, LawyerUncheckedCreateWithoutPetitionsInput>
-    connectOrCreate?: LawyerCreateOrConnectWithoutPetitionsInput
-    connect?: LawyerWhereUniqueInput
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
   }
 
   export type EnumPetitionTypeFieldUpdateOperationsInput = {
@@ -11304,6 +10187,14 @@ export namespace Prisma {
 
   export type EnumPetitionStatusFieldUpdateOperationsInput = {
     set?: $Enums.PetitionStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutPetitionsNestedInput = {
+    create?: XOR<UserCreateWithoutPetitionsInput, UserUncheckedCreateWithoutPetitionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPetitionsInput
+    upsert?: UserUpsertWithoutPetitionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPetitionsInput, UserUpdateWithoutPetitionsInput>, UserUncheckedUpdateWithoutPetitionsInput>
   }
 
   export type ProcessUpdateOneWithoutPetitionsNestedInput = {
@@ -11324,16 +10215,6 @@ export namespace Prisma {
     delete?: ClientWhereInput | boolean
     connect?: ClientWhereUniqueInput
     update?: XOR<XOR<ClientUpdateToOneWithWhereWithoutPetitionsInput, ClientUpdateWithoutPetitionsInput>, ClientUncheckedUpdateWithoutPetitionsInput>
-  }
-
-  export type LawyerUpdateOneWithoutPetitionsNestedInput = {
-    create?: XOR<LawyerCreateWithoutPetitionsInput, LawyerUncheckedCreateWithoutPetitionsInput>
-    connectOrCreate?: LawyerCreateOrConnectWithoutPetitionsInput
-    upsert?: LawyerUpsertWithoutPetitionsInput
-    disconnect?: LawyerWhereInput | boolean
-    delete?: LawyerWhereInput | boolean
-    connect?: LawyerWhereUniqueInput
-    update?: XOR<XOR<LawyerUpdateToOneWithWhereWithoutPetitionsInput, LawyerUpdateWithoutPetitionsInput>, LawyerUncheckedUpdateWithoutPetitionsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -11458,31 +10339,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
   export type NestedDecimalFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
@@ -11527,6 +10383,17 @@ export namespace Prisma {
     _max?: NestedEnumAppointmentStatusFilter<$PrismaModel>
   }
 
+  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+  }
+
   export type NestedEnumPetitionTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.PetitionType | EnumPetitionTypeFieldRefInput<$PrismaModel>
     in?: $Enums.PetitionType[] | ListEnumPetitionTypeFieldRefInput<$PrismaModel>
@@ -11539,6 +10406,22 @@ export namespace Prisma {
     in?: $Enums.PetitionStatus[] | ListEnumPetitionStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.PetitionStatus[] | ListEnumPetitionStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumPetitionStatusFilter<$PrismaModel> | $Enums.PetitionStatus
+  }
+
+  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedDecimalNullableFilter<$PrismaModel>
+    _sum?: NestedDecimalNullableFilter<$PrismaModel>
+    _min?: NestedDecimalNullableFilter<$PrismaModel>
+    _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumPetitionTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -11561,6 +10444,367 @@ export namespace Prisma {
     _max?: NestedEnumPetitionStatusFilter<$PrismaModel>
   }
 
+  export type ClientCreateWithoutUserInput = {
+    id?: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    cpf?: string | null
+    cnpj?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointments?: AppointmentCreateNestedManyWithoutClientInput
+    processes?: ProcessCreateNestedManyWithoutClientInput
+    petitions?: PetitionCreateNestedManyWithoutClientInput
+  }
+
+  export type ClientUncheckedCreateWithoutUserInput = {
+    id?: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    cpf?: string | null
+    cnpj?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutClientInput
+    processes?: ProcessUncheckedCreateNestedManyWithoutClientInput
+    petitions?: PetitionUncheckedCreateNestedManyWithoutClientInput
+  }
+
+  export type ClientCreateOrConnectWithoutUserInput = {
+    where: ClientWhereUniqueInput
+    create: XOR<ClientCreateWithoutUserInput, ClientUncheckedCreateWithoutUserInput>
+  }
+
+  export type ClientCreateManyUserInputEnvelope = {
+    data: ClientCreateManyUserInput | ClientCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProcessCreateWithoutUserInput = {
+    id?: string
+    processNumber: string
+    court: string
+    type: string
+    status?: string
+    hearingDate: Date | string
+    caseValue: Decimal | DecimalJsLike | number | string
+    internalNotes: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    client?: ClientCreateNestedOneWithoutProcessesInput
+    appointments?: AppointmentCreateNestedManyWithoutProcessInput
+    petitions?: PetitionCreateNestedManyWithoutProcessInput
+  }
+
+  export type ProcessUncheckedCreateWithoutUserInput = {
+    id?: string
+    processNumber: string
+    court: string
+    type: string
+    status?: string
+    hearingDate: Date | string
+    caseValue: Decimal | DecimalJsLike | number | string
+    internalNotes: string
+    clientId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutProcessInput
+    petitions?: PetitionUncheckedCreateNestedManyWithoutProcessInput
+  }
+
+  export type ProcessCreateOrConnectWithoutUserInput = {
+    where: ProcessWhereUniqueInput
+    create: XOR<ProcessCreateWithoutUserInput, ProcessUncheckedCreateWithoutUserInput>
+  }
+
+  export type ProcessCreateManyUserInputEnvelope = {
+    data: ProcessCreateManyUserInput | ProcessCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AppointmentCreateWithoutUserInput = {
+    id?: string
+    title: string
+    description?: string | null
+    date: Date | string
+    status?: $Enums.AppointmentStatus
+    eventType?: string | null
+    location?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    client?: ClientCreateNestedOneWithoutAppointmentsInput
+    process?: ProcessCreateNestedOneWithoutAppointmentsInput
+  }
+
+  export type AppointmentUncheckedCreateWithoutUserInput = {
+    id?: string
+    title: string
+    description?: string | null
+    date: Date | string
+    status?: $Enums.AppointmentStatus
+    eventType?: string | null
+    location?: string | null
+    clientId?: string | null
+    processId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AppointmentCreateOrConnectWithoutUserInput = {
+    where: AppointmentWhereUniqueInput
+    create: XOR<AppointmentCreateWithoutUserInput, AppointmentUncheckedCreateWithoutUserInput>
+  }
+
+  export type AppointmentCreateManyUserInputEnvelope = {
+    data: AppointmentCreateManyUserInput | AppointmentCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PetitionCreateWithoutUserInput = {
+    id?: string
+    title: string
+    defendant: string
+    addressing?: string | null
+    facts?: string | null
+    legalBasis?: string | null
+    caseValue?: Decimal | DecimalJsLike | number | string | null
+    closingLocation?: string | null
+    description?: string | null
+    type: $Enums.PetitionType
+    status?: $Enums.PetitionStatus
+    fileUrl?: string | null
+    protocolNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    process?: ProcessCreateNestedOneWithoutPetitionsInput
+    client?: ClientCreateNestedOneWithoutPetitionsInput
+  }
+
+  export type PetitionUncheckedCreateWithoutUserInput = {
+    id?: string
+    title: string
+    defendant: string
+    addressing?: string | null
+    facts?: string | null
+    legalBasis?: string | null
+    caseValue?: Decimal | DecimalJsLike | number | string | null
+    closingLocation?: string | null
+    description?: string | null
+    type: $Enums.PetitionType
+    status?: $Enums.PetitionStatus
+    fileUrl?: string | null
+    protocolNumber?: string | null
+    processId?: string | null
+    clientId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PetitionCreateOrConnectWithoutUserInput = {
+    where: PetitionWhereUniqueInput
+    create: XOR<PetitionCreateWithoutUserInput, PetitionUncheckedCreateWithoutUserInput>
+  }
+
+  export type PetitionCreateManyUserInputEnvelope = {
+    data: PetitionCreateManyUserInput | PetitionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ClientUpsertWithWhereUniqueWithoutUserInput = {
+    where: ClientWhereUniqueInput
+    update: XOR<ClientUpdateWithoutUserInput, ClientUncheckedUpdateWithoutUserInput>
+    create: XOR<ClientCreateWithoutUserInput, ClientUncheckedCreateWithoutUserInput>
+  }
+
+  export type ClientUpdateWithWhereUniqueWithoutUserInput = {
+    where: ClientWhereUniqueInput
+    data: XOR<ClientUpdateWithoutUserInput, ClientUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ClientUpdateManyWithWhereWithoutUserInput = {
+    where: ClientScalarWhereInput
+    data: XOR<ClientUpdateManyMutationInput, ClientUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ClientScalarWhereInput = {
+    AND?: ClientScalarWhereInput | ClientScalarWhereInput[]
+    OR?: ClientScalarWhereInput[]
+    NOT?: ClientScalarWhereInput | ClientScalarWhereInput[]
+    id?: StringFilter<"Client"> | string
+    name?: StringFilter<"Client"> | string
+    email?: StringNullableFilter<"Client"> | string | null
+    phone?: StringNullableFilter<"Client"> | string | null
+    cpf?: StringNullableFilter<"Client"> | string | null
+    cnpj?: StringNullableFilter<"Client"> | string | null
+    address?: StringNullableFilter<"Client"> | string | null
+    city?: StringNullableFilter<"Client"> | string | null
+    state?: StringNullableFilter<"Client"> | string | null
+    userId?: StringFilter<"Client"> | string
+    createdAt?: DateTimeFilter<"Client"> | Date | string
+    updatedAt?: DateTimeFilter<"Client"> | Date | string
+  }
+
+  export type ProcessUpsertWithWhereUniqueWithoutUserInput = {
+    where: ProcessWhereUniqueInput
+    update: XOR<ProcessUpdateWithoutUserInput, ProcessUncheckedUpdateWithoutUserInput>
+    create: XOR<ProcessCreateWithoutUserInput, ProcessUncheckedCreateWithoutUserInput>
+  }
+
+  export type ProcessUpdateWithWhereUniqueWithoutUserInput = {
+    where: ProcessWhereUniqueInput
+    data: XOR<ProcessUpdateWithoutUserInput, ProcessUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ProcessUpdateManyWithWhereWithoutUserInput = {
+    where: ProcessScalarWhereInput
+    data: XOR<ProcessUpdateManyMutationInput, ProcessUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ProcessScalarWhereInput = {
+    AND?: ProcessScalarWhereInput | ProcessScalarWhereInput[]
+    OR?: ProcessScalarWhereInput[]
+    NOT?: ProcessScalarWhereInput | ProcessScalarWhereInput[]
+    id?: StringFilter<"Process"> | string
+    processNumber?: StringFilter<"Process"> | string
+    court?: StringFilter<"Process"> | string
+    type?: StringFilter<"Process"> | string
+    status?: StringFilter<"Process"> | string
+    hearingDate?: DateTimeFilter<"Process"> | Date | string
+    caseValue?: DecimalFilter<"Process"> | Decimal | DecimalJsLike | number | string
+    internalNotes?: StringFilter<"Process"> | string
+    userId?: StringFilter<"Process"> | string
+    clientId?: StringNullableFilter<"Process"> | string | null
+    createdAt?: DateTimeFilter<"Process"> | Date | string
+    updatedAt?: DateTimeFilter<"Process"> | Date | string
+  }
+
+  export type AppointmentUpsertWithWhereUniqueWithoutUserInput = {
+    where: AppointmentWhereUniqueInput
+    update: XOR<AppointmentUpdateWithoutUserInput, AppointmentUncheckedUpdateWithoutUserInput>
+    create: XOR<AppointmentCreateWithoutUserInput, AppointmentUncheckedCreateWithoutUserInput>
+  }
+
+  export type AppointmentUpdateWithWhereUniqueWithoutUserInput = {
+    where: AppointmentWhereUniqueInput
+    data: XOR<AppointmentUpdateWithoutUserInput, AppointmentUncheckedUpdateWithoutUserInput>
+  }
+
+  export type AppointmentUpdateManyWithWhereWithoutUserInput = {
+    where: AppointmentScalarWhereInput
+    data: XOR<AppointmentUpdateManyMutationInput, AppointmentUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type AppointmentScalarWhereInput = {
+    AND?: AppointmentScalarWhereInput | AppointmentScalarWhereInput[]
+    OR?: AppointmentScalarWhereInput[]
+    NOT?: AppointmentScalarWhereInput | AppointmentScalarWhereInput[]
+    id?: StringFilter<"Appointment"> | string
+    title?: StringFilter<"Appointment"> | string
+    description?: StringNullableFilter<"Appointment"> | string | null
+    date?: DateTimeFilter<"Appointment"> | Date | string
+    status?: EnumAppointmentStatusFilter<"Appointment"> | $Enums.AppointmentStatus
+    eventType?: StringNullableFilter<"Appointment"> | string | null
+    location?: StringNullableFilter<"Appointment"> | string | null
+    userId?: StringFilter<"Appointment"> | string
+    clientId?: StringNullableFilter<"Appointment"> | string | null
+    processId?: StringNullableFilter<"Appointment"> | string | null
+    createdAt?: DateTimeFilter<"Appointment"> | Date | string
+    updatedAt?: DateTimeFilter<"Appointment"> | Date | string
+  }
+
+  export type PetitionUpsertWithWhereUniqueWithoutUserInput = {
+    where: PetitionWhereUniqueInput
+    update: XOR<PetitionUpdateWithoutUserInput, PetitionUncheckedUpdateWithoutUserInput>
+    create: XOR<PetitionCreateWithoutUserInput, PetitionUncheckedCreateWithoutUserInput>
+  }
+
+  export type PetitionUpdateWithWhereUniqueWithoutUserInput = {
+    where: PetitionWhereUniqueInput
+    data: XOR<PetitionUpdateWithoutUserInput, PetitionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PetitionUpdateManyWithWhereWithoutUserInput = {
+    where: PetitionScalarWhereInput
+    data: XOR<PetitionUpdateManyMutationInput, PetitionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PetitionScalarWhereInput = {
+    AND?: PetitionScalarWhereInput | PetitionScalarWhereInput[]
+    OR?: PetitionScalarWhereInput[]
+    NOT?: PetitionScalarWhereInput | PetitionScalarWhereInput[]
+    id?: StringFilter<"Petition"> | string
+    title?: StringFilter<"Petition"> | string
+    defendant?: StringFilter<"Petition"> | string
+    addressing?: StringNullableFilter<"Petition"> | string | null
+    facts?: StringNullableFilter<"Petition"> | string | null
+    legalBasis?: StringNullableFilter<"Petition"> | string | null
+    caseValue?: DecimalNullableFilter<"Petition"> | Decimal | DecimalJsLike | number | string | null
+    closingLocation?: StringNullableFilter<"Petition"> | string | null
+    description?: StringNullableFilter<"Petition"> | string | null
+    type?: EnumPetitionTypeFilter<"Petition"> | $Enums.PetitionType
+    status?: EnumPetitionStatusFilter<"Petition"> | $Enums.PetitionStatus
+    fileUrl?: StringNullableFilter<"Petition"> | string | null
+    protocolNumber?: StringNullableFilter<"Petition"> | string | null
+    userId?: StringFilter<"Petition"> | string
+    processId?: StringNullableFilter<"Petition"> | string | null
+    clientId?: StringNullableFilter<"Petition"> | string | null
+    createdAt?: DateTimeFilter<"Petition"> | Date | string
+    updatedAt?: DateTimeFilter<"Petition"> | Date | string
+  }
+
+  export type UserCreateWithoutClientsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    password: string
+    role?: string
+    active?: boolean
+    oab?: string | null
+    oab_uf?: string | null
+    cpf?: string | null
+    phone?: string | null
+    specialty?: string | null
+    office?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    processes?: ProcessCreateNestedManyWithoutUserInput
+    appointments?: AppointmentCreateNestedManyWithoutUserInput
+    petitions?: PetitionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutClientsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    password: string
+    role?: string
+    active?: boolean
+    oab?: string | null
+    oab_uf?: string | null
+    cpf?: string | null
+    phone?: string | null
+    specialty?: string | null
+    office?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    processes?: ProcessUncheckedCreateNestedManyWithoutUserInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutUserInput
+    petitions?: PetitionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutClientsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutClientsInput, UserUncheckedCreateWithoutClientsInput>
+  }
+
   export type AppointmentCreateWithoutClientInput = {
     id?: string
     title: string
@@ -11571,8 +10815,8 @@ export namespace Prisma {
     location?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    lawyer?: LawyerCreateNestedOneWithoutAppointmentInput
-    process?: ProcessCreateNestedOneWithoutAppointmentInput
+    user: UserCreateNestedOneWithoutAppointmentsInput
+    process?: ProcessCreateNestedOneWithoutAppointmentsInput
   }
 
   export type AppointmentUncheckedCreateWithoutClientInput = {
@@ -11583,7 +10827,7 @@ export namespace Prisma {
     status?: $Enums.AppointmentStatus
     eventType?: string | null
     location?: string | null
-    lawyerId?: string | null
+    userId: string
     processId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11610,8 +10854,8 @@ export namespace Prisma {
     internalNotes: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    lawyer?: LawyerCreateNestedOneWithoutProcessesInput
-    appointment?: AppointmentCreateNestedManyWithoutProcessInput
+    user: UserCreateNestedOneWithoutProcessesInput
+    appointments?: AppointmentCreateNestedManyWithoutProcessInput
     petitions?: PetitionCreateNestedManyWithoutProcessInput
   }
 
@@ -11621,13 +10865,13 @@ export namespace Prisma {
     court: string
     type: string
     status?: string
-    lawyerId?: string | null
     hearingDate: Date | string
     caseValue: Decimal | DecimalJsLike | number | string
     internalNotes: string
+    userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    appointment?: AppointmentUncheckedCreateNestedManyWithoutProcessInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutProcessInput
     petitions?: PetitionUncheckedCreateNestedManyWithoutProcessInput
   }
 
@@ -11644,27 +10888,41 @@ export namespace Prisma {
   export type PetitionCreateWithoutClientInput = {
     id?: string
     title: string
+    defendant: string
+    addressing?: string | null
+    facts?: string | null
+    legalBasis?: string | null
+    caseValue?: Decimal | DecimalJsLike | number | string | null
+    closingLocation?: string | null
     description?: string | null
     type: $Enums.PetitionType
     status?: $Enums.PetitionStatus
-    factsSummary?: string | null
     fileUrl?: string | null
     protocolNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutPetitionsInput
     process?: ProcessCreateNestedOneWithoutPetitionsInput
-    lawyer?: LawyerCreateNestedOneWithoutPetitionsInput
   }
 
   export type PetitionUncheckedCreateWithoutClientInput = {
     id?: string
     title: string
+    defendant: string
+    addressing?: string | null
+    facts?: string | null
+    legalBasis?: string | null
+    caseValue?: Decimal | DecimalJsLike | number | string | null
+    closingLocation?: string | null
     description?: string | null
     type: $Enums.PetitionType
     status?: $Enums.PetitionStatus
-    factsSummary?: string | null
     fileUrl?: string | null
     protocolNumber?: string | null
+    userId: string
     processId?: string | null
-    lawyerId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type PetitionCreateOrConnectWithoutClientInput = {
@@ -11675,6 +10933,57 @@ export namespace Prisma {
   export type PetitionCreateManyClientInputEnvelope = {
     data: PetitionCreateManyClientInput | PetitionCreateManyClientInput[]
     skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutClientsInput = {
+    update: XOR<UserUpdateWithoutClientsInput, UserUncheckedUpdateWithoutClientsInput>
+    create: XOR<UserCreateWithoutClientsInput, UserUncheckedCreateWithoutClientsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutClientsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutClientsInput, UserUncheckedUpdateWithoutClientsInput>
+  }
+
+  export type UserUpdateWithoutClientsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    oab?: NullableStringFieldUpdateOperationsInput | string | null
+    oab_uf?: NullableStringFieldUpdateOperationsInput | string | null
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    specialty?: NullableStringFieldUpdateOperationsInput | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processes?: ProcessUpdateManyWithoutUserNestedInput
+    appointments?: AppointmentUpdateManyWithoutUserNestedInput
+    petitions?: PetitionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutClientsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    oab?: NullableStringFieldUpdateOperationsInput | string | null
+    oab_uf?: NullableStringFieldUpdateOperationsInput | string | null
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    specialty?: NullableStringFieldUpdateOperationsInput | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processes?: ProcessUncheckedUpdateManyWithoutUserNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutUserNestedInput
+    petitions?: PetitionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AppointmentUpsertWithWhereUniqueWithoutClientInput = {
@@ -11693,24 +11002,6 @@ export namespace Prisma {
     data: XOR<AppointmentUpdateManyMutationInput, AppointmentUncheckedUpdateManyWithoutClientInput>
   }
 
-  export type AppointmentScalarWhereInput = {
-    AND?: AppointmentScalarWhereInput | AppointmentScalarWhereInput[]
-    OR?: AppointmentScalarWhereInput[]
-    NOT?: AppointmentScalarWhereInput | AppointmentScalarWhereInput[]
-    id?: StringFilter<"Appointment"> | string
-    title?: StringFilter<"Appointment"> | string
-    description?: StringNullableFilter<"Appointment"> | string | null
-    date?: DateTimeFilter<"Appointment"> | Date | string
-    status?: EnumAppointmentStatusFilter<"Appointment"> | $Enums.AppointmentStatus
-    eventType?: StringNullableFilter<"Appointment"> | string | null
-    location?: StringNullableFilter<"Appointment"> | string | null
-    clientId?: StringNullableFilter<"Appointment"> | string | null
-    lawyerId?: StringNullableFilter<"Appointment"> | string | null
-    processId?: StringNullableFilter<"Appointment"> | string | null
-    createdAt?: DateTimeFilter<"Appointment"> | Date | string
-    updatedAt?: DateTimeFilter<"Appointment"> | Date | string
-  }
-
   export type ProcessUpsertWithWhereUniqueWithoutClientInput = {
     where: ProcessWhereUniqueInput
     update: XOR<ProcessUpdateWithoutClientInput, ProcessUncheckedUpdateWithoutClientInput>
@@ -11725,24 +11016,6 @@ export namespace Prisma {
   export type ProcessUpdateManyWithWhereWithoutClientInput = {
     where: ProcessScalarWhereInput
     data: XOR<ProcessUpdateManyMutationInput, ProcessUncheckedUpdateManyWithoutClientInput>
-  }
-
-  export type ProcessScalarWhereInput = {
-    AND?: ProcessScalarWhereInput | ProcessScalarWhereInput[]
-    OR?: ProcessScalarWhereInput[]
-    NOT?: ProcessScalarWhereInput | ProcessScalarWhereInput[]
-    id?: StringFilter<"Process"> | string
-    processNumber?: StringFilter<"Process"> | string
-    court?: StringFilter<"Process"> | string
-    type?: StringFilter<"Process"> | string
-    status?: StringFilter<"Process"> | string
-    lawyerId?: StringNullableFilter<"Process"> | string | null
-    clientId?: StringNullableFilter<"Process"> | string | null
-    hearingDate?: DateTimeFilter<"Process"> | Date | string
-    caseValue?: DecimalFilter<"Process"> | Decimal | DecimalJsLike | number | string
-    internalNotes?: StringFilter<"Process"> | string
-    createdAt?: DateTimeFilter<"Process"> | Date | string
-    updatedAt?: DateTimeFilter<"Process"> | Date | string
   }
 
   export type PetitionUpsertWithWhereUniqueWithoutClientInput = {
@@ -11761,52 +11034,49 @@ export namespace Prisma {
     data: XOR<PetitionUpdateManyMutationInput, PetitionUncheckedUpdateManyWithoutClientInput>
   }
 
-  export type PetitionScalarWhereInput = {
-    AND?: PetitionScalarWhereInput | PetitionScalarWhereInput[]
-    OR?: PetitionScalarWhereInput[]
-    NOT?: PetitionScalarWhereInput | PetitionScalarWhereInput[]
-    id?: StringFilter<"Petition"> | string
-    title?: StringFilter<"Petition"> | string
-    description?: StringNullableFilter<"Petition"> | string | null
-    type?: EnumPetitionTypeFilter<"Petition"> | $Enums.PetitionType
-    status?: EnumPetitionStatusFilter<"Petition"> | $Enums.PetitionStatus
-    factsSummary?: StringNullableFilter<"Petition"> | string | null
-    fileUrl?: StringNullableFilter<"Petition"> | string | null
-    protocolNumber?: StringNullableFilter<"Petition"> | string | null
-    processId?: StringNullableFilter<"Petition"> | string | null
-    clientId?: StringNullableFilter<"Petition"> | string | null
-    lawyerId?: StringNullableFilter<"Petition"> | string | null
-  }
-
-  export type LawyerCreateWithoutProcessesInput = {
+  export type UserCreateWithoutProcessesInput = {
     id?: string
-    name: string
+    name?: string | null
     email: string
-    oabNumber: string
-    specialty: string
+    password: string
+    role?: string
+    active?: boolean
+    oab?: string | null
+    oab_uf?: string | null
+    cpf?: string | null
     phone?: string | null
+    specialty?: string | null
+    office?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    appointment?: AppointmentCreateNestedManyWithoutLawyerInput
-    petitions?: PetitionCreateNestedManyWithoutLawyerInput
+    clients?: ClientCreateNestedManyWithoutUserInput
+    appointments?: AppointmentCreateNestedManyWithoutUserInput
+    petitions?: PetitionCreateNestedManyWithoutUserInput
   }
 
-  export type LawyerUncheckedCreateWithoutProcessesInput = {
+  export type UserUncheckedCreateWithoutProcessesInput = {
     id?: string
-    name: string
+    name?: string | null
     email: string
-    oabNumber: string
-    specialty: string
+    password: string
+    role?: string
+    active?: boolean
+    oab?: string | null
+    oab_uf?: string | null
+    cpf?: string | null
     phone?: string | null
+    specialty?: string | null
+    office?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    appointment?: AppointmentUncheckedCreateNestedManyWithoutLawyerInput
-    petitions?: PetitionUncheckedCreateNestedManyWithoutLawyerInput
+    clients?: ClientUncheckedCreateNestedManyWithoutUserInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutUserInput
+    petitions?: PetitionUncheckedCreateNestedManyWithoutUserInput
   }
 
-  export type LawyerCreateOrConnectWithoutProcessesInput = {
-    where: LawyerWhereUniqueInput
-    create: XOR<LawyerCreateWithoutProcessesInput, LawyerUncheckedCreateWithoutProcessesInput>
+  export type UserCreateOrConnectWithoutProcessesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutProcessesInput, UserUncheckedCreateWithoutProcessesInput>
   }
 
   export type ClientCreateWithoutProcessesInput = {
@@ -11816,17 +11086,12 @@ export namespace Prisma {
     phone?: string | null
     cpf?: string | null
     cnpj?: string | null
-    cpf_cnpj?: string | null
     address?: string | null
     city?: string | null
     state?: string | null
-    zip_code?: string | null
-    notes?: string | null
-    dateOfBirth?: Date | string | null
-    maritalStatus?: string | null
-    profession?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutClientsInput
     appointments?: AppointmentCreateNestedManyWithoutClientInput
     petitions?: PetitionCreateNestedManyWithoutClientInput
   }
@@ -11838,15 +11103,10 @@ export namespace Prisma {
     phone?: string | null
     cpf?: string | null
     cnpj?: string | null
-    cpf_cnpj?: string | null
     address?: string | null
     city?: string | null
     state?: string | null
-    zip_code?: string | null
-    notes?: string | null
-    dateOfBirth?: Date | string | null
-    maritalStatus?: string | null
-    profession?: string | null
+    userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
     appointments?: AppointmentUncheckedCreateNestedManyWithoutClientInput
@@ -11868,8 +11128,8 @@ export namespace Prisma {
     location?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutAppointmentsInput
     client?: ClientCreateNestedOneWithoutAppointmentsInput
-    lawyer?: LawyerCreateNestedOneWithoutAppointmentInput
   }
 
   export type AppointmentUncheckedCreateWithoutProcessInput = {
@@ -11880,8 +11140,8 @@ export namespace Prisma {
     status?: $Enums.AppointmentStatus
     eventType?: string | null
     location?: string | null
+    userId: string
     clientId?: string | null
-    lawyerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -11899,27 +11159,41 @@ export namespace Prisma {
   export type PetitionCreateWithoutProcessInput = {
     id?: string
     title: string
+    defendant: string
+    addressing?: string | null
+    facts?: string | null
+    legalBasis?: string | null
+    caseValue?: Decimal | DecimalJsLike | number | string | null
+    closingLocation?: string | null
     description?: string | null
     type: $Enums.PetitionType
     status?: $Enums.PetitionStatus
-    factsSummary?: string | null
     fileUrl?: string | null
     protocolNumber?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutPetitionsInput
     client?: ClientCreateNestedOneWithoutPetitionsInput
-    lawyer?: LawyerCreateNestedOneWithoutPetitionsInput
   }
 
   export type PetitionUncheckedCreateWithoutProcessInput = {
     id?: string
     title: string
+    defendant: string
+    addressing?: string | null
+    facts?: string | null
+    legalBasis?: string | null
+    caseValue?: Decimal | DecimalJsLike | number | string | null
+    closingLocation?: string | null
     description?: string | null
     type: $Enums.PetitionType
     status?: $Enums.PetitionStatus
-    factsSummary?: string | null
     fileUrl?: string | null
     protocolNumber?: string | null
+    userId: string
     clientId?: string | null
-    lawyerId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type PetitionCreateOrConnectWithoutProcessInput = {
@@ -11932,41 +11206,55 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type LawyerUpsertWithoutProcessesInput = {
-    update: XOR<LawyerUpdateWithoutProcessesInput, LawyerUncheckedUpdateWithoutProcessesInput>
-    create: XOR<LawyerCreateWithoutProcessesInput, LawyerUncheckedCreateWithoutProcessesInput>
-    where?: LawyerWhereInput
+  export type UserUpsertWithoutProcessesInput = {
+    update: XOR<UserUpdateWithoutProcessesInput, UserUncheckedUpdateWithoutProcessesInput>
+    create: XOR<UserCreateWithoutProcessesInput, UserUncheckedCreateWithoutProcessesInput>
+    where?: UserWhereInput
   }
 
-  export type LawyerUpdateToOneWithWhereWithoutProcessesInput = {
-    where?: LawyerWhereInput
-    data: XOR<LawyerUpdateWithoutProcessesInput, LawyerUncheckedUpdateWithoutProcessesInput>
+  export type UserUpdateToOneWithWhereWithoutProcessesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutProcessesInput, UserUncheckedUpdateWithoutProcessesInput>
   }
 
-  export type LawyerUpdateWithoutProcessesInput = {
+  export type UserUpdateWithoutProcessesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
-    oabNumber?: StringFieldUpdateOperationsInput | string
-    specialty?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    oab?: NullableStringFieldUpdateOperationsInput | string | null
+    oab_uf?: NullableStringFieldUpdateOperationsInput | string | null
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    specialty?: NullableStringFieldUpdateOperationsInput | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    appointment?: AppointmentUpdateManyWithoutLawyerNestedInput
-    petitions?: PetitionUpdateManyWithoutLawyerNestedInput
+    clients?: ClientUpdateManyWithoutUserNestedInput
+    appointments?: AppointmentUpdateManyWithoutUserNestedInput
+    petitions?: PetitionUpdateManyWithoutUserNestedInput
   }
 
-  export type LawyerUncheckedUpdateWithoutProcessesInput = {
+  export type UserUncheckedUpdateWithoutProcessesInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
-    oabNumber?: StringFieldUpdateOperationsInput | string
-    specialty?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    oab?: NullableStringFieldUpdateOperationsInput | string | null
+    oab_uf?: NullableStringFieldUpdateOperationsInput | string | null
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    specialty?: NullableStringFieldUpdateOperationsInput | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    appointment?: AppointmentUncheckedUpdateManyWithoutLawyerNestedInput
-    petitions?: PetitionUncheckedUpdateManyWithoutLawyerNestedInput
+    clients?: ClientUncheckedUpdateManyWithoutUserNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutUserNestedInput
+    petitions?: PetitionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ClientUpsertWithoutProcessesInput = {
@@ -11987,17 +11275,12 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     cpf?: NullableStringFieldUpdateOperationsInput | string | null
     cnpj?: NullableStringFieldUpdateOperationsInput | string | null
-    cpf_cnpj?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
-    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
-    profession?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutClientsNestedInput
     appointments?: AppointmentUpdateManyWithoutClientNestedInput
     petitions?: PetitionUpdateManyWithoutClientNestedInput
   }
@@ -12009,15 +11292,10 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     cpf?: NullableStringFieldUpdateOperationsInput | string | null
     cnpj?: NullableStringFieldUpdateOperationsInput | string | null
-    cpf_cnpj?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
-    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
-    profession?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUncheckedUpdateManyWithoutClientNestedInput
@@ -12056,168 +11334,49 @@ export namespace Prisma {
     data: XOR<PetitionUpdateManyMutationInput, PetitionUncheckedUpdateManyWithoutProcessInput>
   }
 
-  export type ProcessCreateWithoutLawyerInput = {
+  export type UserCreateWithoutAppointmentsInput = {
     id?: string
-    processNumber: string
-    court: string
-    type: string
-    status?: string
-    hearingDate: Date | string
-    caseValue: Decimal | DecimalJsLike | number | string
-    internalNotes: string
+    name?: string | null
+    email: string
+    password: string
+    role?: string
+    active?: boolean
+    oab?: string | null
+    oab_uf?: string | null
+    cpf?: string | null
+    phone?: string | null
+    specialty?: string | null
+    office?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    client?: ClientCreateNestedOneWithoutProcessesInput
-    appointment?: AppointmentCreateNestedManyWithoutProcessInput
-    petitions?: PetitionCreateNestedManyWithoutProcessInput
+    clients?: ClientCreateNestedManyWithoutUserInput
+    processes?: ProcessCreateNestedManyWithoutUserInput
+    petitions?: PetitionCreateNestedManyWithoutUserInput
   }
 
-  export type ProcessUncheckedCreateWithoutLawyerInput = {
+  export type UserUncheckedCreateWithoutAppointmentsInput = {
     id?: string
-    processNumber: string
-    court: string
-    type: string
-    status?: string
-    clientId?: string | null
-    hearingDate: Date | string
-    caseValue: Decimal | DecimalJsLike | number | string
-    internalNotes: string
+    name?: string | null
+    email: string
+    password: string
+    role?: string
+    active?: boolean
+    oab?: string | null
+    oab_uf?: string | null
+    cpf?: string | null
+    phone?: string | null
+    specialty?: string | null
+    office?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    appointment?: AppointmentUncheckedCreateNestedManyWithoutProcessInput
-    petitions?: PetitionUncheckedCreateNestedManyWithoutProcessInput
+    clients?: ClientUncheckedCreateNestedManyWithoutUserInput
+    processes?: ProcessUncheckedCreateNestedManyWithoutUserInput
+    petitions?: PetitionUncheckedCreateNestedManyWithoutUserInput
   }
 
-  export type ProcessCreateOrConnectWithoutLawyerInput = {
-    where: ProcessWhereUniqueInput
-    create: XOR<ProcessCreateWithoutLawyerInput, ProcessUncheckedCreateWithoutLawyerInput>
-  }
-
-  export type ProcessCreateManyLawyerInputEnvelope = {
-    data: ProcessCreateManyLawyerInput | ProcessCreateManyLawyerInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type AppointmentCreateWithoutLawyerInput = {
-    id?: string
-    title: string
-    description?: string | null
-    date: Date | string
-    status?: $Enums.AppointmentStatus
-    eventType?: string | null
-    location?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    client?: ClientCreateNestedOneWithoutAppointmentsInput
-    process?: ProcessCreateNestedOneWithoutAppointmentInput
-  }
-
-  export type AppointmentUncheckedCreateWithoutLawyerInput = {
-    id?: string
-    title: string
-    description?: string | null
-    date: Date | string
-    status?: $Enums.AppointmentStatus
-    eventType?: string | null
-    location?: string | null
-    clientId?: string | null
-    processId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type AppointmentCreateOrConnectWithoutLawyerInput = {
-    where: AppointmentWhereUniqueInput
-    create: XOR<AppointmentCreateWithoutLawyerInput, AppointmentUncheckedCreateWithoutLawyerInput>
-  }
-
-  export type AppointmentCreateManyLawyerInputEnvelope = {
-    data: AppointmentCreateManyLawyerInput | AppointmentCreateManyLawyerInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type PetitionCreateWithoutLawyerInput = {
-    id?: string
-    title: string
-    description?: string | null
-    type: $Enums.PetitionType
-    status?: $Enums.PetitionStatus
-    factsSummary?: string | null
-    fileUrl?: string | null
-    protocolNumber?: string | null
-    process?: ProcessCreateNestedOneWithoutPetitionsInput
-    client?: ClientCreateNestedOneWithoutPetitionsInput
-  }
-
-  export type PetitionUncheckedCreateWithoutLawyerInput = {
-    id?: string
-    title: string
-    description?: string | null
-    type: $Enums.PetitionType
-    status?: $Enums.PetitionStatus
-    factsSummary?: string | null
-    fileUrl?: string | null
-    protocolNumber?: string | null
-    processId?: string | null
-    clientId?: string | null
-  }
-
-  export type PetitionCreateOrConnectWithoutLawyerInput = {
-    where: PetitionWhereUniqueInput
-    create: XOR<PetitionCreateWithoutLawyerInput, PetitionUncheckedCreateWithoutLawyerInput>
-  }
-
-  export type PetitionCreateManyLawyerInputEnvelope = {
-    data: PetitionCreateManyLawyerInput | PetitionCreateManyLawyerInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ProcessUpsertWithWhereUniqueWithoutLawyerInput = {
-    where: ProcessWhereUniqueInput
-    update: XOR<ProcessUpdateWithoutLawyerInput, ProcessUncheckedUpdateWithoutLawyerInput>
-    create: XOR<ProcessCreateWithoutLawyerInput, ProcessUncheckedCreateWithoutLawyerInput>
-  }
-
-  export type ProcessUpdateWithWhereUniqueWithoutLawyerInput = {
-    where: ProcessWhereUniqueInput
-    data: XOR<ProcessUpdateWithoutLawyerInput, ProcessUncheckedUpdateWithoutLawyerInput>
-  }
-
-  export type ProcessUpdateManyWithWhereWithoutLawyerInput = {
-    where: ProcessScalarWhereInput
-    data: XOR<ProcessUpdateManyMutationInput, ProcessUncheckedUpdateManyWithoutLawyerInput>
-  }
-
-  export type AppointmentUpsertWithWhereUniqueWithoutLawyerInput = {
-    where: AppointmentWhereUniqueInput
-    update: XOR<AppointmentUpdateWithoutLawyerInput, AppointmentUncheckedUpdateWithoutLawyerInput>
-    create: XOR<AppointmentCreateWithoutLawyerInput, AppointmentUncheckedCreateWithoutLawyerInput>
-  }
-
-  export type AppointmentUpdateWithWhereUniqueWithoutLawyerInput = {
-    where: AppointmentWhereUniqueInput
-    data: XOR<AppointmentUpdateWithoutLawyerInput, AppointmentUncheckedUpdateWithoutLawyerInput>
-  }
-
-  export type AppointmentUpdateManyWithWhereWithoutLawyerInput = {
-    where: AppointmentScalarWhereInput
-    data: XOR<AppointmentUpdateManyMutationInput, AppointmentUncheckedUpdateManyWithoutLawyerInput>
-  }
-
-  export type PetitionUpsertWithWhereUniqueWithoutLawyerInput = {
-    where: PetitionWhereUniqueInput
-    update: XOR<PetitionUpdateWithoutLawyerInput, PetitionUncheckedUpdateWithoutLawyerInput>
-    create: XOR<PetitionCreateWithoutLawyerInput, PetitionUncheckedCreateWithoutLawyerInput>
-  }
-
-  export type PetitionUpdateWithWhereUniqueWithoutLawyerInput = {
-    where: PetitionWhereUniqueInput
-    data: XOR<PetitionUpdateWithoutLawyerInput, PetitionUncheckedUpdateWithoutLawyerInput>
-  }
-
-  export type PetitionUpdateManyWithWhereWithoutLawyerInput = {
-    where: PetitionScalarWhereInput
-    data: XOR<PetitionUpdateManyMutationInput, PetitionUncheckedUpdateManyWithoutLawyerInput>
+  export type UserCreateOrConnectWithoutAppointmentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAppointmentsInput, UserUncheckedCreateWithoutAppointmentsInput>
   }
 
   export type ClientCreateWithoutAppointmentsInput = {
@@ -12227,17 +11386,12 @@ export namespace Prisma {
     phone?: string | null
     cpf?: string | null
     cnpj?: string | null
-    cpf_cnpj?: string | null
     address?: string | null
     city?: string | null
     state?: string | null
-    zip_code?: string | null
-    notes?: string | null
-    dateOfBirth?: Date | string | null
-    maritalStatus?: string | null
-    profession?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutClientsInput
     processes?: ProcessCreateNestedManyWithoutClientInput
     petitions?: PetitionCreateNestedManyWithoutClientInput
   }
@@ -12249,15 +11403,10 @@ export namespace Prisma {
     phone?: string | null
     cpf?: string | null
     cnpj?: string | null
-    cpf_cnpj?: string | null
     address?: string | null
     city?: string | null
     state?: string | null
-    zip_code?: string | null
-    notes?: string | null
-    dateOfBirth?: Date | string | null
-    maritalStatus?: string | null
-    profession?: string | null
+    userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
     processes?: ProcessUncheckedCreateNestedManyWithoutClientInput
@@ -12269,38 +11418,7 @@ export namespace Prisma {
     create: XOR<ClientCreateWithoutAppointmentsInput, ClientUncheckedCreateWithoutAppointmentsInput>
   }
 
-  export type LawyerCreateWithoutAppointmentInput = {
-    id?: string
-    name: string
-    email: string
-    oabNumber: string
-    specialty: string
-    phone?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    processes?: ProcessCreateNestedManyWithoutLawyerInput
-    petitions?: PetitionCreateNestedManyWithoutLawyerInput
-  }
-
-  export type LawyerUncheckedCreateWithoutAppointmentInput = {
-    id?: string
-    name: string
-    email: string
-    oabNumber: string
-    specialty: string
-    phone?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    processes?: ProcessUncheckedCreateNestedManyWithoutLawyerInput
-    petitions?: PetitionUncheckedCreateNestedManyWithoutLawyerInput
-  }
-
-  export type LawyerCreateOrConnectWithoutAppointmentInput = {
-    where: LawyerWhereUniqueInput
-    create: XOR<LawyerCreateWithoutAppointmentInput, LawyerUncheckedCreateWithoutAppointmentInput>
-  }
-
-  export type ProcessCreateWithoutAppointmentInput = {
+  export type ProcessCreateWithoutAppointmentsInput = {
     id?: string
     processNumber: string
     court: string
@@ -12311,30 +11429,81 @@ export namespace Prisma {
     internalNotes: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    lawyer?: LawyerCreateNestedOneWithoutProcessesInput
+    user: UserCreateNestedOneWithoutProcessesInput
     client?: ClientCreateNestedOneWithoutProcessesInput
     petitions?: PetitionCreateNestedManyWithoutProcessInput
   }
 
-  export type ProcessUncheckedCreateWithoutAppointmentInput = {
+  export type ProcessUncheckedCreateWithoutAppointmentsInput = {
     id?: string
     processNumber: string
     court: string
     type: string
     status?: string
-    lawyerId?: string | null
-    clientId?: string | null
     hearingDate: Date | string
     caseValue: Decimal | DecimalJsLike | number | string
     internalNotes: string
+    userId: string
+    clientId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     petitions?: PetitionUncheckedCreateNestedManyWithoutProcessInput
   }
 
-  export type ProcessCreateOrConnectWithoutAppointmentInput = {
+  export type ProcessCreateOrConnectWithoutAppointmentsInput = {
     where: ProcessWhereUniqueInput
-    create: XOR<ProcessCreateWithoutAppointmentInput, ProcessUncheckedCreateWithoutAppointmentInput>
+    create: XOR<ProcessCreateWithoutAppointmentsInput, ProcessUncheckedCreateWithoutAppointmentsInput>
+  }
+
+  export type UserUpsertWithoutAppointmentsInput = {
+    update: XOR<UserUpdateWithoutAppointmentsInput, UserUncheckedUpdateWithoutAppointmentsInput>
+    create: XOR<UserCreateWithoutAppointmentsInput, UserUncheckedCreateWithoutAppointmentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAppointmentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAppointmentsInput, UserUncheckedUpdateWithoutAppointmentsInput>
+  }
+
+  export type UserUpdateWithoutAppointmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    oab?: NullableStringFieldUpdateOperationsInput | string | null
+    oab_uf?: NullableStringFieldUpdateOperationsInput | string | null
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    specialty?: NullableStringFieldUpdateOperationsInput | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clients?: ClientUpdateManyWithoutUserNestedInput
+    processes?: ProcessUpdateManyWithoutUserNestedInput
+    petitions?: PetitionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAppointmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    oab?: NullableStringFieldUpdateOperationsInput | string | null
+    oab_uf?: NullableStringFieldUpdateOperationsInput | string | null
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    specialty?: NullableStringFieldUpdateOperationsInput | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clients?: ClientUncheckedUpdateManyWithoutUserNestedInput
+    processes?: ProcessUncheckedUpdateManyWithoutUserNestedInput
+    petitions?: PetitionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ClientUpsertWithoutAppointmentsInput = {
@@ -12355,17 +11524,12 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     cpf?: NullableStringFieldUpdateOperationsInput | string | null
     cnpj?: NullableStringFieldUpdateOperationsInput | string | null
-    cpf_cnpj?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
-    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
-    profession?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutClientsNestedInput
     processes?: ProcessUpdateManyWithoutClientNestedInput
     petitions?: PetitionUpdateManyWithoutClientNestedInput
   }
@@ -12377,70 +11541,28 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     cpf?: NullableStringFieldUpdateOperationsInput | string | null
     cnpj?: NullableStringFieldUpdateOperationsInput | string | null
-    cpf_cnpj?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
-    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
-    profession?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     processes?: ProcessUncheckedUpdateManyWithoutClientNestedInput
     petitions?: PetitionUncheckedUpdateManyWithoutClientNestedInput
   }
 
-  export type LawyerUpsertWithoutAppointmentInput = {
-    update: XOR<LawyerUpdateWithoutAppointmentInput, LawyerUncheckedUpdateWithoutAppointmentInput>
-    create: XOR<LawyerCreateWithoutAppointmentInput, LawyerUncheckedCreateWithoutAppointmentInput>
-    where?: LawyerWhereInput
-  }
-
-  export type LawyerUpdateToOneWithWhereWithoutAppointmentInput = {
-    where?: LawyerWhereInput
-    data: XOR<LawyerUpdateWithoutAppointmentInput, LawyerUncheckedUpdateWithoutAppointmentInput>
-  }
-
-  export type LawyerUpdateWithoutAppointmentInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    oabNumber?: StringFieldUpdateOperationsInput | string
-    specialty?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    processes?: ProcessUpdateManyWithoutLawyerNestedInput
-    petitions?: PetitionUpdateManyWithoutLawyerNestedInput
-  }
-
-  export type LawyerUncheckedUpdateWithoutAppointmentInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    oabNumber?: StringFieldUpdateOperationsInput | string
-    specialty?: StringFieldUpdateOperationsInput | string
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    processes?: ProcessUncheckedUpdateManyWithoutLawyerNestedInput
-    petitions?: PetitionUncheckedUpdateManyWithoutLawyerNestedInput
-  }
-
-  export type ProcessUpsertWithoutAppointmentInput = {
-    update: XOR<ProcessUpdateWithoutAppointmentInput, ProcessUncheckedUpdateWithoutAppointmentInput>
-    create: XOR<ProcessCreateWithoutAppointmentInput, ProcessUncheckedCreateWithoutAppointmentInput>
+  export type ProcessUpsertWithoutAppointmentsInput = {
+    update: XOR<ProcessUpdateWithoutAppointmentsInput, ProcessUncheckedUpdateWithoutAppointmentsInput>
+    create: XOR<ProcessCreateWithoutAppointmentsInput, ProcessUncheckedCreateWithoutAppointmentsInput>
     where?: ProcessWhereInput
   }
 
-  export type ProcessUpdateToOneWithWhereWithoutAppointmentInput = {
+  export type ProcessUpdateToOneWithWhereWithoutAppointmentsInput = {
     where?: ProcessWhereInput
-    data: XOR<ProcessUpdateWithoutAppointmentInput, ProcessUncheckedUpdateWithoutAppointmentInput>
+    data: XOR<ProcessUpdateWithoutAppointmentsInput, ProcessUncheckedUpdateWithoutAppointmentsInput>
   }
 
-  export type ProcessUpdateWithoutAppointmentInput = {
+  export type ProcessUpdateWithoutAppointmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     processNumber?: StringFieldUpdateOperationsInput | string
     court?: StringFieldUpdateOperationsInput | string
@@ -12451,25 +11573,70 @@ export namespace Prisma {
     internalNotes?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lawyer?: LawyerUpdateOneWithoutProcessesNestedInput
+    user?: UserUpdateOneRequiredWithoutProcessesNestedInput
     client?: ClientUpdateOneWithoutProcessesNestedInput
     petitions?: PetitionUpdateManyWithoutProcessNestedInput
   }
 
-  export type ProcessUncheckedUpdateWithoutAppointmentInput = {
+  export type ProcessUncheckedUpdateWithoutAppointmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     processNumber?: StringFieldUpdateOperationsInput | string
     court?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
-    lawyerId?: NullableStringFieldUpdateOperationsInput | string | null
-    clientId?: NullableStringFieldUpdateOperationsInput | string | null
     hearingDate?: DateTimeFieldUpdateOperationsInput | Date | string
     caseValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     internalNotes?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     petitions?: PetitionUncheckedUpdateManyWithoutProcessNestedInput
+  }
+
+  export type UserCreateWithoutPetitionsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    password: string
+    role?: string
+    active?: boolean
+    oab?: string | null
+    oab_uf?: string | null
+    cpf?: string | null
+    phone?: string | null
+    specialty?: string | null
+    office?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    clients?: ClientCreateNestedManyWithoutUserInput
+    processes?: ProcessCreateNestedManyWithoutUserInput
+    appointments?: AppointmentCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutPetitionsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    password: string
+    role?: string
+    active?: boolean
+    oab?: string | null
+    oab_uf?: string | null
+    cpf?: string | null
+    phone?: string | null
+    specialty?: string | null
+    office?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    clients?: ClientUncheckedCreateNestedManyWithoutUserInput
+    processes?: ProcessUncheckedCreateNestedManyWithoutUserInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutPetitionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPetitionsInput, UserUncheckedCreateWithoutPetitionsInput>
   }
 
   export type ProcessCreateWithoutPetitionsInput = {
@@ -12483,9 +11650,9 @@ export namespace Prisma {
     internalNotes: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    lawyer?: LawyerCreateNestedOneWithoutProcessesInput
+    user: UserCreateNestedOneWithoutProcessesInput
     client?: ClientCreateNestedOneWithoutProcessesInput
-    appointment?: AppointmentCreateNestedManyWithoutProcessInput
+    appointments?: AppointmentCreateNestedManyWithoutProcessInput
   }
 
   export type ProcessUncheckedCreateWithoutPetitionsInput = {
@@ -12494,14 +11661,14 @@ export namespace Prisma {
     court: string
     type: string
     status?: string
-    lawyerId?: string | null
-    clientId?: string | null
     hearingDate: Date | string
     caseValue: Decimal | DecimalJsLike | number | string
     internalNotes: string
+    userId: string
+    clientId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    appointment?: AppointmentUncheckedCreateNestedManyWithoutProcessInput
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutProcessInput
   }
 
   export type ProcessCreateOrConnectWithoutPetitionsInput = {
@@ -12516,17 +11683,12 @@ export namespace Prisma {
     phone?: string | null
     cpf?: string | null
     cnpj?: string | null
-    cpf_cnpj?: string | null
     address?: string | null
     city?: string | null
     state?: string | null
-    zip_code?: string | null
-    notes?: string | null
-    dateOfBirth?: Date | string | null
-    maritalStatus?: string | null
-    profession?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutClientsInput
     appointments?: AppointmentCreateNestedManyWithoutClientInput
     processes?: ProcessCreateNestedManyWithoutClientInput
   }
@@ -12538,15 +11700,10 @@ export namespace Prisma {
     phone?: string | null
     cpf?: string | null
     cnpj?: string | null
-    cpf_cnpj?: string | null
     address?: string | null
     city?: string | null
     state?: string | null
-    zip_code?: string | null
-    notes?: string | null
-    dateOfBirth?: Date | string | null
-    maritalStatus?: string | null
-    profession?: string | null
+    userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
     appointments?: AppointmentUncheckedCreateNestedManyWithoutClientInput
@@ -12558,35 +11715,55 @@ export namespace Prisma {
     create: XOR<ClientCreateWithoutPetitionsInput, ClientUncheckedCreateWithoutPetitionsInput>
   }
 
-  export type LawyerCreateWithoutPetitionsInput = {
-    id?: string
-    name: string
-    email: string
-    oabNumber: string
-    specialty: string
-    phone?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    processes?: ProcessCreateNestedManyWithoutLawyerInput
-    appointment?: AppointmentCreateNestedManyWithoutLawyerInput
+  export type UserUpsertWithoutPetitionsInput = {
+    update: XOR<UserUpdateWithoutPetitionsInput, UserUncheckedUpdateWithoutPetitionsInput>
+    create: XOR<UserCreateWithoutPetitionsInput, UserUncheckedCreateWithoutPetitionsInput>
+    where?: UserWhereInput
   }
 
-  export type LawyerUncheckedCreateWithoutPetitionsInput = {
-    id?: string
-    name: string
-    email: string
-    oabNumber: string
-    specialty: string
-    phone?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    processes?: ProcessUncheckedCreateNestedManyWithoutLawyerInput
-    appointment?: AppointmentUncheckedCreateNestedManyWithoutLawyerInput
+  export type UserUpdateToOneWithWhereWithoutPetitionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPetitionsInput, UserUncheckedUpdateWithoutPetitionsInput>
   }
 
-  export type LawyerCreateOrConnectWithoutPetitionsInput = {
-    where: LawyerWhereUniqueInput
-    create: XOR<LawyerCreateWithoutPetitionsInput, LawyerUncheckedCreateWithoutPetitionsInput>
+  export type UserUpdateWithoutPetitionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    oab?: NullableStringFieldUpdateOperationsInput | string | null
+    oab_uf?: NullableStringFieldUpdateOperationsInput | string | null
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    specialty?: NullableStringFieldUpdateOperationsInput | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clients?: ClientUpdateManyWithoutUserNestedInput
+    processes?: ProcessUpdateManyWithoutUserNestedInput
+    appointments?: AppointmentUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPetitionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    oab?: NullableStringFieldUpdateOperationsInput | string | null
+    oab_uf?: NullableStringFieldUpdateOperationsInput | string | null
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    specialty?: NullableStringFieldUpdateOperationsInput | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clients?: ClientUncheckedUpdateManyWithoutUserNestedInput
+    processes?: ProcessUncheckedUpdateManyWithoutUserNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProcessUpsertWithoutPetitionsInput = {
@@ -12611,9 +11788,9 @@ export namespace Prisma {
     internalNotes?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lawyer?: LawyerUpdateOneWithoutProcessesNestedInput
+    user?: UserUpdateOneRequiredWithoutProcessesNestedInput
     client?: ClientUpdateOneWithoutProcessesNestedInput
-    appointment?: AppointmentUpdateManyWithoutProcessNestedInput
+    appointments?: AppointmentUpdateManyWithoutProcessNestedInput
   }
 
   export type ProcessUncheckedUpdateWithoutPetitionsInput = {
@@ -12622,14 +11799,14 @@ export namespace Prisma {
     court?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
-    lawyerId?: NullableStringFieldUpdateOperationsInput | string | null
-    clientId?: NullableStringFieldUpdateOperationsInput | string | null
     hearingDate?: DateTimeFieldUpdateOperationsInput | Date | string
     caseValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     internalNotes?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    appointment?: AppointmentUncheckedUpdateManyWithoutProcessNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutProcessNestedInput
   }
 
   export type ClientUpsertWithoutPetitionsInput = {
@@ -12650,17 +11827,12 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     cpf?: NullableStringFieldUpdateOperationsInput | string | null
     cnpj?: NullableStringFieldUpdateOperationsInput | string | null
-    cpf_cnpj?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
-    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
-    profession?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutClientsNestedInput
     appointments?: AppointmentUpdateManyWithoutClientNestedInput
     processes?: ProcessUpdateManyWithoutClientNestedInput
   }
@@ -12672,56 +11844,272 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     cpf?: NullableStringFieldUpdateOperationsInput | string | null
     cnpj?: NullableStringFieldUpdateOperationsInput | string | null
-    cpf_cnpj?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
-    zip_code?: NullableStringFieldUpdateOperationsInput | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
-    profession?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     appointments?: AppointmentUncheckedUpdateManyWithoutClientNestedInput
     processes?: ProcessUncheckedUpdateManyWithoutClientNestedInput
   }
 
-  export type LawyerUpsertWithoutPetitionsInput = {
-    update: XOR<LawyerUpdateWithoutPetitionsInput, LawyerUncheckedUpdateWithoutPetitionsInput>
-    create: XOR<LawyerCreateWithoutPetitionsInput, LawyerUncheckedCreateWithoutPetitionsInput>
-    where?: LawyerWhereInput
+  export type ClientCreateManyUserInput = {
+    id?: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    cpf?: string | null
+    cnpj?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type LawyerUpdateToOneWithWhereWithoutPetitionsInput = {
-    where?: LawyerWhereInput
-    data: XOR<LawyerUpdateWithoutPetitionsInput, LawyerUncheckedUpdateWithoutPetitionsInput>
+  export type ProcessCreateManyUserInput = {
+    id?: string
+    processNumber: string
+    court: string
+    type: string
+    status?: string
+    hearingDate: Date | string
+    caseValue: Decimal | DecimalJsLike | number | string
+    internalNotes: string
+    clientId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type LawyerUpdateWithoutPetitionsInput = {
+  export type AppointmentCreateManyUserInput = {
+    id?: string
+    title: string
+    description?: string | null
+    date: Date | string
+    status?: $Enums.AppointmentStatus
+    eventType?: string | null
+    location?: string | null
+    clientId?: string | null
+    processId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PetitionCreateManyUserInput = {
+    id?: string
+    title: string
+    defendant: string
+    addressing?: string | null
+    facts?: string | null
+    legalBasis?: string | null
+    caseValue?: Decimal | DecimalJsLike | number | string | null
+    closingLocation?: string | null
+    description?: string | null
+    type: $Enums.PetitionType
+    status?: $Enums.PetitionStatus
+    fileUrl?: string | null
+    protocolNumber?: string | null
+    processId?: string | null
+    clientId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ClientUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    oabNumber?: StringFieldUpdateOperationsInput | string
-    specialty?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    cnpj?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    processes?: ProcessUpdateManyWithoutLawyerNestedInput
-    appointment?: AppointmentUpdateManyWithoutLawyerNestedInput
+    appointments?: AppointmentUpdateManyWithoutClientNestedInput
+    processes?: ProcessUpdateManyWithoutClientNestedInput
+    petitions?: PetitionUpdateManyWithoutClientNestedInput
   }
 
-  export type LawyerUncheckedUpdateWithoutPetitionsInput = {
+  export type ClientUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    oabNumber?: StringFieldUpdateOperationsInput | string
-    specialty?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    cnpj?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    processes?: ProcessUncheckedUpdateManyWithoutLawyerNestedInput
-    appointment?: AppointmentUncheckedUpdateManyWithoutLawyerNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutClientNestedInput
+    processes?: ProcessUncheckedUpdateManyWithoutClientNestedInput
+    petitions?: PetitionUncheckedUpdateManyWithoutClientNestedInput
+  }
+
+  export type ClientUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    cpf?: NullableStringFieldUpdateOperationsInput | string | null
+    cnpj?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProcessUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    processNumber?: StringFieldUpdateOperationsInput | string
+    court?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    hearingDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    caseValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    internalNotes?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    client?: ClientUpdateOneWithoutProcessesNestedInput
+    appointments?: AppointmentUpdateManyWithoutProcessNestedInput
+    petitions?: PetitionUpdateManyWithoutProcessNestedInput
+  }
+
+  export type ProcessUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    processNumber?: StringFieldUpdateOperationsInput | string
+    court?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    hearingDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    caseValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    internalNotes?: StringFieldUpdateOperationsInput | string
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    appointments?: AppointmentUncheckedUpdateManyWithoutProcessNestedInput
+    petitions?: PetitionUncheckedUpdateManyWithoutProcessNestedInput
+  }
+
+  export type ProcessUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    processNumber?: StringFieldUpdateOperationsInput | string
+    court?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    hearingDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    caseValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    internalNotes?: StringFieldUpdateOperationsInput | string
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppointmentUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
+    eventType?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    client?: ClientUpdateOneWithoutAppointmentsNestedInput
+    process?: ProcessUpdateOneWithoutAppointmentsNestedInput
+  }
+
+  export type AppointmentUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
+    eventType?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
+    processId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppointmentUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
+    eventType?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
+    processId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PetitionUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    defendant?: StringFieldUpdateOperationsInput | string
+    addressing?: NullableStringFieldUpdateOperationsInput | string | null
+    facts?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    caseValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    closingLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumPetitionTypeFieldUpdateOperationsInput | $Enums.PetitionType
+    status?: EnumPetitionStatusFieldUpdateOperationsInput | $Enums.PetitionStatus
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    protocolNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    process?: ProcessUpdateOneWithoutPetitionsNestedInput
+    client?: ClientUpdateOneWithoutPetitionsNestedInput
+  }
+
+  export type PetitionUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    defendant?: StringFieldUpdateOperationsInput | string
+    addressing?: NullableStringFieldUpdateOperationsInput | string | null
+    facts?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    caseValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    closingLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumPetitionTypeFieldUpdateOperationsInput | $Enums.PetitionType
+    status?: EnumPetitionStatusFieldUpdateOperationsInput | $Enums.PetitionStatus
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    protocolNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    processId?: NullableStringFieldUpdateOperationsInput | string | null
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PetitionUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    defendant?: StringFieldUpdateOperationsInput | string
+    addressing?: NullableStringFieldUpdateOperationsInput | string | null
+    facts?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    caseValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    closingLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumPetitionTypeFieldUpdateOperationsInput | $Enums.PetitionType
+    status?: EnumPetitionStatusFieldUpdateOperationsInput | $Enums.PetitionStatus
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    protocolNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    processId?: NullableStringFieldUpdateOperationsInput | string | null
+    clientId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AppointmentCreateManyClientInput = {
@@ -12732,7 +12120,7 @@ export namespace Prisma {
     status?: $Enums.AppointmentStatus
     eventType?: string | null
     location?: string | null
-    lawyerId?: string | null
+    userId: string
     processId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12744,10 +12132,10 @@ export namespace Prisma {
     court: string
     type: string
     status?: string
-    lawyerId?: string | null
     hearingDate: Date | string
     caseValue: Decimal | DecimalJsLike | number | string
     internalNotes: string
+    userId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12755,14 +12143,21 @@ export namespace Prisma {
   export type PetitionCreateManyClientInput = {
     id?: string
     title: string
+    defendant: string
+    addressing?: string | null
+    facts?: string | null
+    legalBasis?: string | null
+    caseValue?: Decimal | DecimalJsLike | number | string | null
+    closingLocation?: string | null
     description?: string | null
     type: $Enums.PetitionType
     status?: $Enums.PetitionStatus
-    factsSummary?: string | null
     fileUrl?: string | null
     protocolNumber?: string | null
+    userId: string
     processId?: string | null
-    lawyerId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type AppointmentUpdateWithoutClientInput = {
@@ -12775,8 +12170,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lawyer?: LawyerUpdateOneWithoutAppointmentNestedInput
-    process?: ProcessUpdateOneWithoutAppointmentNestedInput
+    user?: UserUpdateOneRequiredWithoutAppointmentsNestedInput
+    process?: ProcessUpdateOneWithoutAppointmentsNestedInput
   }
 
   export type AppointmentUncheckedUpdateWithoutClientInput = {
@@ -12787,7 +12182,7 @@ export namespace Prisma {
     status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
     eventType?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    lawyerId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
     processId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12801,7 +12196,7 @@ export namespace Prisma {
     status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
     eventType?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    lawyerId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
     processId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12818,8 +12213,8 @@ export namespace Prisma {
     internalNotes?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lawyer?: LawyerUpdateOneWithoutProcessesNestedInput
-    appointment?: AppointmentUpdateManyWithoutProcessNestedInput
+    user?: UserUpdateOneRequiredWithoutProcessesNestedInput
+    appointments?: AppointmentUpdateManyWithoutProcessNestedInput
     petitions?: PetitionUpdateManyWithoutProcessNestedInput
   }
 
@@ -12829,13 +12224,13 @@ export namespace Prisma {
     court?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
-    lawyerId?: NullableStringFieldUpdateOperationsInput | string | null
     hearingDate?: DateTimeFieldUpdateOperationsInput | Date | string
     caseValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     internalNotes?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    appointment?: AppointmentUncheckedUpdateManyWithoutProcessNestedInput
+    appointments?: AppointmentUncheckedUpdateManyWithoutProcessNestedInput
     petitions?: PetitionUncheckedUpdateManyWithoutProcessNestedInput
   }
 
@@ -12845,10 +12240,10 @@ export namespace Prisma {
     court?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
-    lawyerId?: NullableStringFieldUpdateOperationsInput | string | null
     hearingDate?: DateTimeFieldUpdateOperationsInput | Date | string
     caseValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     internalNotes?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12856,40 +12251,61 @@ export namespace Prisma {
   export type PetitionUpdateWithoutClientInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    defendant?: StringFieldUpdateOperationsInput | string
+    addressing?: NullableStringFieldUpdateOperationsInput | string | null
+    facts?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    caseValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    closingLocation?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumPetitionTypeFieldUpdateOperationsInput | $Enums.PetitionType
     status?: EnumPetitionStatusFieldUpdateOperationsInput | $Enums.PetitionStatus
-    factsSummary?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     protocolNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPetitionsNestedInput
     process?: ProcessUpdateOneWithoutPetitionsNestedInput
-    lawyer?: LawyerUpdateOneWithoutPetitionsNestedInput
   }
 
   export type PetitionUncheckedUpdateWithoutClientInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    defendant?: StringFieldUpdateOperationsInput | string
+    addressing?: NullableStringFieldUpdateOperationsInput | string | null
+    facts?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    caseValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    closingLocation?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumPetitionTypeFieldUpdateOperationsInput | $Enums.PetitionType
     status?: EnumPetitionStatusFieldUpdateOperationsInput | $Enums.PetitionStatus
-    factsSummary?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     protocolNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
     processId?: NullableStringFieldUpdateOperationsInput | string | null
-    lawyerId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PetitionUncheckedUpdateManyWithoutClientInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    defendant?: StringFieldUpdateOperationsInput | string
+    addressing?: NullableStringFieldUpdateOperationsInput | string | null
+    facts?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    caseValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    closingLocation?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumPetitionTypeFieldUpdateOperationsInput | $Enums.PetitionType
     status?: EnumPetitionStatusFieldUpdateOperationsInput | $Enums.PetitionStatus
-    factsSummary?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     protocolNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
     processId?: NullableStringFieldUpdateOperationsInput | string | null
-    lawyerId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AppointmentCreateManyProcessInput = {
@@ -12900,8 +12316,8 @@ export namespace Prisma {
     status?: $Enums.AppointmentStatus
     eventType?: string | null
     location?: string | null
+    userId: string
     clientId?: string | null
-    lawyerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12909,14 +12325,21 @@ export namespace Prisma {
   export type PetitionCreateManyProcessInput = {
     id?: string
     title: string
+    defendant: string
+    addressing?: string | null
+    facts?: string | null
+    legalBasis?: string | null
+    caseValue?: Decimal | DecimalJsLike | number | string | null
+    closingLocation?: string | null
     description?: string | null
     type: $Enums.PetitionType
     status?: $Enums.PetitionStatus
-    factsSummary?: string | null
     fileUrl?: string | null
     protocolNumber?: string | null
+    userId: string
     clientId?: string | null
-    lawyerId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type AppointmentUpdateWithoutProcessInput = {
@@ -12929,8 +12352,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutAppointmentsNestedInput
     client?: ClientUpdateOneWithoutAppointmentsNestedInput
-    lawyer?: LawyerUpdateOneWithoutAppointmentNestedInput
   }
 
   export type AppointmentUncheckedUpdateWithoutProcessInput = {
@@ -12941,8 +12364,8 @@ export namespace Prisma {
     status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
     eventType?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
-    lawyerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12955,8 +12378,8 @@ export namespace Prisma {
     status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
     eventType?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
-    lawyerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12964,208 +12387,61 @@ export namespace Prisma {
   export type PetitionUpdateWithoutProcessInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    defendant?: StringFieldUpdateOperationsInput | string
+    addressing?: NullableStringFieldUpdateOperationsInput | string | null
+    facts?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    caseValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    closingLocation?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumPetitionTypeFieldUpdateOperationsInput | $Enums.PetitionType
     status?: EnumPetitionStatusFieldUpdateOperationsInput | $Enums.PetitionStatus
-    factsSummary?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     protocolNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPetitionsNestedInput
     client?: ClientUpdateOneWithoutPetitionsNestedInput
-    lawyer?: LawyerUpdateOneWithoutPetitionsNestedInput
   }
 
   export type PetitionUncheckedUpdateWithoutProcessInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    defendant?: StringFieldUpdateOperationsInput | string
+    addressing?: NullableStringFieldUpdateOperationsInput | string | null
+    facts?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    caseValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    closingLocation?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumPetitionTypeFieldUpdateOperationsInput | $Enums.PetitionType
     status?: EnumPetitionStatusFieldUpdateOperationsInput | $Enums.PetitionStatus
-    factsSummary?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     protocolNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
-    lawyerId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PetitionUncheckedUpdateManyWithoutProcessInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    defendant?: StringFieldUpdateOperationsInput | string
+    addressing?: NullableStringFieldUpdateOperationsInput | string | null
+    facts?: NullableStringFieldUpdateOperationsInput | string | null
+    legalBasis?: NullableStringFieldUpdateOperationsInput | string | null
+    caseValue?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    closingLocation?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumPetitionTypeFieldUpdateOperationsInput | $Enums.PetitionType
     status?: EnumPetitionStatusFieldUpdateOperationsInput | $Enums.PetitionStatus
-    factsSummary?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     protocolNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
     clientId?: NullableStringFieldUpdateOperationsInput | string | null
-    lawyerId?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type ProcessCreateManyLawyerInput = {
-    id?: string
-    processNumber: string
-    court: string
-    type: string
-    status?: string
-    clientId?: string | null
-    hearingDate: Date | string
-    caseValue: Decimal | DecimalJsLike | number | string
-    internalNotes: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type AppointmentCreateManyLawyerInput = {
-    id?: string
-    title: string
-    description?: string | null
-    date: Date | string
-    status?: $Enums.AppointmentStatus
-    eventType?: string | null
-    location?: string | null
-    clientId?: string | null
-    processId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type PetitionCreateManyLawyerInput = {
-    id?: string
-    title: string
-    description?: string | null
-    type: $Enums.PetitionType
-    status?: $Enums.PetitionStatus
-    factsSummary?: string | null
-    fileUrl?: string | null
-    protocolNumber?: string | null
-    processId?: string | null
-    clientId?: string | null
-  }
-
-  export type ProcessUpdateWithoutLawyerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    processNumber?: StringFieldUpdateOperationsInput | string
-    court?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
-    hearingDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    caseValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    internalNotes?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    client?: ClientUpdateOneWithoutProcessesNestedInput
-    appointment?: AppointmentUpdateManyWithoutProcessNestedInput
-    petitions?: PetitionUpdateManyWithoutProcessNestedInput
-  }
-
-  export type ProcessUncheckedUpdateWithoutLawyerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    processNumber?: StringFieldUpdateOperationsInput | string
-    court?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
-    clientId?: NullableStringFieldUpdateOperationsInput | string | null
-    hearingDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    caseValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    internalNotes?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    appointment?: AppointmentUncheckedUpdateManyWithoutProcessNestedInput
-    petitions?: PetitionUncheckedUpdateManyWithoutProcessNestedInput
-  }
-
-  export type ProcessUncheckedUpdateManyWithoutLawyerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    processNumber?: StringFieldUpdateOperationsInput | string
-    court?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    status?: StringFieldUpdateOperationsInput | string
-    clientId?: NullableStringFieldUpdateOperationsInput | string | null
-    hearingDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    caseValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    internalNotes?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AppointmentUpdateWithoutLawyerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
-    eventType?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    client?: ClientUpdateOneWithoutAppointmentsNestedInput
-    process?: ProcessUpdateOneWithoutAppointmentNestedInput
-  }
-
-  export type AppointmentUncheckedUpdateWithoutLawyerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
-    eventType?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    clientId?: NullableStringFieldUpdateOperationsInput | string | null
-    processId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AppointmentUncheckedUpdateManyWithoutLawyerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumAppointmentStatusFieldUpdateOperationsInput | $Enums.AppointmentStatus
-    eventType?: NullableStringFieldUpdateOperationsInput | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    clientId?: NullableStringFieldUpdateOperationsInput | string | null
-    processId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PetitionUpdateWithoutLawyerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: EnumPetitionTypeFieldUpdateOperationsInput | $Enums.PetitionType
-    status?: EnumPetitionStatusFieldUpdateOperationsInput | $Enums.PetitionStatus
-    factsSummary?: NullableStringFieldUpdateOperationsInput | string | null
-    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    protocolNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    process?: ProcessUpdateOneWithoutPetitionsNestedInput
-    client?: ClientUpdateOneWithoutPetitionsNestedInput
-  }
-
-  export type PetitionUncheckedUpdateWithoutLawyerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: EnumPetitionTypeFieldUpdateOperationsInput | $Enums.PetitionType
-    status?: EnumPetitionStatusFieldUpdateOperationsInput | $Enums.PetitionStatus
-    factsSummary?: NullableStringFieldUpdateOperationsInput | string | null
-    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    protocolNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    processId?: NullableStringFieldUpdateOperationsInput | string | null
-    clientId?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type PetitionUncheckedUpdateManyWithoutLawyerInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    type?: EnumPetitionTypeFieldUpdateOperationsInput | $Enums.PetitionType
-    status?: EnumPetitionStatusFieldUpdateOperationsInput | $Enums.PetitionStatus
-    factsSummary?: NullableStringFieldUpdateOperationsInput | string | null
-    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    protocolNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    processId?: NullableStringFieldUpdateOperationsInput | string | null
-    clientId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 

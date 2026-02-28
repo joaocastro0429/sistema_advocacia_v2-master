@@ -1,12 +1,18 @@
-import { RequestHandler } from 'express'
-import { appointment } from '../services/get.service'
+import { Response } from "express"
+import { AuthenticatedRequest } from "../../login/middlewares/auth.middleware"
+import { appointment } from "../services/get.service"
 
-export const GetAppointment: RequestHandler = async (req, res) => {
-    try {
-        const lawyer = await appointment()
-        return res.status(200).json(lawyer)
-    } catch (error: any) {
-        console.error('Error in get lawyers controller:', error.message)
-        return res.status(500).json({ error: 'Error fetching lawyers', details: error.message })   
+export const GetAppointment = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.user?.id
+    if (!userId) {
+      return res.status(401).json({ error: "Usuario nao autenticado" })
     }
+
+    const appointments = await appointment(userId)
+    return res.status(200).json(appointments)
+  } catch (error: any) {
+    console.error("Error in get appointments controller:", error.message)
+    return res.status(500).json({ error: "Error fetching appointments", details: error.message })
+  }
 }

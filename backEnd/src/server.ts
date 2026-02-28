@@ -9,16 +9,16 @@ import { router as clientRoutes } from './clients/routes/client.routes'
 import { ProcessRouter } from './process/routes/routes'
 import { lawyerRoutes } from './lawyers/routes/routes'
 import { appointmentRoutes } from './appointments/routes/routes'
-import { petitionRoutes } from './petitions/routes/routes' // Updated import
+import { petitionRoutes } from './petitions/routes/routes'
 import { loginRouter } from './login/routes/route'
 import { userRoutes } from './users/routes/routes'
+import { notificationsRouter } from './notifications/routes/routes'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const server = express()
 
-// CORS configuration
 server.use(cors({
   origin: [
     'http://localhost:5173',
@@ -35,7 +35,6 @@ server.use(cors({
 
 server.use(express.json())
 
-// Servir arquivos estáticos do diretório de uploads
 server.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')))
 
 server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
@@ -44,16 +43,15 @@ server.use('/api', clientRoutes)
 server.use('/api', ProcessRouter)
 server.use('/api', lawyerRoutes)
 server.use('/api', appointmentRoutes)
-server.use('/api', petitionRoutes) // Updated route registration
+server.use('/api', petitionRoutes)
 server.use('/api', loginRouter)
 server.use('/api', userRoutes)
+server.use('/api', notificationsRouter)
 
-// 404 - sempre depois das rotas
 server.use((req: Request, res: Response) => {
   return res.status(404).json({ message: 'Route not found' })
 })
 
-// Error handler - sempre por último
 server.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   return res.status(500).json({
     message: err.message || 'Internal server error',

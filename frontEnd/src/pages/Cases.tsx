@@ -286,6 +286,9 @@ export default function Cases() {
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white shadow-2xl">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">{editingCase ? "Editar Processo" : "Novo Processo"}</DialogTitle>
+            <DialogDescription>
+              Preencha os dados do processo e vincule ao cliente responsavel.
+            </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleSubmit} className="space-y-6 pt-4">
@@ -358,10 +361,12 @@ export default function Cases() {
                         // Criar FormData com o arquivo
                         const uploadFormData = new FormData();
                         uploadFormData.append('file', file);
+                        const token = localStorage.getItem('auth_token');
                         
                         // Enviar para o backend
                         const response = await fetch('http://localhost:3333/api/processes/upload', {
                           method: 'POST',
+                          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
                           body: uploadFormData,
                         });
                         

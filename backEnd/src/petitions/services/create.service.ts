@@ -1,34 +1,55 @@
-import { prisma } from '../../lib/prisma'
-import { PetitionType, PetitionStatus } from '../../../generated/prisma' // Updated import
+import { prisma } from "../../lib/prisma"
+import { PetitionStatus, PetitionType } from "../../../generated/prisma"
 
 interface DataPetition {
-  title          : string
-  description   ?: string
-  type           : PetitionType // Updated type
-  status        ?: PetitionStatus // Updated type
-  factsSummary  ?: string
-  fileUrl       ?: string
+  title: string
+  description?: string
+  type: PetitionType
+  status?: PetitionStatus
+  addressing?: string
+  defendant: string
+  facts?: string
+  legalBasis?: string
+  caseValue?: number
+  closingLocation?: string
+  fileUrl?: string
   protocolNumber?: string
-  processId     ?: string
-  clientId       : string
-  lawyerId       : string
+  userId: string
+  processId?: string
+  clientId?: string
 }
 
 export const createPetition = async (data: DataPetition) => {
-  const petition = await prisma.petition.create({ // Updated prisma model and variable
+  const petition = await prisma.petition.create({
     data: {
-      title         : data.title,
-      description   : data.description,
-      type          : data.type,
-      status        : data.status ?? PetitionStatus.DRAFT, // Updated status default
-      factsSummary  : data.factsSummary,
-      fileUrl       : data.fileUrl,
+      title: data.title,
+      description: data.description,
+      type: data.type,
+      status: data.status ?? PetitionStatus.DRAFT,
+      addressing: data.addressing,
+      defendant: data.defendant,
+      facts: data.facts,
+      legalBasis: data.legalBasis,
+      caseValue: data.caseValue,
+      closingLocation: data.closingLocation,
+      fileUrl: data.fileUrl,
       protocolNumber: data.protocolNumber,
-      processId     : data.processId,
-      clientId      : data.clientId,
-      lawyerId      : data.lawyerId,
+      userId: data.userId,
+      processId: data.processId,
+      clientId: data.clientId,
+    },
+    include: {
+      client: true,
+      process: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
     },
   })
 
-  return petition // Updated return variable
+  return petition
 }

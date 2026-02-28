@@ -25,13 +25,14 @@ export function usePetitions() {
   const { data: petitions, isLoading } = useQuery<Petition[]>({
     queryKey: ["petitions", user?.id],
     queryFn: async () => {
-      if (!user?.id) {
+      const token = localStorage.getItem("auth_token");
+      if (!user?.id || !token) {
         return [];
       }
       console.log("📜 Buscando petições do usuário:", user?.id);
       return apiClient.get<Petition[]>(`/petitions`);
     },
-    enabled: !!user,
+    enabled: !!user?.id,
   });
 
   // 2. CRIAR NOVA PETIÇÃO

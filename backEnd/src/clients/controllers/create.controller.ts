@@ -1,58 +1,23 @@
-import { Request, Response } from 'express';
-import { CreateClient } from '../services/create.service';
-import { Prisma } from '../../../generated/prisma';
+import { Response } from 'express'
+import { CreateClient } from '../services/create.service'
+import { AuthenticatedRequest } from '../../login/middlewares/auth.middleware' // ✅ Vai funcionar!
 
-/**
- * @swagger
- * /api/users:
- *   post:
- *     summary: Create a new client
- *     tags: [Clients]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *               name:
- *                 type: string
- *               cpf:
- *                 type: string
- *               cnpj:
- *                 type: string
- *     responses:
- *       201:
- *         description: The created client.
- *       409:
- *         description: Conflict - a client with this CPF or CNPJ already exists.
- *       500:
- *         description: Internal server error
- */
-export const createController = async (req: Request, res: Response) => {
-    try {
-        const client = await CreateClient(req.body);
-        return res.status(201).json(client);
-    } catch (error: any) {
-        console.error('Erro ao criar cliente:', error);
-        if (error instanceof Prisma.PrismaClientKnownRequestError) {
-            if (error.code === 'P2002') {
-                const target = (error.meta?.target as string[]) || [];
-                if (target.includes('cpf')) {
-                    return res.status(409).json({ message: 'A client with this CPF already exists.' });
-                }
-                if (target.includes('cnpj')) {
-                    return res.status(409).json({ message: 'A client with this CNPJ already exists.' });
-                }
-            }
-        }
-        return res.status(500).json({
-            error: 'Internal server error',
-            message: error.message || 'Erro desconhecido ao criar cliente'
-        });
+export async function createController(req: AuthenticatedRequest, res: Response) {
+  try {
+    const userId = req.user?.id
+    
+    if (!userId) {
+      return res.status(401).json({ error: 'Usuário não autenticado' })
     }
-};
+
+    const client = await CreateClient({
+      ...req.body,
+      userId: userId,
+    })
+
+    return res.status(201).json(client)
+  } catch (error) {
+    console.error('Erro ao criar cliente:', error)
+    return res.status(500).json({ error: 'Erro ao criar cliente' })
+  }
+}

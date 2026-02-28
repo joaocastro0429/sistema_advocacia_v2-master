@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Scale } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,27 @@ export default function Login() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { signIn, signUp, resetPassword } = useAuth() as any;
+
+  useEffect(() => {
+    const expiredReason = localStorage.getItem("session_expired_reason");
+    if (expiredReason === "idle") {
+      localStorage.removeItem("session_expired_reason");
+      toast({
+        title: "Sessão encerrada",
+        description: "Você ficou inativo por muito tempo. Faça login novamente.",
+        variant: "destructive",
+      });
+    }
+  }, [toast]);
+
+  const validateStrongPassword = (value: string): string | null => {
+    if (value.length < 8) return "A senha deve ter no mínimo 8 caracteres.";
+    if (!/[A-Z]/.test(value)) return "A senha deve ter pelo menos 1 letra maiúscula.";
+    if (!/[a-z]/.test(value)) return "A senha deve ter pelo menos 1 letra minúscula.";
+    if (!/[0-9]/.test(value)) return "A senha deve ter pelo menos 1 número.";
+    if (!/[^A-Za-z0-9]/.test(value)) return "A senha deve ter pelo menos 1 caractere especial (ex.: +, !, @).";
+    return null;
+  };
 
   // Função para limpar campos
   const clearForm = () => {
@@ -52,6 +73,11 @@ export default function Login() {
         clearForm();
         navigate("/");
       } else {
+        const passwordError = validateStrongPassword(password);
+        if (passwordError) {
+          throw new Error(passwordError);
+        }
+
         const { error } = await signUp({
           email,
           password,
@@ -186,8 +212,13 @@ export default function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    minLength={6}
+                    minLength={8}
                   />
+                  {!isLogin && (
+                    <p className="text-xs text-muted-foreground">
+                      Use 8+ caracteres com maiúscula, minúscula, número e símbolo (ex.: <code>Lgbtqia+2026</code>).
+                    </p>
+                  )}
                 </div>
               )}
 

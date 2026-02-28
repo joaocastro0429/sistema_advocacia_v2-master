@@ -19,6 +19,7 @@ interface SignUpParams {
   oabNumber: string;
   specialty: string;
 }
+
 interface AuthContextType {
   user: User | null;
   token: string | null;
@@ -26,10 +27,19 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUp: (params: SignUpParams) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
+  resetPassword: (email: string) => Promise<{ error: Error | null }>;
   isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const IDLE_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutos
+const ACTIVITY_EVENTS: Array<keyof WindowEventMap> = [
+  "mousemove",
+  "mousedown",
+  "keydown",
+  "scroll",
+  "touchstart",
+];
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -91,10 +101,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = async (params: SignUpParams) => {
     try {
-      console.log('📝 Iniciando registro com dados:', { email: params.email, name: params.name });
+      console.log('📝 Iniciando registro com dados:', { 
+        email: params.email, 
+        name: params.name,
+        oabNumber: params.oabNumber,
+        specialty: params.specialty 
+      });
       
-      // The backend expects `name`, so we pass it from params
-      const response = await apiClient.post<User>("/register", params);
+      const response = await apiClient.post<User>("/register", {
+        email: params.email,
+        password: params.password,
+        name: params.name,
+        oabNumber: params.oabNumber,
+        specialty: params.specialty,
+      });
+      
       console.log('✅ Usuário registrado com sucesso:', response);
 
       // Após registrar, fazer login automaticamente
@@ -102,6 +123,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return loginResult;
     } catch (error) {
       console.error("❌ Erro no registro:", error);
+      return { error: error as Error };
+    }
+  };
+
+  const resetPassword = async (email: string) => {
+    try {
+      console.log('📧 Solicitando reset de senha para:', email);
+      
+      // Quando tiver o endpoint no backend, descomente e ajuste:
+      // await apiClient.post("/reset-password", { email });
+      
+      // Por enquanto, apenas simula o envio (remova este timeout quando implementar)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      return { error: null };
+    } catch (error) {
+      console.error("Password reset error:", error);
       return { error: error as Error };
     }
   };
@@ -127,6 +165,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     console.log('✅ Logout completo - localStorage e cache limpos');
   };
 
+  useEffect(() => {
+    if (!token || !user) return;
+
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    const onIdle = () => {
+      localStorage.setItem("session_expired_reason", "idle");
+      void signOut();
+    };
+
+    const resetIdleTimer = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(onIdle, IDLE_TIMEOUT_MS);
+    };
+
+    ACTIVITY_EVENTS.forEach((eventName) =>
+      window.addEventListener(eventName, resetIdleTimer, { passive: true })
+    );
+
+    resetIdleTimer();
+
+    return () => {
+      clearTimeout(timeoutId);
+      ACTIVITY_EVENTS.forEach((eventName) =>
+        window.removeEventListener(eventName, resetIdleTimer)
+      );
+    };
+  }, [token, user]);
+
   const isAuthenticated = !!token && !!user;
 
   return (
@@ -138,6 +205,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signIn,
         signUp,
         signOut,
+        resetPassword,
         isAuthenticated,
       }}
     >

@@ -1,13 +1,23 @@
-import { Request, Response } from "express";
-import { updateAppointment } from "../services/update.service";
+import { Response } from "express"
+import { AuthenticatedRequest } from "../../login/middlewares/auth.middleware"
+import { updateAppointment } from "../services/update.service"
 
-export const updateAppointmentController = async (req: Request, res: Response) => {
-  const  id  = String(req.params.id)
-  const body = req.body;
+export const updateAppointmentController = async (req: AuthenticatedRequest, res: Response) => {
+  const id = String(req.params.id)
+  const body = req.body
+
   try {
-    const appointment = await updateAppointment(id, body);
-    return res.status(200).json(appointment);
-  } catch (error) {
-    return res.status(500).json({ error: "Failed to update appointment" });
+    const userId = req.user?.id
+    if (!userId) {
+      return res.status(401).json({ error: "Usuario nao autenticado" })
+    }
+
+    const appointment = await updateAppointment(id, userId, body)
+    return res.status(200).json(appointment)
+  } catch (error: any) {
+    if (error.message?.includes("nao encontrado")) {
+      return res.status(404).json({ error: error.message })
+    }
+    return res.status(500).json({ error: "Failed to update appointment" })
   }
-};
+}

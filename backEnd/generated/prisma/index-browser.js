@@ -144,15 +144,10 @@ exports.Prisma.ClientScalarFieldEnum = {
   phone: 'phone',
   cpf: 'cpf',
   cnpj: 'cnpj',
-  cpf_cnpj: 'cpf_cnpj',
   address: 'address',
   city: 'city',
   state: 'state',
-  zip_code: 'zip_code',
-  notes: 'notes',
-  dateOfBirth: 'dateOfBirth',
-  maritalStatus: 'maritalStatus',
-  profession: 'profession',
+  userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -163,22 +158,11 @@ exports.Prisma.ProcessScalarFieldEnum = {
   court: 'court',
   type: 'type',
   status: 'status',
-  lawyerId: 'lawyerId',
-  clientId: 'clientId',
   hearingDate: 'hearingDate',
   caseValue: 'caseValue',
   internalNotes: 'internalNotes',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.LawyerScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  email: 'email',
-  oabNumber: 'oabNumber',
-  specialty: 'specialty',
-  phone: 'phone',
+  userId: 'userId',
+  clientId: 'clientId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -191,8 +175,8 @@ exports.Prisma.AppointmentScalarFieldEnum = {
   status: 'status',
   eventType: 'eventType',
   location: 'location',
+  userId: 'userId',
   clientId: 'clientId',
-  lawyerId: 'lawyerId',
   processId: 'processId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -201,15 +185,22 @@ exports.Prisma.AppointmentScalarFieldEnum = {
 exports.Prisma.PetitionScalarFieldEnum = {
   id: 'id',
   title: 'title',
+  defendant: 'defendant',
+  addressing: 'addressing',
+  facts: 'facts',
+  legalBasis: 'legalBasis',
+  caseValue: 'caseValue',
+  closingLocation: 'closingLocation',
   description: 'description',
   type: 'type',
   status: 'status',
-  factsSummary: 'factsSummary',
   fileUrl: 'fileUrl',
   protocolNumber: 'protocolNumber',
+  userId: 'userId',
   processId: 'processId',
   clientId: 'clientId',
-  lawyerId: 'lawyerId'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -238,6 +229,10 @@ exports.PetitionType = exports.$Enums.PetitionType = {
   PETITION: 'PETITION',
   RECOURSE: 'RECOURSE',
   EVIDENCE: 'EVIDENCE',
+  CONTESTATION: 'CONTESTATION',
+  REPLY: 'REPLY',
+  APPEAL: 'APPEAL',
+  MANIFESTATION: 'MANIFESTATION',
   OTHER: 'OTHER'
 };
 
@@ -253,7 +248,6 @@ exports.Prisma.ModelName = {
   User: 'User',
   Client: 'Client',
   Process: 'Process',
-  Lawyer: 'Lawyer',
   Appointment: 'Appointment',
   Petition: 'Petition'
 };

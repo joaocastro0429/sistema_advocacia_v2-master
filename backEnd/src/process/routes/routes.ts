@@ -6,13 +6,14 @@ import { updateProcessController} from '../controllers/update.controller'
 import {deleteController} from '../controllers/delete.controller'
 import { upload } from '../../config/multer.config'
 import { UploadController } from '../controllers/upload.controller'
+import { authMiddleware } from '../../login/middlewares/auth.middleware'
 
 
 export const ProcessRouter= Router()
 
-ProcessRouter.get("/processes",GetprocessController)
-ProcessRouter.get("/processes/:id",GetProcessById)
-ProcessRouter.post("/processes",CreateProcessController)
-ProcessRouter.post("/processes/upload", upload.single('file'), UploadController)
-ProcessRouter.put("/processes/:id",updateProcessController)
-ProcessRouter.delete("/processes/:id",deleteController)
+ProcessRouter.get("/processes", authMiddleware, GetprocessController)
+ProcessRouter.get("/processes/:id", authMiddleware, GetProcessById)
+ProcessRouter.post("/processes", authMiddleware, CreateProcessController)
+ProcessRouter.post("/processes/upload", authMiddleware, upload.single('file'), UploadController)
+ProcessRouter.put("/processes/:id", authMiddleware, updateProcessController)
+ProcessRouter.delete("/processes/:id", authMiddleware, deleteController)

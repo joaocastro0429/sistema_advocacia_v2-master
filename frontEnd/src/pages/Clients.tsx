@@ -313,10 +313,12 @@ export default function Clients() {
                         // Criar FormData com o arquivo
                         const uploadFormData = new FormData();
                         uploadFormData.append('file', file);
+                        const token = localStorage.getItem('auth_token');
                         
                         // Enviar para o backend
                         const response = await fetch('http://localhost:3333/api/processes/upload', {
                           method: 'POST',
+                          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
                           body: uploadFormData,
                         });
                         

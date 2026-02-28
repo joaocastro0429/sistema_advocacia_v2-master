@@ -15,6 +15,7 @@ interface ProcessCreateServiceData {
   client_id?: string | null
   clientId?: string | null
   lawyerId?: string | null
+  userId: string
 }
 
 export const ProcessCreateService = async (data: ProcessCreateServiceData) => {
@@ -25,28 +26,41 @@ export const ProcessCreateService = async (data: ProcessCreateServiceData) => {
     const clientId = data.clientId || data.client_id
 
     if (!processNumber) {
-      throw new Error('Número do processo é obrigatório')
+      throw new Error("Numero do processo e obrigatorio")
     }
     if (!type) {
-      throw new Error('Tipo do processo é obrigatório')
+      throw new Error("Tipo do processo e obrigatorio")
+    }
+    if (!data.userId) {
+      throw new Error("Usuario nao autenticado")
+    }
+
+    if (clientId) {
+      const client = await prisma.client.findFirst({
+        where: {
+          id: clientId,
+          userId: data.userId,
+        },
+        select: { id: true },
+      })
+
+      if (!client) {
+        throw new Error("Cliente nao encontrado para este usuario")
+      }
     }
 
     const process = await prisma.process.create({
-      data : {
-        processNumber: processNumber,
+      data: {
+        processNumber,
         court: data.court || null,
-        type: type,
-        status: data.status || 'open',
+        type,
+        status: data.status || "open",
         hearingDate: new Date(),
         caseValue: data.value || 0,
-        internalNotes: data.notes || '',
-        // Só adiciona relação se existir ID
+        internalNotes: data.notes || "",
+        userId: data.userId,
         ...(clientId && {
           client: { connect: { id: clientId } },
-        }),
-
-        ...(data.lawyerId && {
-          lawyer: { connect: { id: data.lawyerId } },
         }),
       },
       include: {
@@ -54,9 +68,9 @@ export const ProcessCreateService = async (data: ProcessCreateServiceData) => {
           select: {
             id: true,
             name: true,
-          }
-        }
-      }
+          },
+        },
+      },
     })
 
     // Retornar no formato esperado pelo frontend
@@ -66,19 +80,21 @@ export const ProcessCreateService = async (data: ProcessCreateServiceData) => {
       case_number: process.processNumber,
       case_type: process.type,
       court: process.court,
-      judge: null, // Campo não existe no schema
-      subject: null, // Campo não existe no schema
+      judge: null, // Campo nao existe no schema
+      subject: null, // Campo nao existe no schema
       status: process.status,
-      value: null, // Campo não existe no schema
-      notes: null, // Campo não existe no schema
+      value: process.caseValue ? Number(process.caseValue) : null,
+      notes: process.internalNotes ?? null,
       created_at: process.createdAt.toISOString(),
       updated_at: process.updatedAt.toISOString(),
-      clients: process.client ? {
-        name: process.client.name
-      } : undefined,
+      clients: process.client
+        ? {
+            name: process.client.name,
+          }
+        : undefined,
     }
   } catch (error: any) {
     console.error("ERRO REAL:", error)
-    throw new Error(error.message || 'Erro ao criar processo')
+    throw new Error(error.message || "Erro ao criar processo")
   }
 }

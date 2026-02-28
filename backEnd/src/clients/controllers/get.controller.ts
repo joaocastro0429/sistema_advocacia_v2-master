@@ -1,47 +1,21 @@
-import { RequestHandler } from 'express'
-import { getClients } from '../../clients/services/get.services'
+import { Response } from "express"
+import { AuthenticatedRequest } from "../../login/middlewares/auth.middleware"
+import { getClients } from "../../clients/services/get.services"
 
-/**
- * @swagger
- * /api/users:
- *   get:
- *     summary: Get all clients
- *     tags: [Clients]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: A list of clients.
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                     description: The client ID.
- *                   email:
- *                     type: string
- *                     description: The client email.
- *                   name:
- *                     type: string
- *                     description: The client name.
- *       500:
- *         description: Internal server error
- */
-export const getClient:RequestHandler = async (req, res) => {
+export const getClient = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const clients = await getClients()
+    const userId = req.user?.id
+    if (!userId) {
+      return res.status(401).json({ message: "Usuario nao autenticado" })
+    }
 
+    const clients = await getClients(userId)
     return res.status(200).json(clients)
   } catch (error: any) {
-    console.error('Erro no controller getClient:', error)
+    console.error("Erro no controller getClient:", error)
     return res.status(500).json({
-      message: error.message || 'Erro ao buscar usuários',
-      error: error.message
+      message: error.message || "Erro ao buscar usuarios",
+      error: error.message,
     })
   }
 }
-

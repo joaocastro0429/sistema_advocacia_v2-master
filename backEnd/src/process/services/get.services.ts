@@ -1,8 +1,11 @@
 import { prisma } from '../../lib/prisma'
 
-export const Getprocess = async () => {
+export const Getprocess = async (userId: string) => {
   try {
     const processes = await prisma.process.findMany({
+      where: {
+        userId,
+      },
       include: { 
         client: {
           select: {
