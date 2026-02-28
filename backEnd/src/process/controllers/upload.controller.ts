@@ -34,6 +34,7 @@ export const UploadController = (req: Request, res: Response) => {
       mimeType: req.file.mimetype,
       size: req.file.size,
       path: `/uploads/${req.file.filename}`, // Caminho relativo para download
+      downloadPath: `/uploads/${req.file.filename}`,
       fullPath: req.file.path, // Caminho completo no servidor
     }
   };

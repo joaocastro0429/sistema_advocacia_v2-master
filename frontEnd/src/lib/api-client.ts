@@ -1,5 +1,5 @@
 // Detectar o host do backend baseado no host atual do frontend
-function getApiBaseUrl(): string {
+export function getApiBaseUrl(): string {
   // Se VITE_API_URL estiver definido, usar ele
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL;
@@ -17,7 +17,8 @@ function getApiBaseUrl(): string {
   return `http://${currentHost}:3333/api`;
 }
 
-const API_BASE_URL = getApiBaseUrl();
+export const API_BASE_URL = getApiBaseUrl();
+export const BACKEND_BASE_URL = API_BASE_URL.replace(/\/api$/, "");
 
 interface ApiRequestOptions extends RequestInit {
   params?: Record<string, string | number | boolean>;

@@ -15,6 +15,8 @@ export default function Login() {
   const [name, setName] = useState("");
   const [oabNumber, setOabNumber] = useState("");
   const [specialty, setSpecialty] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -48,6 +50,8 @@ export default function Login() {
     setName("");
     setOabNumber("");
     setSpecialty("");
+    setNewPassword("");
+    setConfirmNewPassword("");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -57,13 +61,24 @@ export default function Login() {
     try {
       if (isRecovering) {
         if (resetPassword) {
-          const { error } = await resetPassword(email);
+          const passwordError = validateStrongPassword(newPassword);
+          if (passwordError) {
+            throw new Error(passwordError);
+          }
+          if (newPassword !== confirmNewPassword) {
+            throw new Error("A confirmação da nova senha não confere.");
+          }
+
+          const { error } = await resetPassword({
+            email,
+            oabNumber,
+            newPassword,
+          });
           if (error) throw error;
         } else {
-          // Simulação caso o hook não tenha a função implementada
-          await new Promise(resolve => setTimeout(resolve, 1500));
+          throw new Error("Fluxo de recuperação indisponível.");
         }
-        toast({ title: "E-mail enviado!", description: "Verifique sua caixa de entrada para redefinir a senha." });
+        toast({ title: "Senha redefinida!", description: "Faça login com sua nova senha." });
         setIsRecovering(false);
         clearForm();
       } else if (isLogin) {
@@ -134,7 +149,7 @@ export default function Login() {
             </h2>
             <p className="text-muted-foreground mb-6">
               {isRecovering
-                ? "Informe seu e-mail para receber o link de recuperação"
+                ? "Informe e-mail, OAB e a nova senha para redefinir seu acesso"
                 : isLogin
                   ? "Acesse sua conta para continuar"
                   : "Preencha os dados para criar sua conta"}
@@ -191,6 +206,49 @@ export default function Login() {
                 />
               </div>
 
+              {isRecovering && (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="recover-oab">Nº da OAB</Label>
+                    <Input
+                      id="recover-oab"
+                      type="text"
+                      placeholder="123456"
+                      value={oabNumber}
+                      onChange={(e) => setOabNumber(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="new-password">Nova senha</Label>
+                    <Input
+                      id="new-password"
+                      type="password"
+                      placeholder="••••••••"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      required
+                      minLength={8}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="confirm-new-password">Confirmar nova senha</Label>
+                    <Input
+                      id="confirm-new-password"
+                      type="password"
+                      placeholder="••••••••"
+                      value={confirmNewPassword}
+                      onChange={(e) => setConfirmNewPassword(e.target.value)}
+                      required
+                      minLength={8}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Use 8+ caracteres com maiúscula, minúscula, número e símbolo (ex.: <code>Lgbtqia+2026</code>).
+                    </p>
+                  </div>
+                </>
+              )}
+
               {!isRecovering && (
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
@@ -223,7 +281,7 @@ export default function Login() {
               )}
 
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Carregando..." : isRecovering ? "Enviar Link" : isLogin ? "Entrar" : "Criar conta"}
+                {loading ? "Carregando..." : isRecovering ? "Redefinir senha" : isLogin ? "Entrar" : "Criar conta"}
               </Button>
             </form>
 

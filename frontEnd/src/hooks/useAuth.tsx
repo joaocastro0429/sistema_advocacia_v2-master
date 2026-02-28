@@ -20,6 +20,12 @@ interface SignUpParams {
   specialty: string;
 }
 
+interface ResetPasswordParams {
+  email: string;
+  oabNumber: string;
+  newPassword: string;
+}
+
 interface AuthContextType {
   user: User | null;
   token: string | null;
@@ -27,18 +33,20 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUp: (params: SignUpParams) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
-  resetPassword: (email: string) => Promise<{ error: Error | null }>;
+  resetPassword: (params: ResetPasswordParams) => Promise<{ error: Error | null }>;
   isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const IDLE_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutos
+const LAST_ACTIVITY_KEY = "last_activity_at";
 const ACTIVITY_EVENTS: Array<keyof WindowEventMap> = [
   "mousemove",
   "mousedown",
   "keydown",
   "scroll",
   "touchstart",
+  "click",
 ];
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -88,6 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Armazenar token e user
       localStorage.setItem("auth_token", authToken);
       localStorage.setItem("auth_user", JSON.stringify(userData));
+      localStorage.setItem(LAST_ACTIVITY_KEY, Date.now().toString());
 
       setToken(authToken);
       setUser(userData);
@@ -127,16 +136,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const resetPassword = async (email: string) => {
+  const resetPassword = async (params: ResetPasswordParams) => {
     try {
-      console.log('📧 Solicitando reset de senha para:', email);
-      
-      // Quando tiver o endpoint no backend, descomente e ajuste:
-      // await apiClient.post("/reset-password", { email });
-      
-      // Por enquanto, apenas simula o envio (remova este timeout quando implementar)
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await apiClient.post("/forgot-password", {
+        email: params.email,
+        oabNumber: params.oabNumber,
+        newPassword: params.newPassword,
+      });
       return { error: null };
     } catch (error) {
       console.error("Password reset error:", error);
@@ -150,6 +156,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Limpar todos os dados do localStorage relacionados a auth
     localStorage.removeItem("auth_token");
     localStorage.removeItem("auth_user");
+    localStorage.removeItem(LAST_ACTIVITY_KEY);
     
     // Limpar qualquer outro dado de sessão
     sessionStorage.clear();
@@ -169,28 +176,57 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!token || !user) return;
 
     let timeoutId: ReturnType<typeof setTimeout>;
+    let intervalId: ReturnType<typeof setInterval>;
 
     const onIdle = () => {
       localStorage.setItem("session_expired_reason", "idle");
       void signOut();
     };
 
+    const markActivity = () => {
+      localStorage.setItem(LAST_ACTIVITY_KEY, Date.now().toString());
+    };
+
+    const getLastActivity = () => {
+      const stored = localStorage.getItem(LAST_ACTIVITY_KEY);
+      const parsed = stored ? Number(stored) : Date.now();
+      return Number.isFinite(parsed) ? parsed : Date.now();
+    };
+
     const resetIdleTimer = () => {
       clearTimeout(timeoutId);
+      markActivity();
       timeoutId = setTimeout(onIdle, IDLE_TIMEOUT_MS);
     };
+
+    const checkIdleState = () => {
+      const inactiveFor = Date.now() - getLastActivity();
+      if (inactiveFor >= IDLE_TIMEOUT_MS) {
+        onIdle();
+      }
+    };
+
+    if (!localStorage.getItem(LAST_ACTIVITY_KEY)) {
+      markActivity();
+    }
 
     ACTIVITY_EVENTS.forEach((eventName) =>
       window.addEventListener(eventName, resetIdleTimer, { passive: true })
     );
+    window.addEventListener("visibilitychange", checkIdleState);
+    window.addEventListener("focus", checkIdleState);
 
     resetIdleTimer();
+    intervalId = setInterval(checkIdleState, 60 * 1000);
 
     return () => {
       clearTimeout(timeoutId);
+      clearInterval(intervalId);
       ACTIVITY_EVENTS.forEach((eventName) =>
         window.removeEventListener(eventName, resetIdleTimer)
       );
+      window.removeEventListener("visibilitychange", checkIdleState);
+      window.removeEventListener("focus", checkIdleState);
     };
   }, [token, user]);
 
