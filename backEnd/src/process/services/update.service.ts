@@ -11,6 +11,8 @@ interface UpdateProcessData {
   status?: string
   value?: number | null
   notes?: string | null
+  document_id?: string | null
+  documentPath?: string | null
   client_id?: string | null
   clientId?: string | null
   lawyerId?: string | null
@@ -37,6 +39,12 @@ export const updateProcess = async (
   if (data.status !== undefined) {
     updateData.status = data.status
   }
+  if (data.documentPath !== undefined || data.document_id !== undefined) {
+    updateData.documentPath =
+      data.documentPath !== undefined
+        ? data.documentPath || null
+        : data.document_id || null
+  }
 
 
   // Atualizar valor da causa (caseValue)
@@ -59,18 +67,50 @@ export const updateProcess = async (
     updateData.lawyerId = data.lawyerId || null
   }
 
-  const process = await prisma.process.update({
-    where: { id },
-    data: updateData,
-    include: {
-      client: {
-        select: {
-          id: true,
-          name: true,
+  let process: any
+  try {
+    process = await prisma.process.update({
+      where: { id },
+      data: updateData,
+      include: {
+        client: {
+          select: {
+            id: true,
+            name: true,
+          }
         }
       }
-    }
-  })
+    })
+  } catch (error: any) {
+    const isMissingDocumentPath = error?.code === "P2022"
+    if (!isMissingDocumentPath) throw error
+
+    const { documentPath, ...legacyUpdateData } = updateData
+    process = await prisma.process.update({
+      where: { id },
+      data: legacyUpdateData,
+      select: {
+        id: true,
+        processNumber: true,
+        court: true,
+        type: true,
+        status: true,
+        hearingDate: true,
+        caseValue: true,
+        internalNotes: true,
+        userId: true,
+        clientId: true,
+        createdAt: true,
+        updatedAt: true,
+        client: {
+          select: {
+            id: true,
+            name: true,
+          }
+        }
+      },
+    })
+  }
 
   // Retornar no formato esperado pelo frontend
   return {
@@ -84,6 +124,7 @@ export const updateProcess = async (
     status: process.status,
     value: process.caseValue ?? null,
     notes: process.internalNotes ?? null,
+    document_id: process.documentPath ?? null,
     trial_date: process.hearingDate ? process.hearingDate.toISOString() : null,
     created_at: process.createdAt.toISOString(),
     updated_at: process.updatedAt.toISOString(),

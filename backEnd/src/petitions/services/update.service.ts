@@ -49,8 +49,25 @@ export const UpdatePetition = async (id: string, userId: string, data: UpdatePet
         clientId: data.clientId,
       },
       include: {
-        client: true,
-        process: true,
+        client: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            cpf: true,
+            cnpj: true,
+          },
+        },
+        process: {
+          select: {
+            id: true,
+            processNumber: true,
+            court: true,
+            type: true,
+            status: true,
+          },
+        },
         user: {
           select: {
             id: true,

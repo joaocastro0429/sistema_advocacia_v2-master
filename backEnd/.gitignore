@@ -3,8 +3,13 @@ node_modules/
 
 # Prisma
 generated/
+generated/prisma/
+prisma/migrations/
 *.db
 *.db-journal
+
+# Uploads
+uploads/
 
 # Environment variables
 .env

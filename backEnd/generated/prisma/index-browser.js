@@ -137,6 +137,14 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PasswordResetTokenScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.ClientScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -144,6 +152,7 @@ exports.Prisma.ClientScalarFieldEnum = {
   phone: 'phone',
   cpf: 'cpf',
   cnpj: 'cnpj',
+  documentPath: 'documentPath',
   address: 'address',
   city: 'city',
   state: 'state',
@@ -158,6 +167,7 @@ exports.Prisma.ProcessScalarFieldEnum = {
   court: 'court',
   type: 'type',
   status: 'status',
+  documentPath: 'documentPath',
   hearingDate: 'hearingDate',
   caseValue: 'caseValue',
   internalNotes: 'internalNotes',
@@ -246,6 +256,7 @@ exports.PetitionStatus = exports.$Enums.PetitionStatus = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  PasswordResetToken: 'PasswordResetToken',
   Client: 'Client',
   Process: 'Process',
   Appointment: 'Appointment',

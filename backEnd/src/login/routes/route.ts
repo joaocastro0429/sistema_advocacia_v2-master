@@ -1,17 +1,13 @@
-import { Router } from 'express';
-import { RegisterController } from '../controllers/register';
-import { loginController } from '../controllers/login';
-import { forgotPasswordController } from '../controllers/forgot-password';
-import { authMiddleware } from '../middlewares/auth.middleware';
+import { Router } from 'express'
+import { loginController } from '../../login/controllers/login'
+import { forgotPassword, resetPassword } from '../../login/controllers/authControllers'
+import { RegisterController } from '../../login/controllers/register'
 
-export const loginRouter = Router();
+const loginRouter = Router()
 
-loginRouter.post('/register', RegisterController)
 loginRouter.post('/login', loginController)
-loginRouter.post('/forgot-password', forgotPasswordController)
+loginRouter.post('/register', RegisterController)
+loginRouter.post('/forgot-password', forgotPassword)
+loginRouter.post('/reset-password', resetPassword)
 
-loginRouter.get('/protected', authMiddleware, (req, res) => {
-    return res.json({
-      message: 'Rota protegida acessada',
-    })
-  })
+export { loginRouter }

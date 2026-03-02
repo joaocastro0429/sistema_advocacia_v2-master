@@ -10,6 +10,8 @@ interface CreateClientData {
   address?: string | null
   city?: string | null
   state?: string | null
+  document_id?: string | null
+  documentPath?: string | null
   userId: string
 }
 
@@ -27,22 +29,53 @@ export async function CreateClient(data: CreateClientData) {
     }
   }
 
-  const client = await prisma.client.create({
-    data: {
-      name: data.name,
-      email: data.email ?? null,
-      phone: data.phone ?? null,
-      cpf,
-      cnpj,
-      address: data.address ?? null,
-      city: data.city ?? null,
-      state: data.state ?? null,
-      userId: data.userId,
-    },
-  })
+  const createData = {
+    name: data.name,
+    email: data.email ?? null,
+    phone: data.phone ?? null,
+    cpf,
+    cnpj,
+    address: data.address ?? null,
+    city: data.city ?? null,
+    state: data.state ?? null,
+    documentPath: data.documentPath ?? data.document_id ?? null,
+    userId: data.userId,
+  }
+
+  let client: any
+  try {
+    client = await prisma.client.create({
+      data: createData,
+    })
+  } catch (error: any) {
+    const isMissingDocumentPath = error?.code === "P2022"
+
+    if (!isMissingDocumentPath) throw error
+
+    // Fallback para bancos ainda sem a coluna documentPath
+    const { documentPath, ...legacyData } = createData
+    client = await prisma.client.create({
+      data: legacyData,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        cpf: true,
+        cnpj: true,
+        address: true,
+        city: true,
+        state: true,
+        userId: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    })
+  }
 
   return {
     ...client,
     cpf_cnpj: client.cpf || client.cnpj || null,
+    document_id: client.documentPath ?? null,
   }
 }

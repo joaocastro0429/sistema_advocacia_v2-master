@@ -1,12 +1,36 @@
 import { prisma } from "../../lib/prisma"
 
 export const getClientById = async (id: string, userId: string) => {
-  const client = await prisma.client.findFirst({
-    where: {
-      id,
-      userId,
-    },
-  })
+  let client: any
+  try {
+    client = await prisma.client.findFirst({
+      where: {
+        id,
+        userId,
+      },
+    })
+  } catch (error: any) {
+    const isMissingDocumentPath = error?.code === "P2022"
+    if (!isMissingDocumentPath) throw error
+
+    client = await prisma.client.findFirst({
+      where: { id, userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        cpf: true,
+        cnpj: true,
+        address: true,
+        city: true,
+        state: true,
+        userId: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    })
+  }
 
   if (!client) {
     return null
@@ -15,5 +39,6 @@ export const getClientById = async (id: string, userId: string) => {
   return {
     ...client,
     cpf_cnpj: client.cpf || client.cnpj || null,
+    document_id: client.documentPath ?? null,
   }
 }

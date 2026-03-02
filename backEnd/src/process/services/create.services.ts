@@ -12,6 +12,8 @@ interface ProcessCreateServiceData {
   status?: string
   value?: number | null
   notes?: string | null
+  document_id?: string | null
+  documentPath?: string | null
   client_id?: string | null
   clientId?: string | null
   lawyerId?: string | null
@@ -49,29 +51,63 @@ export const ProcessCreateService = async (data: ProcessCreateServiceData) => {
       }
     }
 
-    const process = await prisma.process.create({
-      data: {
-        processNumber,
-        court: data.court || null,
-        type,
-        status: data.status || "open",
-        hearingDate: new Date(),
-        caseValue: data.value || 0,
-        internalNotes: data.notes || "",
-        userId: data.userId,
-        ...(clientId && {
-          client: { connect: { id: clientId } },
-        }),
-      },
-      include: {
-        client: {
-          select: {
-            id: true,
-            name: true,
+    const createData: any = {
+      processNumber,
+      court: data.court || null,
+      type,
+      status: data.status || "open",
+      hearingDate: new Date(),
+      caseValue: data.value || 0,
+      internalNotes: data.notes || "",
+      documentPath: data.documentPath ?? data.document_id ?? null,
+      userId: data.userId,
+      ...(clientId && {
+        clientId,
+      }),
+    }
+
+    let process: any
+    try {
+      process = await prisma.process.create({
+        data: createData,
+        include: {
+          client: {
+            select: {
+              id: true,
+              name: true,
+            },
           },
         },
-      },
-    })
+      })
+    } catch (error: any) {
+      const isMissingDocumentPath = error?.code === "P2022"
+      if (!isMissingDocumentPath) throw error
+
+      const { documentPath, ...legacyData } = createData
+      process = await prisma.process.create({
+        data: legacyData,
+        select: {
+          id: true,
+          processNumber: true,
+          court: true,
+          type: true,
+          status: true,
+          hearingDate: true,
+          caseValue: true,
+          internalNotes: true,
+          userId: true,
+          clientId: true,
+          createdAt: true,
+          updatedAt: true,
+          client: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      })
+    }
 
     // Retornar no formato esperado pelo frontend
     return {
@@ -85,6 +121,7 @@ export const ProcessCreateService = async (data: ProcessCreateServiceData) => {
       status: process.status,
       value: process.caseValue ? Number(process.caseValue) : null,
       notes: process.internalNotes ?? null,
+      document_id: process.documentPath ?? null,
       created_at: process.createdAt.toISOString(),
       updated_at: process.updatedAt.toISOString(),
       clients: process.client

@@ -26,19 +26,30 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  clients      Client[]
-  processes    Process[]
-  appointments Appointment[]
-  petitions    Petition[]
+  clients             Client[]
+  processes           Process[]
+  appointments        Appointment[]
+  petitions           Petition[]
+  passwordResetTokens PasswordResetToken[]
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }
 
 model Client {
-  id    String  @id @default(uuid())
-  name  String
-  email String?
-  phone String?
-  cpf   String?
-  cnpj  String?
+  id           String  @id @default(uuid())
+  name         String
+  email        String?
+  phone        String?
+  cpf          String?
+  cnpj         String?
+  documentPath String?
 
   address String?
   city    String?
@@ -59,11 +70,12 @@ model Client {
 }
 
 model Process {
-  id            String @id @default(uuid())
+  id            String  @id @default(uuid())
   processNumber String
   court         String
   type          String
-  status        String @default("open")
+  status        String  @default("open")
+  documentPath  String?
 
   hearingDate   DateTime
   caseValue     Decimal  @db.Decimal(30, 15)

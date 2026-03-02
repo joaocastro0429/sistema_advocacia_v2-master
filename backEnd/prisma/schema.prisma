@@ -30,6 +30,16 @@ model User {
   processes    Process[]
   appointments Appointment[]
   petitions    Petition[]
+  passwordResetTokens PasswordResetToken[]
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }
 
 model Client {
@@ -39,6 +49,7 @@ model Client {
   phone   String?
   cpf     String?
   cnpj    String?
+  documentPath String?
 
   address String?
   city    String?
@@ -64,6 +75,7 @@ model Process {
   court         String
   type          String
   status        String @default("open")
+  documentPath  String?
 
   hearingDate   DateTime
   caseValue     Decimal  @db.Decimal(30, 15)

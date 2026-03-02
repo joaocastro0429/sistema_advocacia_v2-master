@@ -32,8 +32,25 @@ export const getPetitions = async (userId: string) => {
         userId,
       },
       include: {
-        client: true,
-        process: true,
+        client: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            cpf: true,
+            cnpj: true,
+          },
+        },
+        process: {
+          select: {
+            id: true,
+            processNumber: true,
+            court: true,
+            type: true,
+            status: true,
+          },
+        },
         user: {
           select: {
             id: true,
@@ -64,8 +81,25 @@ export const getPetitionById = async (id: string, userId: string) => {
         userId,
       },
       include: {
-        client: true,
-        process: true,
+        client: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true,
+            cpf: true,
+            cnpj: true,
+          },
+        },
+        process: {
+          select: {
+            id: true,
+            processNumber: true,
+            court: true,
+            type: true,
+            status: true,
+          },
+        },
         user: {
           select: {
             id: true,
