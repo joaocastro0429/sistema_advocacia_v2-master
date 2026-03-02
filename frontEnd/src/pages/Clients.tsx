@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Search, Pencil, Trash2, User, CalendarDays, Paperclip } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, User, CalendarDays, Paperclip, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -21,9 +21,12 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useClients, ClientInput } from "@/hooks/useClients";
+import { useToast } from "@/hooks/use-toast";
+import { downloadProtectedFile } from "@/lib/file-download";
 
 export default function Clients() {
   const { clients, isLoading, createClient, updateClient, deleteClient } = useClients();
+  const { toast } = useToast();
   const [search, setSearch] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingClient, setEditingClient] = useState<string | null>(null);
@@ -103,6 +106,18 @@ export default function Clients() {
   const handleDelete = async (id: string) => {
     if (confirm("Tem certeza que deseja excluir este cliente?")) {
       await deleteClient.mutateAsync(id);
+    }
+  };
+
+  const handleDownloadDocument = async () => {
+    if (!formData.document_id) return;
+
+    try {
+      await downloadProtectedFile(formData.document_id);
+      toast({ title: "Download iniciado." });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Nao foi possivel baixar o arquivo.";
+      toast({ title: "Erro ao baixar arquivo", description: message, variant: "destructive" });
     }
   };
 
@@ -341,6 +356,12 @@ export default function Clients() {
                   }}
                 />
                 <p className="text-[10px] text-slate-500">Selecione um arquivo para fazer upload automático.</p>
+                {formData.document_id && (
+                  <Button type="button" variant="outline" className="w-fit" onClick={handleDownloadDocument}>
+                    <Download className="w-4 h-4 mr-2" />
+                    Baixar arquivo atual
+                  </Button>
+                )}
               </div>
 
               <div className="md:col-span-2 space-y-2">

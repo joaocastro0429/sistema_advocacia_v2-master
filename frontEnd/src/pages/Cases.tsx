@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Plus, Search, Pencil, Trash2, Briefcase, CalendarDays, Gavel, ChevronDown, Paperclip } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, Briefcase, CalendarDays, Gavel, ChevronDown, Paperclip, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -40,6 +40,7 @@ import { useClients } from "@/hooks/useClients";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
+import { downloadProtectedFile } from "@/lib/file-download";
 
 const statusConfig = {
   em_andamento: { label: "Em Andamento", className: "bg-blue-100 text-blue-700 border-blue-200" },
@@ -174,6 +175,18 @@ export default function Cases() {
   const handleDelete = async (id: string) => {
     if (confirm("Tem certeza que deseja excluir este processo?")) {
       await deleteCase.mutateAsync(id);
+    }
+  };
+
+  const handleDownloadDocument = async () => {
+    if (!formData.document_id) return;
+
+    try {
+      await downloadProtectedFile(formData.document_id);
+      toast({ title: "Download iniciado." });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Nao foi possivel baixar o arquivo.";
+      toast({ title: "Erro ao baixar arquivo", description: message, variant: "destructive" });
     }
   };
 
@@ -389,6 +402,12 @@ export default function Cases() {
                   }}
                 />
                 <p className="text-[10px] text-slate-500">Selecione um arquivo para fazer upload automático.</p>
+                {formData.document_id && (
+                  <Button type="button" variant="outline" className="w-fit" onClick={handleDownloadDocument}>
+                    <Download className="w-4 h-4 mr-2" />
+                    Baixar arquivo atual
+                  </Button>
+                )}
               </div>
 
               <div className="md:col-span-2 space-y-2">
